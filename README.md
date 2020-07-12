@@ -1,6 +1,6 @@
 # XIA - LINE Web Client
 
-![logo](logo.svg)
+![logo](src/assets/logo.svg)
 
 ## Warning
 This is a side project that it is not ensuring your account whether will be banned by [LINE Corp.](https://linecorp.com)
