@@ -3,13 +3,19 @@
     <h1>LINE Web Client for any platform</h1>
     <p>
       This is an
-      <a href="https://github.com/supersonictw/xia" target="_blank" rel="noopener">OSS</a>
+      <a
+        href="https://github.com/supersonictw/xia"
+        target="_blank"
+        rel="noopener"
+        >OSS</a
+      >
       with
       <a
         href="https://github.com/supersonictw/xia/blob/master/LICENSE"
         target="_blank"
         rel="noopener"
-      >Mozilla Public License v.2.0</a>.
+        >Mozilla Public License v.2.0</a
+      >.
     </p>
     <h3>Login with LINE account</h3>
     <p>{{ loginStatus }}</p>
@@ -48,6 +54,7 @@
 import Constant from "@/data/const.js";
 
 import utf8 from "utf8";
+import axios from "axios";
 import thrift from "thrift";
 import crypto from "node-bignumber";
 
@@ -61,9 +68,9 @@ export default {
       user: {
         ip_addr: "Unknown",
         identity: "",
-        password: ""
+        password: "",
       },
-      loginStatus: ""
+      loginStatus: "",
     };
   },
   methods: {
@@ -76,7 +83,7 @@ export default {
       const loginRequest = await this.getCredential();
       const loginResponse = await loginClient
         .loginZ(loginRequest)
-        .catch(error => (this.loginStatus = error.reason));
+        .catch((error) => (this.loginStatus = error.reason));
       if (loginResponse !== this.loginStatus) {
         await this.verifyPinCode(loginResponse);
       }
@@ -106,29 +113,27 @@ export default {
         accessLocation: this.user.ip_addr,
         systemName: Constant.NAME,
         certificate: null,
-        e2eeVersion: 0
+        e2eeVersion: 0,
       });
     },
     async verifyPinCode(loginResult) {
       this.loginStatus = `Confirm your PinCode with ${loginResult.pinCode} in 2 minutes.`;
       switch (loginResult.type) {
         case lineType.LoginResultType.REQUIRE_DEVICE_CONFIRM: {
-          const certificateResponse = await fetch(
+          const certificateResponse = await axios(
             `${Constant.LINE_USE_HTTPS ? "https" : "http"}://${
               Constant.LINE_SERVER_HOST
             }${Constant.LINE_CERTIFICATE_PATH}`,
             {
               method: "GET",
-              cache: "no-cache",
               headers: {
                 Accept: "application/json",
                 "X-Line-Access": loginResult.verifier,
-                "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY
+                "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY,
               },
-              keepalive: true
             }
           );
-          const accessKey = await certificateResponse.json();
+          const accessKey = certificateResponse.data;
           const verifyClient = this.connect(Constant.LINE_LOGIN_PATH);
           verifyClient.setHeader;
           const verifyRequest = new lineType.LoginRequest({
@@ -138,7 +143,7 @@ export default {
             keepLoggedIn: true,
             accessLocation: this.user.ip_addr,
             systemName: Constant.NAME,
-            e2eeVersion: 0
+            e2eeVersion: 0,
           });
           const verifyResult = await verifyClient.loginZ(verifyRequest);
           if (verifyResult.type == lineType.LoginResultType.SUCCESS) {
@@ -159,9 +164,9 @@ export default {
       }
     },
     async getUserIP() {
-      let response = await fetch("https://restapi.starinc.xyz/basic/ip");
-      let data = await response.json();
-      return data.data.ip_addr;
+      let response = await axios("https://restapi.starinc.xyz/basic/ip");
+      let result = response.data;
+      return result.data.ip_addr;
     },
     connect(path) {
       let host = Constant.LINE_SERVER_HOST;
@@ -170,26 +175,26 @@ export default {
         transport: thrift.TBufferedTransport,
         protocol: thrift.TCompactProtocol,
         headers: {
-          "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY
+          "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY,
         },
         https: Constant.LINE_USE_HTTPS,
         path: path,
-        useCORS: true
+        useCORS: true,
       };
 
       let connection = thrift.createHttpConnection(host, port, opts);
       let thriftClient = thrift.createHttpClient(talkService, connection);
 
-      connection.on("error", err => {
+      connection.on("error", (err) => {
         console.error(err);
       });
 
       return thriftClient;
-    }
+    },
   },
   async created() {
     this.user.ip_addr = await this.getUserIP();
-  }
+  },
 };
 </script>
 
