@@ -10,6 +10,7 @@
 
 <template>
   <div>
+    <img alt="XIA logo" src="@/assets/logo.svg" />
     <h2>LINE Web Client for any platform</h2>
     <p>
       This is an
@@ -96,8 +97,11 @@ export default {
         .catch((error) => (this.loginStatus = error.reason));
       if (loginResponse !== this.loginStatus) {
         let status = await this.verifyPinCode(loginResponse);
-        if (status == true) {
-          this.$router.replace({ name: Constant.ROUTER_TAG_HOME });
+        if (status === true) {
+          setTimeout(
+            () => this.$router.push({ name: Constant.ROUTER_TAG_DASHBOARD }),
+            1000
+          );
         } else {
           this.loginStatus = "Login failed";
         }
@@ -166,12 +170,7 @@ export default {
           if (verifyResult.type == lineType.LoginResultType.SUCCESS) {
             this.loginStatus = "Successful";
             this.setAuthToken(verifyResult.authToken);
-            if (verifyResult.certificate !== "") {
-              this.$cookies.set(
-                `XIA_AccessCertificate_${this.user.identity}`,
-                verifyResult.certificate
-              );
-            }
+            this.setAccessCertificate(verifyResult.certificate);
             return true;
           }
           this.loginStatus = "Unknown Error";
@@ -216,6 +215,12 @@ export default {
     },
     setAuthToken(authToken) {
       this.$cookies.set("XIA_AccessKey", authToken);
+    },
+    setAccessCertificate(certificate) {
+      this.$cookies.set(
+        `XIA_AccessCertificate_${this.user.identity}`,
+        certificate
+      );
     },
   },
   async created() {

@@ -10,7 +10,8 @@
 
 export default {
   NAME: "XIA",
-  ROUTER_TAG_HOME: "Home",
+  ROUTER_TAG_LOGIN: "Login",
+  ROUTER_TAG_DASHBOARD:"Dashboard",
   ROUTER_TAG_CHAT: "Chat",
   ROUTER_TAG_ABOUT: "About",
   ROUTER_TAG_NOT_FOUND: "Not Found",

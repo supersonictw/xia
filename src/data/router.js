@@ -13,7 +13,8 @@ import VueRouter from "vue-router";
 
 import Constant from "@/data/const.js";
 
-import Console from "@/views/Console.vue";
+import Login from "@/views/Login.vue";
+import Dashboard from "@/views/Dashboard.vue";
 import Chat from "@/views/Chat.vue";
 import About from "@/views/About.vue";
 import NotFound from "@/views/NotFound.vue";
@@ -23,8 +24,13 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: Constant.ROUTER_TAG_HOME,
-    component: Console,
+    name: Constant.ROUTER_TAG_LOGIN,
+    component: Login,
+  },
+  {
+    path: "/dashboard",
+    name: Constant.ROUTER_TAG_DASHBOARD,
+    component: Dashboard,
   },
   {
     path: "/chat",

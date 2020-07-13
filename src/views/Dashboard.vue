@@ -8,3 +8,20 @@
   (c) 2020 SuperSonic. (https://github.com/supersonictw)
 -->
 
+<template>
+  <div>
+    <a @click="logout" href="#">Logout</a>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Dashboard",
+  methods: {
+    logout() {
+      this.$cookies.remove("XIA_AccessKey");
+      window.location.reload();
+    },
+  },
+};
+</script>

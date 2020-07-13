@@ -17,6 +17,38 @@
   </div>
 </template>
 
+<script>
+import Constants from "./data/const.js";
+
+export default {
+  name: "XIA",
+  methods: {
+    verifyAccess() {
+      if (this.$route.name == Constants.ROUTER_TAG_ABOUT) {
+        return;
+      }
+      if (this.$cookies.get("XIA_AccessKey")) {
+        if (this.$route.name === Constants.ROUTER_TAG_LOGIN) {
+          this.$router.push({ name: Constants.ROUTER_TAG_DASHBOARD });
+        }
+        return;
+      }
+      if (this.$route.name !== Constants.ROUTER_TAG_LOGIN) {
+        this.$router.push({ name: Constants.ROUTER_TAG_LOGIN });
+      }
+    },
+  },
+  created() {
+    this.verifyAccess();
+  },
+  watch: {
+    $route() {
+      this.verifyAccess();
+    },
+  },
+};
+</script>
+
 <style scoped>
 .footer {
   margin-top: 100px;
