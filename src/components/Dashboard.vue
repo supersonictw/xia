@@ -8,8 +8,3 @@
   (c) 2020 SuperSonic. (https://github.com/supersonictw)
 -->
 
-<template>
-  <div id="app" class="ui">
-    <router-view />
-  </div>
-</template>

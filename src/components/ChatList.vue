@@ -9,7 +9,5 @@
 -->
 
 <template>
-  <div id="app" class="ui">
-    <router-view />
-  </div>
+
 </template>

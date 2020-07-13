@@ -1,3 +1,13 @@
+<!--
+    XIA - LINE Web Client
+    ---
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+  (c) 2020 SuperSonic. (https://github.com/supersonictw)
+-->
+
 <template>
   <div class="hello">
     <h1>LINE Web Client for any platform</h1>
@@ -18,7 +28,7 @@
       >.
     </p>
     <h3>Login with LINE account</h3>
-    <p>{{ loginStatus }}</p>
+    <p class="warning">{{ loginStatus }}</p>
     <form class="login" method="post">
       <div>
         <label for="line-identity">Email:</label>
@@ -43,7 +53,7 @@
         />
       </div>
       <div>
-        <input type="submit" value="Login" @click="login" />
+        <input type="submit" value="Login" @click.prevent="login" />
       </div>
     </form>
     <p>IP: {{ user.ip_addr }}</p>
@@ -74,9 +84,9 @@ export default {
     };
   },
   methods: {
-    async login(e) {
-      e.preventDefault();
+    async login() {
       if (this.user.identity.length < 1 || this.user.password.length < 1) {
+        this.loginStatus = "Empty identity or password";
         return;
       }
       const loginClient = this.connect(Constant.LINE_LOGIN_PATH);
@@ -85,7 +95,12 @@ export default {
         .loginZ(loginRequest)
         .catch((error) => (this.loginStatus = error.reason));
       if (loginResponse !== this.loginStatus) {
-        await this.verifyPinCode(loginResponse);
+        let status = await this.verifyPinCode(loginResponse);
+        if (status == true) {
+          this.$router.replace({ name: Constant.ROUTER_TAG_HOME });
+        } else {
+          this.loginStatus = "Login failed";
+        }
       }
     },
     async getCredential() {
@@ -112,7 +127,9 @@ export default {
         keepLoggedIn: true,
         accessLocation: this.user.ip_addr,
         systemName: Constant.NAME,
-        certificate: null,
+        certificate: this.$cookies.get(
+          `XIA_AccessCertificate_${this.user.identity}`
+        ),
         e2eeVersion: 0,
       });
     },
@@ -148,7 +165,13 @@ export default {
           const verifyResult = await verifyClient.loginZ(verifyRequest);
           if (verifyResult.type == lineType.LoginResultType.SUCCESS) {
             this.loginStatus = "Successful";
-            this.$store.commit("updateAuthToken", verifyResult.authToken);
+            this.setAuthToken(verifyResult.authToken);
+            if (verifyResult.certificate !== "") {
+              this.$cookies.set(
+                `XIA_AccessCertificate_${this.user.identity}`,
+                verifyResult.certificate
+              );
+            }
             return true;
           }
           this.loginStatus = "Unknown Error";
@@ -159,7 +182,7 @@ export default {
           return false;
         case lineType.LoginResultType.SUCCESS:
           this.loginStatus = "Successful";
-          this.$store.commit("updateAuthToken", loginResult.authToken);
+          this.setAuthToken(loginResult.authToken);
           return true;
       }
     },
@@ -191,6 +214,9 @@ export default {
 
       return thriftClient;
     },
+    setAuthToken(authToken) {
+      this.$cookies.set("XIA_AccessKey", authToken);
+    },
   },
   async created() {
     this.user.ip_addr = await this.getUserIP();
@@ -199,8 +225,16 @@ export default {
 </script>
 
 <style scoped>
+h3 {
+  margin: 40px 0 0;
+}
+
 .login,
 .login input {
   margin: 15px 15px 15px 15px;
+}
+
+.warning {
+  color: #ff1100;
 }
 </style>

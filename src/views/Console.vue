@@ -9,7 +9,19 @@
 -->
 
 <template>
-  <div id="app" class="ui">
-    <router-view />
+  <div>
+    <img alt="XIA logo" src="@/assets/logo.svg" />
+    <Widget />
   </div>
 </template>
+
+<script>
+import Login from "@/components/Login.vue";
+
+export default {
+  name: "Home",
+  components: {
+    Widget: Login,
+  },
+};
+</script>

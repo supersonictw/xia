@@ -9,7 +9,19 @@
 -->
 
 <template>
-  <div id="app" class="ui">
-    <router-view />
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <h2 class="pt-3">404</h2>
+      <p>The page you request is not exists.</p>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.container {
+  text-align: center;
+  height: 150px;
+  width: auto;
+  background: #ffffff;
+}
+</style>
