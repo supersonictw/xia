@@ -11,5 +11,14 @@
 <template>
   <div id="app" class="ui">
     <router-view />
+    <div class="footer">
+      <router-link to="/about">About XIA</router-link>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.footer {
+  margin-top: 100px;
+}
+</style>

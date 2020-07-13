@@ -24,6 +24,14 @@
           >Mozilla Public License v.2.0</a
         >.
       </p>
+      <p>
+        <a
+          href="https://github.com/supersonictw/xia"
+          target="_blank"
+          rel="noopener"
+          >GitHub Repository</a
+        >
+      </p>
     </div>
   </div>
 </template>
