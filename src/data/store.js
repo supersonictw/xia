@@ -15,16 +15,16 @@ Vue.use(Vuex);
 
 const Store = new Vuex.Store({
   state: {
-    authToken: "",
+    revision: 0,
   },
   getters: {
-    getAuthToken(state) {
-      return state.authToken || false;
+    getLocalRevision(state) {
+      return state.revision;
     },
   },
   mutations: {
-    updateAuthToken(state, accessKey) {
-      state.authToken = accessKey;
+    updateLocalRevision(state, revision) {
+      state.revision = revision;
     },
   },
 });

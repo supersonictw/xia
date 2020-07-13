@@ -18,6 +18,7 @@ export default {
   LINE_USE_HTTPS: true,
   LINE_APPLICATION_IDENTITY: "CHROMEOS\t2.3.8\tChrome_OS\tXIA",
   LINE_SERVER_HOST: "gf.line.naver.jp",
+  LINE_MEDIA_HOST: "obs.line-apps.com",
   LINE_CERTIFICATE_PATH: "/Q",
   LINE_LOGIN_PATH: "/api/v4p/rs",
   LINE_AUTH_PATH: "/api/v4/TalkService.do",

@@ -1,5 +1,15 @@
+<!--
+    XIA - LINE Web Client
+    ---
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+  (c) 2020 SuperSonic. (https://github.com/supersonictw)
+-->
+
 <template>
-  <div id="back">
+  <div title="Back" id="back">
     <a @click="back" href="#">
       <svg
         alt="back"
@@ -38,7 +48,7 @@ export default {
   color: #42b983;
   margin-left: 30px;
   background: rgba(0, 0, 0, 0);
-  border-radius: 35px;
+  border-radius: 50px;
   border: #42b983 1.5px solid;
 }
 </style>

@@ -9,8 +9,12 @@
 -->
 
 <template>
-  <div id="chat-list">
-    <div class="chat-item">
+  <div id="contact-list">
+    <div id="contact-list-type">
+      <a href="#">Contact</a>
+      <a href="#">Group</a>
+    </div>
+    <div class="contact-item">
       <a href="#">
         <div id="contact">
           <img
@@ -32,9 +36,9 @@ a {
   text-decoration: none;
 }
 
-#chat-list {
+#contact-list {
   margin: 10px 10px 10px 10px;
-  width: 500px;
+  width: 200px;
   height: 350px;
   display: block;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -43,7 +47,16 @@ a {
   overflow: scroll;
 }
 
-.chat-item {
+#contact-list-type {
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#contact-list-type a {
+  margin: 0 10px 0 10px;
+}
+
+.contact-item {
   text-align: left;
   margin: 10px 0 10px 0;
 }

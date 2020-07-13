@@ -66,11 +66,10 @@ import Constant from "@/data/const.js";
 
 import utf8 from "utf8";
 import axios from "axios";
-import thrift from "thrift";
 import crypto from "node-bignumber";
 
+import lineClient from "@/computes/line.js";
 import lineType from "@/computes/line/line_types.js";
-import talkService from "@/computes/line/TalkService.js";
 
 export default {
   name: "Login",
@@ -90,7 +89,7 @@ export default {
         this.loginStatus = "Empty identity or password";
         return;
       }
-      const loginClient = this.connect(Constant.LINE_LOGIN_PATH);
+      const loginClient = lineClient(Constant.LINE_LOGIN_PATH);
       const loginRequest = await this.getCredential();
       const loginResponse = await loginClient
         .loginZ(loginRequest)
@@ -108,7 +107,7 @@ export default {
       }
     },
     async getCredential() {
-      const authClient = this.connect(Constant.LINE_AUTH_PATH);
+      const authClient = lineClient(Constant.LINE_AUTH_PATH);
       const rsaKey = await authClient.getRSAKeyInfo(
         lineType.IdentityProvider.LINE
       );
@@ -155,7 +154,7 @@ export default {
             }
           );
           const accessKey = certificateResponse.data;
-          const verifyClient = this.connect(Constant.LINE_LOGIN_PATH);
+          const verifyClient = lineClient(Constant.LINE_LOGIN_PATH);
           verifyClient.setHeader;
           const verifyRequest = new lineType.LoginRequest({
             type: lineType.LoginType.QRCODE,
@@ -189,29 +188,6 @@ export default {
       let response = await axios("https://restapi.starinc.xyz/basic/ip");
       let result = response.data;
       return result.data.ip_addr;
-    },
-    connect(path) {
-      let host = Constant.LINE_SERVER_HOST;
-      let port = Constant.LINE_USE_HTTPS ? 443 : 80;
-      let opts = {
-        transport: thrift.TBufferedTransport,
-        protocol: thrift.TCompactProtocol,
-        headers: {
-          "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY,
-        },
-        https: Constant.LINE_USE_HTTPS,
-        path: path,
-        useCORS: true,
-      };
-
-      let connection = thrift.createHttpConnection(host, port, opts);
-      let thriftClient = thrift.createHttpClient(talkService, connection);
-
-      connection.on("error", (err) => {
-        console.error(err);
-      });
-
-      return thriftClient;
     },
     setAuthToken(authToken) {
       this.$cookies.set("XIA_AccessKey", authToken);
