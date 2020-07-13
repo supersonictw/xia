@@ -15,6 +15,7 @@ import Constant from "@/data/const.js";
 
 import Console from "@/views/Console.vue";
 import Chat from "@/views/Chat.vue";
+import About from "@/views/About.vue";
 import NotFound from "@/views/NotFound.vue";
 
 Vue.use(VueRouter);
@@ -29,6 +30,11 @@ const routes = [
     path: "/chat",
     name: Constant.ROUTER_TAG_CHAT,
     component: Chat,
+  },
+  {
+    path: "/about",
+    name: Constant.ROUTER_TAG_ABOUT,
+    component: About,
   },
   {
     path: "*",

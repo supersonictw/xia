@@ -9,8 +9,8 @@
 -->
 
 <template>
-  <div class="hello">
-    <h1>LINE Web Client for any platform</h1>
+  <div>
+    <h2>LINE Web Client for any platform</h2>
     <p>
       This is an
       <a
