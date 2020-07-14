@@ -9,8 +9,8 @@
 -->
 
 <template>
-  <a title="Back" @click.prevent="back" href="#">
-    <div id="back">
+  <div id="back">
+    <a title="Back" @click.prevent="back" href="#">
       <svg
         alt="Back"
         viewBox="0 0 16 16"
@@ -25,9 +25,9 @@
         <path
           fill-rule="evenodd"
           d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
-        />
-      </svg></div
-  ></a>
+        /></svg
+    ></a>
+  </div>
 </template>
 
 <script>
