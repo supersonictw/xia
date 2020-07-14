@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     async mobileUIhandler(e) {
-      this.mobileUI = e.target.innerWidth < 780;
+      this.mobileUI = e.target.innerWidth < Constant.MOBILE_UI_WIDTH;
     },
     async getProfile() {
       this.profile = await this.client.getProfile();
@@ -67,7 +67,7 @@ export default {
   },
   data() {
     return {
-      mobileUI: true,
+      mobileUI: window.innerWidth < Constant.MOBILE_UI_WIDTH,
       client: lineClient(
         Constant.LINE_QUERY_PATH,
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
