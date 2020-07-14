@@ -18,33 +18,85 @@
 </template>
 
 <script>
-import Constants from "./data/const.js";
+import Constant from "./data/const.js";
+
+import lineClient from "@/computes/line.js";
 
 export default {
   name: "XIA",
   methods: {
     verifyAccess() {
-      if (this.$route.name == Constants.ROUTER_TAG_ABOUT) {
-        return;
+      if (this.$route.name == Constant.ROUTER_TAG_ABOUT) {
+        return null;
       }
-      if (this.$cookies.get("XIA_AccessKey")) {
-        if (this.$route.name === Constants.ROUTER_TAG_LOGIN) {
-          this.$router.push({ name: Constants.ROUTER_TAG_DASHBOARD });
+      if (this.$cookies.isKey(Constant.COOKIE_ACCESS_KEY)) {
+        if (this.$route.name === Constant.ROUTER_TAG_LOGIN) {
+          this.$router.push({ name: Constant.ROUTER_TAG_DASHBOARD });
         }
-        return;
+        this.client = lineClient(
+          Constant.LINE_QUERY_PATH,
+          this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+        );
+        return true;
       }
-      if (this.$route.name !== Constants.ROUTER_TAG_LOGIN) {
-        this.$router.push({ name: Constants.ROUTER_TAG_LOGIN });
+      if (this.$route.name !== Constant.ROUTER_TAG_LOGIN) {
+        this.$router.push({ name: Constant.ROUTER_TAG_LOGIN });
       }
+      return false;
     },
-  },
-  created() {
-    this.verifyAccess();
+    async initialize() {
+      if (this.$cookies.isKey(Constant.COOKIE_OP_REVISION)) {
+        this.revision = this.$cookies.get(Constant.COOKIE_OP_REVISION);
+      } else {
+        this.revision = await this.client.getLastOpRevision();
+        this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);
+      }
+      this.opListener();
+    },
+    async opListener() {
+      let opClient = lineClient(
+        Constant.LINE_POLL_PATH,
+        this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+      );
+      this.longPoll(opClient);
+    },
+    async longPoll(opClient) {
+      let operations = await opClient.fetchOperations(
+        Constant.FETCH_OP_NUM,
+        this.revision
+      );
+      this.opDeMux(operations);
+      await this.updateRevisionByOp(operations);
+      this.longPoll(opClient);
+    },
+    async opDeMux(operations) {
+      operations.forEach((obj) => console.log(obj));
+    },
+    async updateRevisionByOp(operations) {
+      let opLength = operations.length;
+      this.revision = Math.max(
+        operations[opLength - 2].revision,
+        operations[opLength - 1].revision
+      );
+      this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);
+    },
   },
   watch: {
     $route() {
       this.verifyAccess();
     },
+  },
+  data() {
+    return {
+      client: null,
+      revision: 0,
+    };
+  },
+  created() {
+    let status = this.verifyAccess();
+    if (status && this.client) {
+      this.initialize();
+    }
   },
 };
 </script>

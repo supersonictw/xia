@@ -31,11 +31,19 @@
 </template>
 
 <script>
+import Constant from "@/data/const.js";
+
+import lineClient from "@/computes/line.js";
+
 export default {
   name: "Logout",
   methods: {
     logout() {
-      this.$cookies.remove("XIA_AccessKey");
+      lineClient(
+        Constant.LINE_QUERY_PATH,
+        this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+      ).logout();
+      this.$cookies.remove(Constant.COOKIE_ACCESS_KEY);
       window.location.reload();
     },
   },

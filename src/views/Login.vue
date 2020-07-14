@@ -97,10 +97,7 @@ export default {
       if (loginResponse !== this.loginStatus) {
         let status = await this.verifyPinCode(loginResponse);
         if (status === true) {
-          setTimeout(
-            () => this.$router.push({ name: Constant.ROUTER_TAG_DASHBOARD }),
-            1000
-          );
+          window.location.reload();
         } else {
           this.loginStatus = "Login failed";
         }
@@ -131,7 +128,7 @@ export default {
         accessLocation: this.user.ip_addr,
         systemName: Constant.NAME,
         certificate: this.$cookies.get(
-          `XIA_AccessCertificate_${this.user.identity}`
+          `${Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX}_${this.user.identity}`
         ),
         e2eeVersion: 0,
       });
@@ -190,11 +187,11 @@ export default {
       return result.data.ip_addr;
     },
     setAuthToken(authToken) {
-      this.$cookies.set("XIA_AccessKey", authToken);
+      this.$cookies.set(Constant.COOKIE_ACCESS_KEY, authToken);
     },
     setAccessCertificate(certificate) {
       this.$cookies.set(
-        `XIA_AccessCertificate_${this.user.identity}`,
+        `${Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX}_${this.user.identity}`,
         certificate
       );
     },

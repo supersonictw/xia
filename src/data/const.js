@@ -10,8 +10,9 @@
 
 export default {
   NAME: "XIA",
+  FETCH_OP_NUM: 50,
   ROUTER_TAG_LOGIN: "Login",
-  ROUTER_TAG_DASHBOARD:"Dashboard",
+  ROUTER_TAG_DASHBOARD: "Dashboard",
   ROUTER_TAG_CHAT: "Chat",
   ROUTER_TAG_ABOUT: "About",
   ROUTER_TAG_NOT_FOUND: "Not Found",
@@ -24,4 +25,7 @@ export default {
   LINE_AUTH_PATH: "/api/v4/TalkService.do",
   LINE_QUERY_PATH: "/S4",
   LINE_POLL_PATH: "/P4",
+  COOKIE_ACCESS_KEY: "XIA_AccessKey",
+  COOKIE_ACCESS_CERTIFICATE_PREFIX: "XIA_AccessCertificate",
+  COOKIE_OP_REVISION: "XIA_OpRevision",
 };

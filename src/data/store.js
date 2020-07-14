@@ -14,19 +14,9 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 const Store = new Vuex.Store({
-  state: {
-    revision: 0,
-  },
-  getters: {
-    getLocalRevision(state) {
-      return state.revision;
-    },
-  },
-  mutations: {
-    updateLocalRevision(state, revision) {
-      state.revision = revision;
-    },
-  },
+  state: {},
+  getters: {},
+  mutations: {},
 });
 
 export default Store;
