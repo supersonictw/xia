@@ -129,21 +129,18 @@ export default {
   background: rgba(0, 0, 0, 0);
 }
 
-#msg-submit a {
-  text-decoration: none;
-}
-
 #msg-submit:hover {
-  background: rgba(0, 0, 0, 0);
+  background: rgba(0, 0, 0, 0.1);
 }
 
 #msg-submit:active {
-  background: rgba(0, 0, 0, 0.1);
+  color: rgb(255, 255, 255);
+  background: rgb(0, 0, 0);
 }
 
 #msg-submit-arrow {
   width: 35px;
   height: 35px;
-  padding-top: 10px;
+  padding-top: 13px;
 }
 </style>

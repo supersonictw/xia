@@ -10,7 +10,9 @@
 
 <template>
   <div id="app" class="ui">
-    <router-view />
+    <transition name="slide">
+      <router-view class="child-view" />
+    </transition>
     <div class="footer">
       <router-link to="/about">About XIA</router-link>
     </div>
@@ -102,6 +104,23 @@ export default {
 </script>
 
 <style scoped>
+.child-view {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  transition: all 0.6s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.slide-enter {
+  opacity: 0;
+  transform: translate(100%, 0);
+}
+
+.slide-leave-active {
+  opacity: 0;
+  transform: translate(-100px, 0);
+}
+
 .footer {
   margin-top: 100px;
 }
