@@ -47,8 +47,48 @@ export default {
       return false;
     },
     async initialize() {
+      this.syncDatas();
       await this.updateRevision();
       this.opListener();
+    },
+    async syncDatas() {
+      if (!(Constant.SESSION_CONTACT_DATA in window.localStorage)) {
+        this.syncContacts();
+      } else {
+        let data = window.localStorage.getItem(Constant.SESSION_CONTACT_DATA);
+        JSON.parse(data);
+      }
+      if (!(Constant.SESSION_GROUP_JOINED_DATA in window.localStorage)) {
+        this.syncGroupsJoined();
+      } else {
+        let data = window.localStorage.getItem(
+          Constant.SESSION_GROUP_JOINED_DATA
+        );
+        JSON.parse(data);
+      }
+      if (!(Constant.SESSION_GROUP_INVITE_DATA in window.localStorage)) {
+        this.syncGroupsInvited();
+      } else {
+        let data = window.localStorage.getItem(
+          Constant.SESSION_GROUP_INVITE_DATA
+        );
+        JSON.parse(data);
+      }
+    },
+    async syncContacts() {
+      let contactIds = await this.client.getAllContactIds();
+      let contactDatas = await this.client.getContacts(contactIds);
+      this.$store.commit("syncContacts", contactDatas);
+    },
+    async syncGroupsJoined() {
+      let groupIds = await this.client.getGroupIdsJoined();
+      let groupDatas = await this.client.getGroups(groupIds);
+      this.$store.commit("syncGroupsJoined", groupDatas);
+    },
+    async syncGroupsInvited() {
+      let groupIds = await this.client.getGroupIdsInvited();
+      let groupDatas = await this.client.getGroups(groupIds);
+      this.$store.commit("syncGroupsInvited", groupDatas);
     },
     async opListener() {
       let opClient = lineClient(

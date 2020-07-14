@@ -11,12 +11,42 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
+import Constant from "@/data/const.js";
+
 Vue.use(Vuex);
 
 const Store = new Vuex.Store({
-  state: {},
-  getters: {},
-  mutations: {},
+  state: {
+    contactData: [],
+    groupJoinedData: [],
+    groupInvitedData: [],
+  },
+  getters: {
+    getAllContactIds() {},
+  },
+  mutations: {
+    syncContacts(state, data) {
+      let jsonString = JSON.stringify(data);
+      window.localStorage.setItem(Constant.SESSION_CONTACT_DATA, jsonString);
+      state.contactData = JSON.parse(jsonString);
+    },
+    syncGroupsJoined(state, data) {
+      let jsonString = JSON.stringify(data);
+      window.localStorage.setItem(
+        Constant.SESSION_GROUP_JOINED_DATA,
+        jsonString
+      );
+      state.groupJoinedData = JSON.parse(jsonString);
+    },
+    syncGroupsInvited(state, data) {
+      let jsonString = JSON.stringify(data);
+      window.localStorage.setItem(
+        Constant.SESSION_GROUP_INVITED_DATA,
+        jsonString
+      );
+      state.groupInvitedData = JSON.parse(jsonString);
+    },
+  },
 });
 
 export default Store;

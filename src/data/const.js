@@ -31,4 +31,7 @@ export default {
   COOKIE_ACCESS_KEY: "XIA_AccessKey",
   COOKIE_ACCESS_CERTIFICATE_PREFIX: "XIA_AccessCertificate",
   COOKIE_OP_REVISION: "XIA_OpRevision",
+  SESSION_CONTACT_DATA: "XIA_Contacts",
+  SESSION_GROUP_JOINED_DATA: "XIA_Group_Joined",
+  SESSION_GROUP_INVITED_DATA: "XIA_Group_Invited",
 };

@@ -44,6 +44,8 @@ export default {
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
       ).logout();
       this.wipeCookies();
+      window.localStorage.clear();
+      window.sessionStorage.clear();
       window.location.reload();
     },
     wipeCookies() {
