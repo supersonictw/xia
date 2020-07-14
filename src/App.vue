@@ -52,25 +52,25 @@ export default {
       this.opListener();
     },
     async syncDatas() {
-      if (!(Constant.SESSION_CONTACT_DATA in window.localStorage)) {
+      if (!(Constant.STORAGE_CONTACT_DATA in window.localStorage)) {
         this.syncContacts();
       } else {
-        let data = window.localStorage.getItem(Constant.SESSION_CONTACT_DATA);
+        let data = window.localStorage.getItem(Constant.STORAGE_CONTACT_DATA);
         JSON.parse(data);
       }
-      if (!(Constant.SESSION_GROUP_JOINED_DATA in window.localStorage)) {
+      if (!(Constant.STORAGE_GROUP_JOINED_DATA in window.localStorage)) {
         this.syncGroupsJoined();
       } else {
         let data = window.localStorage.getItem(
-          Constant.SESSION_GROUP_JOINED_DATA
+          Constant.STORAGE_GROUP_JOINED_DATA
         );
         JSON.parse(data);
       }
-      if (!(Constant.SESSION_GROUP_INVITE_DATA in window.localStorage)) {
+      if (!(Constant.STORAGE_GROUP_INVITE_DATA in window.localStorage)) {
         this.syncGroupsInvited();
       } else {
         let data = window.localStorage.getItem(
-          Constant.SESSION_GROUP_INVITE_DATA
+          Constant.STORAGE_GROUP_INVITE_DATA
         );
         JSON.parse(data);
       }

@@ -27,13 +27,13 @@ const Store = new Vuex.Store({
   mutations: {
     syncContacts(state, data) {
       let jsonString = JSON.stringify(data);
-      window.localStorage.setItem(Constant.SESSION_CONTACT_DATA, jsonString);
+      window.localStorage.setItem(Constant.STORAGE_CONTACT_DATA, jsonString);
       state.contactData = JSON.parse(jsonString);
     },
     syncGroupsJoined(state, data) {
       let jsonString = JSON.stringify(data);
       window.localStorage.setItem(
-        Constant.SESSION_GROUP_JOINED_DATA,
+        Constant.STORAGE_GROUP_JOINED_DATA,
         jsonString
       );
       state.groupJoinedData = JSON.parse(jsonString);
@@ -41,7 +41,7 @@ const Store = new Vuex.Store({
     syncGroupsInvited(state, data) {
       let jsonString = JSON.stringify(data);
       window.localStorage.setItem(
-        Constant.SESSION_GROUP_INVITED_DATA,
+        Constant.STORAGE_GROUP_INVITED_DATA,
         jsonString
       );
       state.groupInvitedData = JSON.parse(jsonString);
