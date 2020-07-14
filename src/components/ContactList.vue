@@ -22,8 +22,8 @@
             src="https://avatars1.githubusercontent.com/u/13705584"
           />
           <div>
-            <h3>TEST</h3>
-            <p>Demo Messages</p>
+            <h3>Contact Name</h3>
+            <p>Status Messages</p>
           </div>
         </div></a
       >
@@ -76,16 +76,16 @@ a {
 
 #contact h3 {
   width: auto;
-  height: 30px;
-  font-size: 20px;
-  margin: 0;
+  height: 18px;
+  font-size: 15px;
+  margin: 5px auto;
 }
 
 #contact p {
   width: auto;
   height: 15px;
   font-size: 12px;
-  margin: 0;
+  margin: 5px auto;
 }
 
 .picture-icon {

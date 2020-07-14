@@ -65,7 +65,7 @@ export default {
         Constant.FETCH_OP_NUM,
         this.revision
       );
-      this.opDeMux(operations);
+      //this.opDeMux(operations);
       await this.updateRevisionByOp(operations);
       this.longPoll(opClient);
     },

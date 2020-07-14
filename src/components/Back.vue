@@ -9,12 +9,12 @@
 -->
 
 <template>
-  <div title="Back" id="back">
-    <a @click="back" href="#">
+  <a title="Back" @click.prevent="back" href="#">
+    <div id="back">
       <svg
-        alt="back"
+        alt="Back"
         viewBox="0 0 16 16"
-        class="back-arrow"
+        id="back-arrow"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -25,9 +25,9 @@
         <path
           fill-rule="evenodd"
           d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
-        /></svg
-    ></a>
-  </div>
+        />
+      </svg></div
+  ></a>
 </template>
 
 <script>

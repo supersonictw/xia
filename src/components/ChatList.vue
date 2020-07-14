@@ -11,7 +11,7 @@
 <template>
   <div id="chat-list">
     <div class="chat-item">
-      <a href="#">
+      <a href="#" @click.prevent="enterChat">
         <div id="contact">
           <img
             class="picture-icon"
@@ -26,6 +26,19 @@
     </div>
   </div>
 </template>
+
+<script>
+import Constant from "@/data/const.js";
+
+export default {
+  name: "ChatList",
+  methods: {
+    enterChat() {
+      this.$router.push({ name: Constant.ROUTER_TAG_CHAT });
+    },
+  }
+};
+</script>
 
 <style scoped>
 a {
