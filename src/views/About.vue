@@ -14,7 +14,22 @@
     <div id="about">
       <img alt="XIA logo" src="@/assets/logo.svg" />
       <h2>XIA 雫</h2>
-      <p>LINE Web Client for any platform</p>
+      <p>
+        <a href="https://line.me/" target="_blank" rel="noopener">LINE</a> Web
+        Client for any platform
+      </p>
+      <p>
+        Special thanks to:
+        <a href="https://vue.js/" target="_blank" rel="noopener">Vue.js</a>,
+        <a href="https://starinc.xyz/" target="_blank" rel="noopener"
+          >Star Inc.</a
+        >,
+        <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener"
+          >Bootstrap Icons</a
+        ><!-- ,<a href="https://linecorp.com/" target="_blank" rel="noopener"
+          >LINE Corporation.</a
+        > -->
+      </p>
       <p>
         The software is licensed under
         <a

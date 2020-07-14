@@ -10,7 +10,11 @@
 
 <template>
   <div id="chat-list">
-    <div class="chat-item" v-for="(item, itemId) in displayMessages" :key="itemId">
+    <div
+      class="chat-item"
+      v-for="(item, itemId) in displayMessages"
+      :key="itemId"
+    >
       <a href="#" @click.prevent="enterChat">
         <div class="contact">
           <img class="picture-icon" :src="item.picturePath" />
@@ -55,9 +59,7 @@ export default {
       displayMessages: [],
     };
   },
-  mounted() {
-    
-  },
+  mounted() {},
 };
 </script>
 

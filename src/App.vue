@@ -47,12 +47,7 @@ export default {
       return false;
     },
     async initialize() {
-      if (this.$cookies.isKey(Constant.COOKIE_OP_REVISION)) {
-        this.revision = this.$cookies.get(Constant.COOKIE_OP_REVISION);
-      } else {
-        this.revision = await this.client.getLastOpRevision();
-        this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);
-      }
+      await this.updateRevision();
       this.opListener();
     },
     async opListener() {
@@ -73,6 +68,14 @@ export default {
     },
     async opDeMux(operations) {
       operations.forEach((obj) => console.log(obj));
+    },
+    async updateRevision() {
+      if (this.$cookies.isKey(Constant.COOKIE_OP_REVISION)) {
+        this.revision = this.$cookies.get(Constant.COOKIE_OP_REVISION);
+      } else {
+        this.revision = await this.client.getLastOpRevision();
+        this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);
+      }
     },
     async updateRevisionByOp(operations) {
       let opLength = operations.length;

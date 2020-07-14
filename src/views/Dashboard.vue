@@ -12,30 +12,30 @@
   <div id="dashboard">
     <div class="header">
       <div class="float-right"><Logout /></div>
-      <div id="profile">
-        <img
-          v-if="profile.picturePath"
-          class="picture-icon"
-          :src="mediaURL + profile.picturePath"
-        />
-        <div>
-          <h3>{{ profile.displayName }}</h3>
-          <p>{{ profile.statusMessage }}</p>
-        </div>
+      <div id="profile-box">
+        <a @click.prevent="" href="#">
+          <div id="profile">
+            <img
+              v-if="profile.picturePath"
+              class="picture-icon"
+              :src="mediaURL + profile.picturePath"
+            />
+            <div>
+              <h3>{{ profile.displayName }}</h3>
+              <p>{{ profile.statusMessage }}</p>
+            </div>
+          </div>
+        </a>
       </div>
     </div>
-    <div v-if="mobileUI">
-      <div id="list-buttons">
-        <a class="list-button" href="#">Contacts</a>
-        <a class="list-button" href="#">Contacts</a>
+    <div>
+      <div id="tab-switcher" v-if="mobileUI">
+        <a @click.prevent="tabSwitcher" href="#">Display {{ tabSwitcherName }}</a>
       </div>
       <div id="lists">
-        <ChatList />
+        <ContactList v-if="!mobileUI || tabName == 'Contacts'" />
+        <ChatList v-if="!mobileUI || tabName == 'Chats'" />
       </div>
-    </div>
-    <div v-else id="lists">
-      <ContactList />
-      <ChatList />
     </div>
   </div>
 </template>
@@ -58,6 +58,11 @@ export default {
     ChatList,
   },
   methods: {
+    tabSwitcher() {
+      let tabs = [this.tabName, this.tabSwitcherName];
+      this.tabName = this.tabName == tabs[0] ? tabs[1] : tabs[0];
+      this.tabSwitcherName = this.tabSwitcherName == tabs[0] ? tabs[1] : tabs[0];
+    },
     async mobileUIhandler(e) {
       this.mobileUI = e.target.innerWidth < Constant.MOBILE_UI_WIDTH;
     },
@@ -67,6 +72,8 @@ export default {
   },
   data() {
     return {
+      tabName: "Contacts",
+      tabSwitcherName: "Chats",
       mobileUI: window.innerWidth < Constant.MOBILE_UI_WIDTH,
       client: lineClient(
         Constant.LINE_QUERY_PATH,
@@ -99,10 +106,26 @@ export default {
   margin-bottom: 30px;
 }
 
+#profile-box {
+  width: 250px;
+  height: 70px;
+  border-radius: 25px;
+  border: 1px solid rgba(0, 0, 0, 0);
+}
+
+#profile-box:hover {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+#profile-box a {
+  text-decoration: none;
+}
+
 #profile {
+  width: 200px;
+  margin: 8px auto;
   display: flex;
-  width: 300px;
-  height: 50px;
+  color: #000;
 }
 
 #profile .picture-icon {
@@ -123,6 +146,10 @@ export default {
   height: 20px;
   font-size: 12px;
   margin: 0;
+}
+
+#tab-switcher {
+  text-align: right;
 }
 
 #lists {
