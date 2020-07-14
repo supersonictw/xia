@@ -11,6 +11,8 @@
 export default {
   NAME: "XIA",
   FETCH_OP_NUM: 50,
+  CHAT_ROW_TEXT_LENGTH: 15,
+  CONTACT_ROW_TEXT_LENGTH: 15,
   ROUTER_TAG_LOGIN: "Login",
   ROUTER_TAG_DASHBOARD: "Dashboard",
   ROUTER_TAG_CHAT: "Chat",

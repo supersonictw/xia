@@ -74,6 +74,15 @@ a {
   background: rgba(0, 0, 0, 0);
 }
 
+#logout:hover {
+  background: rgba(0, 125, 0, 0.1);
+}
+
+#logout:active {
+  color: rgb(255, 255, 255);
+  background: rgb(125, 220, 150);
+}
+
 #logout-box {
   display: flex;
   margin: 0;
@@ -89,5 +98,24 @@ a {
   width: auto;
   height: 20px;
   font-size: 20px;
+}
+
+@media screen and (max-width: 600px) {
+  #logout {
+    width: 50px;
+    height: 15px;
+  }
+
+  #logout-door {
+    width: auto;
+    height: 15px;
+    margin-right: 3px;
+  }
+
+  #logout-text {
+    width: auto;
+    height: 10px;
+    font-size: 10px;
+  }
 }
 </style>

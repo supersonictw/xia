@@ -10,19 +10,16 @@
 
 <template>
   <div id="chat-list">
-    <div class="chat-item">
+    <div class="chat-item" v-for="(item, itemId) in displayMessages" :key="itemId">
       <a href="#" @click.prevent="enterChat">
-        <div id="contact">
-          <img
-            class="picture-icon"
-            src="https://avatars1.githubusercontent.com/u/13705584"
-          />
+        <div class="contact">
+          <img class="picture-icon" :src="item.picturePath" />
           <div>
-            <h3>TEST</h3>
-            <p>Demo Messages</p>
+            <h3>{{ item.displayName }}</h3>
+            <p>{{ item.lastMessageAbstracted }}</p>
           </div>
-        </div></a
-      >
+        </div>
+      </a>
     </div>
   </div>
 </template>
@@ -36,7 +33,31 @@ export default {
     enterChat() {
       this.$router.push({ name: Constant.ROUTER_TAG_CHAT });
     },
-  }
+    subLastMessage(lastMessage) {
+      return lastMessage.length < Constant.CHAT_ROW_TEXT_LENGTH
+        ? lastMessage
+        : `${String.substring(0, Constant.CHAT_ROW_TEXT_LENGTH)}...`;
+    },
+    async addChatItem(mid, displayName, picturePath, lastMessage) {
+      this.displayMessages.push({
+        mid,
+        displayName,
+        picturePath,
+        lastMessageAbstracted: this.subLastMessage(lastMessage),
+      });
+    },
+  },
+  data() {
+    return {
+      mediaURL: `${Constant.LINE_USE_HTTPS ? "https" : "http"}://${
+        Constant.LINE_MEDIA_HOST
+      }`,
+      displayMessages: [],
+    };
+  },
+  mounted() {
+    
+  },
 };
 </script>
 
@@ -61,27 +82,27 @@ a {
   margin: 10px 0 10px 0;
 }
 
-#contact {
+.contact {
   display: flex;
   width: auto;
   height: 50px;
   color: rgba(0, 0, 0, 0.7);
 }
 
-#contact .picture-icon {
+.contact .picture-icon {
   width: 50px;
   height: 50px;
   margin-right: 10px;
 }
 
-#contact h3 {
+.contact h3 {
   width: auto;
   height: 30px;
   font-size: 20px;
   margin: 0;
 }
 
-#contact p {
+.contact p {
   width: auto;
   height: 15px;
   font-size: 12px;

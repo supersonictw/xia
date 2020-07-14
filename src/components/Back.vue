@@ -51,4 +51,12 @@ export default {
   border-radius: 50px;
   border: #42b983 1.5px solid;
 }
+
+#back:hover {
+  background: rgba(0, 125, 0, 0.1);
+}
+
+#back:active {
+  background: rgba(0, 0, 0, 0);
+}
 </style>

@@ -24,7 +24,16 @@
         </div>
       </div>
     </div>
-    <div id="lists">
+    <div v-if="mobileUI">
+      <div id="list-buttons">
+        <a class="list-button" href="#">Contacts</a>
+        <a class="list-button" href="#">Contacts</a>
+      </div>
+      <div id="lists">
+        <ChatList />
+      </div>
+    </div>
+    <div v-else id="lists">
       <ContactList />
       <ChatList />
     </div>
@@ -49,15 +58,19 @@ export default {
     ChatList,
   },
   methods: {
+    async mobileUIhandler(e) {
+      this.mobileUI = e.target.innerWidth < 780;
+    },
     async getProfile() {
       this.profile = await this.client.getProfile();
     },
   },
   data() {
     return {
+      mobileUI: true,
       client: lineClient(
         Constant.LINE_QUERY_PATH,
-        this.$cookies.get("XIA_AccessKey")
+        this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
       ),
       profile: new lineType.Profile(),
       mediaURL: `${Constant.LINE_USE_HTTPS ? "https" : "http"}://${
@@ -66,7 +79,11 @@ export default {
     };
   },
   created() {
+    window.addEventListener("resize", this.mobileUIhandler);
     this.getProfile();
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.mobileUIhandler);
   },
 };
 </script>
