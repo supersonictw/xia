@@ -43,9 +43,17 @@ export default {
         Constant.LINE_QUERY_PATH,
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
       ).logout();
-      this.$cookies.remove(Constant.COOKIE_ACCESS_KEY);
+      this.wipeCookies();
       window.location.reload();
     },
+    wipeCookies() {
+      this.cookies.forEach((name) => this.$cookies.remove(name));
+    },
+  },
+  data() {
+    return {
+      cookies: [Constant.COOKIE_ACCESS_KEY, Constant.COOKIE_OP_REVISION],
+    };
   },
 };
 </script>

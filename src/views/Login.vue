@@ -66,6 +66,7 @@ import Constant from "@/data/const.js";
 
 import utf8 from "utf8";
 import axios from "axios";
+import hash from "js-sha256";
 import crypto from "node-bignumber";
 
 import lineClient from "@/computes/line.js";
@@ -128,7 +129,9 @@ export default {
         accessLocation: this.user.ip_addr,
         systemName: Constant.NAME,
         certificate: this.$cookies.get(
-          `${Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX}_${this.user.identity}`
+          `${Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX}_${hash.sha256(
+            this.user.identity
+          )}`
         ),
         e2eeVersion: 0,
       });
@@ -191,7 +194,9 @@ export default {
     },
     setAccessCertificate(certificate) {
       this.$cookies.set(
-        `${Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX}_${this.user.identity}`,
+        `${Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX}_${hash.sha256(
+          this.user.identity
+        )}`,
         certificate
       );
     },
