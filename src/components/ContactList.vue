@@ -98,7 +98,9 @@ export default {
       contactGroup: [],
     };
   },
-  mounted() {},
+  mounted() {
+    console.log(this.$store.state.contactData);
+  },
 };
 </script>
 

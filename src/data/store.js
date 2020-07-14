@@ -13,6 +13,8 @@ import Vuex from "vuex";
 
 import Constant from "@/data/const.js";
 
+import zlib from "zlib";
+
 Vue.use(Vuex);
 
 const Store = new Vuex.Store({
@@ -22,28 +24,42 @@ const Store = new Vuex.Store({
     groupInvitedData: [],
   },
   getters: {
-    getAllContactIds() {},
+    getAllContactIds: (state) => {
+      return state.contactData.map((contact) => contact.mid);
+    },
   },
   mutations: {
     syncContacts(state, data) {
       let jsonString = JSON.stringify(data);
-      window.localStorage.setItem(Constant.STORAGE_CONTACT_DATA, jsonString);
+      zlib.gzip(jsonString, function(err, buf) {
+        let compressedString = new Buffer(buf).toString("base64");
+        window.localStorage.setItem(
+          Constant.STORAGE_CONTACT_DATA,
+          compressedString
+        );
+      });
       state.contactData = JSON.parse(jsonString);
     },
     syncGroupsJoined(state, data) {
       let jsonString = JSON.stringify(data);
-      window.localStorage.setItem(
-        Constant.STORAGE_GROUP_JOINED_DATA,
-        jsonString
-      );
+      zlib.gzip(jsonString, function(err, buf) {
+        let compressedString = new Buffer(buf).toString("base64");
+        window.localStorage.setItem(
+          Constant.STORAGE_GROUP_JOINED_DATA,
+          compressedString
+        );
+      });
       state.groupJoinedData = JSON.parse(jsonString);
     },
     syncGroupsInvited(state, data) {
       let jsonString = JSON.stringify(data);
-      window.localStorage.setItem(
-        Constant.STORAGE_GROUP_INVITED_DATA,
-        jsonString
-      );
+      zlib.gzip(jsonString, function(err, buf) {
+        let compressedString = new Buffer(buf).toString("base64");
+        window.localStorage.setItem(
+          Constant.STORAGE_GROUP_INVITED_DATA,
+          compressedString
+        );
+      });
       state.groupInvitedData = JSON.parse(jsonString);
     },
   },

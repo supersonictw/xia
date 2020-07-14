@@ -24,6 +24,8 @@ import Constant from "./data/const.js";
 
 import lineClient from "@/computes/line.js";
 
+import zlib from "zlib";
+
 export default {
   name: "XIA",
   methods: {
@@ -56,7 +58,7 @@ export default {
         this.syncContacts();
       } else {
         let data = window.localStorage.getItem(Constant.STORAGE_CONTACT_DATA);
-        JSON.parse(data);
+        this.$store.commit("syncContacts", await this.decompress(data));
       }
       if (!(Constant.STORAGE_GROUP_JOINED_DATA in window.localStorage)) {
         this.syncGroupsJoined();
@@ -64,7 +66,7 @@ export default {
         let data = window.localStorage.getItem(
           Constant.STORAGE_GROUP_JOINED_DATA
         );
-        JSON.parse(data);
+        this.$store.commit("syncGroupsJoined", await this.decompress(data));
       }
       if (!(Constant.STORAGE_GROUP_INVITE_DATA in window.localStorage)) {
         this.syncGroupsInvited();
@@ -72,7 +74,7 @@ export default {
         let data = window.localStorage.getItem(
           Constant.STORAGE_GROUP_INVITE_DATA
         );
-        JSON.parse(data);
+        this.$store.commit("syncGroupsInvited", await this.decompress(data));
       }
     },
     async syncContacts() {
@@ -124,6 +126,9 @@ export default {
         operations[opLength - 1].revision
       );
       this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);
+    },
+    async decompress(data) {
+      return new Promise((buf) => zlib.gunzip(new Buffer(data, "base64"), buf));
     },
   },
   watch: {
