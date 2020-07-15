@@ -26,7 +26,7 @@
       v-for="(item, itemId) in getTabData()"
       :key="itemId"
     >
-      <a :title="item.displayName" href="#">
+      <a :title="getItemTitle(item)" href="#">
         <div class="contact">
           <img
             class="picture-icon"
@@ -68,7 +68,7 @@ export default {
               let group = groups[groupIndex];
               let statusMessage = "";
               if (groupIndex >= joinedNum) {
-                statusMessage += "ⓘ ";
+                statusMessage += `${Constant.GROUP_INVITING_ICON} `;
               }
               statusMessage += `Members: ${
                 group.members ? group.members.length : 0
@@ -99,6 +99,14 @@ export default {
         this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
       }
       this.tabId = tabId;
+    },
+    getItemTitle(item) {
+      if (this.tabId == 1) {
+        return item.statusMessage.includes(Constant.GROUP_INVITING_ICON)
+          ? `[Inviting] ${item.displayName}`
+          : `${item.displayName}`;
+      }
+      return item.displayName;
     },
     subDisplayName(displayName) {
       return displayName.length < Constant.CONTACT_ROW_DISPLAY_NAME_LENGTH
