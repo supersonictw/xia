@@ -49,48 +49,39 @@ export default {
       return false;
     },
     async initialize() {
-      this.syncDatas();
+      this.syncData();
       await this.updateRevision();
       this.opListener();
     },
-    async syncDatas() {
-      if (!(Constant.STORAGE_CONTACT_DATA in window.localStorage)) {
-        this.syncContacts();
-      } else {
-        let data = window.localStorage.getItem(Constant.STORAGE_CONTACT_DATA);
-        this.$store.commit("syncContacts", await this.decompress(data));
-      }
-      if (!(Constant.STORAGE_GROUP_JOINED_DATA in window.localStorage)) {
-        this.syncGroupsJoined();
-      } else {
-        let data = window.localStorage.getItem(
-          Constant.STORAGE_GROUP_JOINED_DATA
-        );
-        this.$store.commit("syncGroupsJoined", await this.decompress(data));
-      }
-      if (!(Constant.STORAGE_GROUP_INVITE_DATA in window.localStorage)) {
-        this.syncGroupsInvited();
-      } else {
-        let data = window.localStorage.getItem(
-          Constant.STORAGE_GROUP_INVITE_DATA
-        );
-        this.$store.commit("syncGroupsInvited", await this.decompress(data));
+    async syncData() {
+      let contactsDataType = {
+        [Constant.STORAGE_CONTACT_DATA]: this.syncContacts,
+        [Constant.STORAGE_GROUP_JOINED_DATA]: this.syncGroupsJoined,
+        [Constant.STORAGE_GROUP_INVITED_DATA]: this.syncGroupsInvited,
+      };
+      for (let name in contactsDataType) {
+        let data = "Unknown";
+        if (!(name in window.localStorage)) {
+          data = await contactsDataType[name]();
+        } else {
+          let compressedData = window.localStorage.getItem(name);
+          let decompressedData = await this.decompress(compressedData);
+          data = JSON.parse(decompressedData);
+        }
+        this.$store.commit("syncContactsData", [name, data]);
       }
     },
     async syncContacts() {
       let contactIds = await this.client.getAllContactIds();
-      let contactDatas = await this.client.getContacts(contactIds);
-      this.$store.commit("syncContacts", contactDatas);
+      return await this.client.getContacts(contactIds);
     },
     async syncGroupsJoined() {
       let groupIds = await this.client.getGroupIdsJoined();
-      let groupDatas = await this.client.getGroups(groupIds);
-      this.$store.commit("syncGroupsJoined", groupDatas);
+      return await this.client.getGroups(groupIds);
     },
     async syncGroupsInvited() {
       let groupIds = await this.client.getGroupIdsInvited();
-      let groupDatas = await this.client.getGroups(groupIds);
-      this.$store.commit("syncGroupsInvited", groupDatas);
+      return await this.client.getGroups(groupIds);
     },
     async opListener() {
       let opClient = lineClient(
@@ -127,8 +118,16 @@ export default {
       );
       this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);
     },
-    async decompress(data) {
-      return new Promise((buf) => zlib.gunzip(new Buffer(data, "base64"), buf));
+    async decompress(b64String) {
+      return new Promise((resolve, reject) =>
+        zlib.gunzip(new Buffer(b64String, "base64"), function(error, result) {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(Error(error));
+          }
+        })
+      );
     },
   },
   watch: {
