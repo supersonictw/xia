@@ -93,7 +93,7 @@ export default {
   border-width: 1px;
   border-radius: 5px;
   margin: 10px auto;
-  padding: 10px 10px 10px 10px;
+  padding: 10px;
   overflow: scroll;
 }
 
@@ -116,6 +116,7 @@ export default {
   width: 89%;
   height: 60px;
   margin-right: 1%;
+  resize: none;
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 5px;
 }

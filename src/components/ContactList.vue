@@ -26,7 +26,7 @@
       v-for="(item, itemId) in getTabData()"
       :key="itemId"
     >
-      <a href="#">
+      <a :title="item.displayName" href="#">
         <div class="contact">
           <img
             class="picture-icon"
@@ -56,24 +56,34 @@ export default {
       switch (this.tabId) {
         case 0: {
           let generator = function*(users) {
-            for (let userIndex in users) {
-              yield users[userIndex];
+            for (let user of users) {
+              yield user;
             }
           };
           return generator(this.contactUser);
         }
         case 1: {
-          let generator = function*(groups) {
+          let generator = function*(groups, joinedNum) {
             for (let groupIndex in groups) {
               let group = groups[groupIndex];
+              let statusMessage = "";
+              if (groupIndex >= joinedNum) {
+                statusMessage += "ⓘ ";
+              }
+              statusMessage += `Members: ${
+                group.members ? group.members.length : 0
+              }`;
+              let picturePath = group.pictureStatus
+                ? `/${group.pictureStatus}`
+                : null;
               yield {
                 displayName: group.name,
-                statusMessage: "",
-                picturePath: `/${group.pictureStatus}`,
+                statusMessage,
+                picturePath,
               };
             }
           };
-          return generator(this.contactGroup);
+          return generator(this.contactGroup, this.contactGroupJoined.length);
         }
         default:
           this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
@@ -109,15 +119,21 @@ export default {
           )}...`;
     },
   },
+  computed: {
+    contactGroup() {
+      return this.$store.state.groupJoinedData.concat(
+        this.$store.state.groupInvitedData
+      );
+    },
+  },
   data() {
     return {
-      mediaURL: `${Constant.LINE_USE_HTTPS ? "https" : "http"}://${
-        Constant.LINE_MEDIA_HOST
-      }`,
+      mediaURL: this.$store.state.mediaURL,
       tabId: 0,
       contactType: ["Contact", "Group"],
       contactUser: this.$store.state.contactData,
-      contactGroup: this.$store.state.groupJoinedData,
+      contactGroupJoined: this.$store.state.groupJoinedData,
+      contactGroupInvited: this.$store.state.groupInvitedData,
     };
   },
 };
@@ -169,6 +185,7 @@ a {
   width: auto;
   height: 50px;
   color: rgba(0, 0, 0, 0.7);
+  overflow: hidden;
 }
 
 .contact .picture-icon {

@@ -27,7 +27,7 @@ import lineClient from "@/computes/line.js";
 import zlib from "zlib";
 
 export default {
-  name: "XIA",
+  name: Constant.NAME,
   methods: {
     verifyAccess() {
       if (this.$route.name == Constant.ROUTER_TAG_ABOUT) {
@@ -49,9 +49,25 @@ export default {
       return false;
     },
     async initialize() {
+      await this.updateProfile();
       this.syncData();
-      await this.updateRevision();
+      await this.syncRevision();
       this.opListener();
+      this.$store.commit("setReady");
+    },
+    async updateProfile() {
+      let profile = await this.client.getProfile();
+      this.$store.commit("updateProfile", profile);
+    },
+    async syncRevision() {
+      let revision = 0;
+      if (this.$cookies.isKey(Constant.COOKIE_OP_REVISION)) {
+        revision = this.$cookies.get(Constant.COOKIE_OP_REVISION);
+      } else {
+        revision = await this.client.getLastOpRevision();
+        this.$cookies.set(Constant.COOKIE_OP_REVISION, revision);
+      }
+      this.$store.commit("setRevision", revision);
     },
     async syncData() {
       let contactsDataType = {
@@ -88,35 +104,12 @@ export default {
         Constant.LINE_POLL_PATH,
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
       );
-      this.longPoll(opClient);
-    },
-    async longPoll(opClient) {
       let operations = await opClient.fetchOperations(
         Constant.FETCH_OP_NUM,
         this.revision
       );
-      //this.opDeMux(operations);
-      await this.updateRevisionByOp(operations);
-      this.longPoll(opClient);
-    },
-    async opDeMux(operations) {
-      operations.forEach((obj) => console.log(obj));
-    },
-    async updateRevision() {
-      if (this.$cookies.isKey(Constant.COOKIE_OP_REVISION)) {
-        this.revision = this.$cookies.get(Constant.COOKIE_OP_REVISION);
-      } else {
-        this.revision = await this.client.getLastOpRevision();
-        this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);
-      }
-    },
-    async updateRevisionByOp(operations) {
-      let opLength = operations.length;
-      this.revision = Math.max(
-        operations[opLength - 2].revision,
-        operations[opLength - 1].revision
-      );
-      this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);
+      this.dispatch("longPoll", operations);
+      this.dispatch("updateRevision", operations);
     },
     async decompress(b64String) {
       return new Promise((resolve, reject) =>
@@ -138,7 +131,6 @@ export default {
   data() {
     return {
       client: null,
-      revision: 0,
     };
   },
   created() {

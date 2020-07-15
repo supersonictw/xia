@@ -20,16 +20,38 @@ Vue.use(Vuex);
 
 const Store = new Vuex.Store({
   state: {
+    ready: 0,
+    profile: {},
     contactData: [],
     groupJoinedData: [],
     groupInvitedData: [],
+    operations: [],
+    revision: 0,
+    mediaURL: `${Constant.LINE_USE_HTTPS ? "https" : "http"}://${
+      Constant.LINE_MEDIA_HOST
+    }`,
   },
   getters: {
-    getAllContactIds: (state) => {
-      return state.contactData.map((contact) => contact.mid);
+    contactInfoForChatList: (state) => {
+      let layout = new Map();
+      state.contactData.forEach((contact) => {
+        layout.set(contact.mid, {
+          picturePath: contact.picturePath,
+          displayName: contact.displayName,
+        });
+      });
+      return layout;
     },
   },
   mutations: {
+    setReady(state) {
+      state.ready++;
+    },
+    updateProfile(state, profileData) {
+      state.profile.DisplayName = profileData.displayName;
+      state.profile.PicturePath = profileData.picturePath;
+      state.profile.StatusMessage = profileData.statusMessage;
+    },
     pushContactData(state, { dataName, data }) {
       let dataType = {
         [Constant.STORAGE_CONTACT_DATA]: state.contactData,
@@ -42,9 +64,26 @@ const Store = new Vuex.Store({
       );
       dataType[dataName].push(data);
     },
+    pushOperations(state, data) {
+      state.operations.push(data);
+    },
+    setRevision(state, revision) {
+      state.revision = revision;
+    },
   },
   actions: {
-    syncContactsData({commit}, payload) {
+    async longPoll({ commit }, operations) {
+      operations.forEach((op) => commit("pushOperation", op));
+    },
+    async updateRevision({ commit }, operations) {
+      let opLength = operations.length;
+      let lastRevision = Math.max(
+        operations[opLength - 2].revision,
+        operations[opLength - 1].revision
+      );
+      commit("setRevision", lastRevision);
+    },
+    syncContactsData({ commit }, payload) {
       assert(
         typeof payload == "object" && payload.length == 2,
         "Invalid Payload in syncContactsData"

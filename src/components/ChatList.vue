@@ -12,15 +12,15 @@
   <div id="chat-list">
     <div
       class="chat-item"
-      v-for="(item, itemId) in displayMessages"
+      v-for="(item, itemId) in getDisplayMessages()"
       :key="itemId"
     >
-      <a href="#" @click.prevent="enterChat">
+      <a href="#" :id="item.id" @click.prevent="enterChat">
         <div class="contact">
-          <img class="picture-icon" :src="item.picturePath" />
+          <img class="picture-icon" :src="mediaURL + item.picturePath" />
           <div>
             <h3>{{ item.displayName }}</h3>
-            <p>{{ item.lastMessageAbstracted }}</p>
+            <p>{{ subLastMessage(item.lastMessage) }}</p>
           </div>
         </div>
       </a>
@@ -31,6 +31,9 @@
 <script>
 import Constant from "@/data/const.js";
 
+import hash from "js-sha256";
+import substring from "unicode-substring";
+
 export default {
   name: "ChatList",
   methods: {
@@ -40,26 +43,32 @@ export default {
     subLastMessage(lastMessage) {
       return lastMessage.length < Constant.CHAT_ROW_TEXT_LENGTH
         ? lastMessage
-        : `${String.substring(0, Constant.CHAT_ROW_TEXT_LENGTH)}...`;
+        : `${substring(lastMessage, 0, Constant.CHAT_ROW_TEXT_LENGTH)}...`;
     },
-    async addChatItem(mid, displayName, picturePath, lastMessage) {
-      this.displayMessages.push({
-        mid,
-        displayName,
-        picturePath,
-        lastMessageAbstracted: this.subLastMessage(lastMessage),
-      });
+    getDisplayMessages() {
+      let generator = function*(self) {
+        for (let message of self.displayMessages) {
+          let targetId = message.to;
+          let contactData = self.$store.getters.contactInfoForChatList.get(
+            targetId
+          );
+          yield {
+            id: hash.sha256(targetId),
+            displayName: contactData.displayName,
+            picturePath: contactData.picturePath,
+            lastMessage: message.text,
+          };
+        }
+      };
+      return generator(this);
     },
   },
   data() {
     return {
-      mediaURL: `${Constant.LINE_USE_HTTPS ? "https" : "http"}://${
-        Constant.LINE_MEDIA_HOST
-      }`,
+      mediaURL: this.$store.state.mediaURL,
       displayMessages: [],
     };
   },
-  mounted() {},
 };
 </script>
 

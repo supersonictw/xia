@@ -70,7 +70,7 @@ a {
   height: 25px;
   color: #42b983;
   margin-right: 30px;
-  padding: 10px 10px 10px 10px;
+  padding: 10px;
   border: 1px solid;
   border-radius: 10px;
   background: rgba(0, 0, 0, 0);

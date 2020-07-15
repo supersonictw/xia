@@ -15,6 +15,7 @@ import Constant from "@/data/const.js";
 
 import Login from "@/views/Login.vue";
 import Dashboard from "@/views/Dashboard.vue";
+import Profile from "@/views/Profile.vue";
 import Chat from "@/views/Chat.vue";
 import About from "@/views/About.vue";
 import NotFound from "@/views/NotFound.vue";
@@ -31,6 +32,11 @@ const routes = [
     path: "/dashboard",
     name: Constant.ROUTER_TAG_DASHBOARD,
     component: Dashboard,
+  },
+  {
+    path: "/profile",
+    name: Constant.ROUTER_TAG_PROFILE,
+    component: Profile,
   },
   {
     path: "/chat",

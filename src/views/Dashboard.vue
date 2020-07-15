@@ -13,24 +13,29 @@
     <div class="header">
       <div class="float-right"><Logout /></div>
       <div id="profile-box">
-        <a @click.prevent="" href="#">
+        <router-link :title="profileDisplayName" to="/profile">
           <div id="profile">
             <img
-              v-if="profile.picturePath"
-              class="picture-icon"
-              :src="mediaURL + profile.picturePath"
+              v-if="profilePicturePath"
+              class="profile-icon"
+              :src="mediaURL + profilePicturePath"
             />
+            <img class="profile-icon" v-else src="@/assets/logo.svg" />
             <div>
-              <h3>{{ profile.displayName }}</h3>
-              <p>{{ profile.statusMessage }}</p>
+              <div id="profile-displayName">
+                <h3>{{ profileDisplayName }}</h3>
+              </div>
+              <p>{{ subStatusMessage(profileStatusMessage) }}</p>
             </div>
           </div>
-        </a>
+        </router-link>
       </div>
     </div>
     <div>
       <div id="tab-switcher" v-if="mobileUI">
-        <a @click.prevent="tabSwitcher" href="#">Display {{ tabSwitcherName }}</a>
+        <a @click.prevent="tabSwitcher" href="#"
+          >Display {{ tabSwitcherName }}</a
+        >
       </div>
       <div id="lists">
         <ContactList v-if="!mobileUI || tabName == 'Contacts'" />
@@ -48,7 +53,8 @@ import ContactList from "@/components/ContactList.vue";
 import ChatList from "@/components/ChatList.vue";
 
 import lineClient from "@/computes/line.js";
-import lineType from "@/computes/line/line_types.js";
+
+import substring from "unicode-substring";
 
 export default {
   name: "Dashboard",
@@ -58,16 +64,38 @@ export default {
     ChatList,
   },
   methods: {
+    async waitForUpdateProfile() {
+      setTimeout(() => {
+        if (this.$store.state.ready) {
+          this.updateProfile();
+        } else {
+          this.waitForUpdateProfile();
+        }
+      }, 1);
+    },
+    updateProfile() {
+      this.profileDisplayName = this.$store.state.profile.DisplayName;
+      this.profileStatusMessage = this.$store.state.profile.StatusMessage;
+      this.profilePicturePath = this.$store.state.profile.PicturePath;
+    },
+    subStatusMessage(statusMessage) {
+      return statusMessage.length <
+        Constant.DASHBOARD_PROFILE_STATUS_MESSAGE_LENGTH
+        ? statusMessage
+        : `${substring(
+            statusMessage,
+            0,
+            Constant.DASHBOARD_PROFILE_STATUS_MESSAGE_LENGTH
+          )}...`;
+    },
     tabSwitcher() {
       let tabs = [this.tabName, this.tabSwitcherName];
       this.tabName = this.tabName == tabs[0] ? tabs[1] : tabs[0];
-      this.tabSwitcherName = this.tabSwitcherName == tabs[0] ? tabs[1] : tabs[0];
+      this.tabSwitcherName =
+        this.tabSwitcherName == tabs[0] ? tabs[1] : tabs[0];
     },
     async mobileUIhandler(e) {
       this.mobileUI = e.target.innerWidth < Constant.MOBILE_UI_WIDTH;
-    },
-    async getProfile() {
-      this.profile = await this.client.getProfile();
     },
   },
   data() {
@@ -79,15 +107,15 @@ export default {
         Constant.LINE_QUERY_PATH,
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
       ),
-      profile: new lineType.Profile(),
-      mediaURL: `${Constant.LINE_USE_HTTPS ? "https" : "http"}://${
-        Constant.LINE_MEDIA_HOST
-      }`,
+      profileDisplayName: "Loading...",
+      profileStatusMessage: "Loading...",
+      profilePicturePath: null,
+      mediaURL: this.$store.state.mediaURL,
     };
   },
   created() {
     window.addEventListener("resize", this.mobileUIhandler);
-    this.getProfile();
+    this.waitForUpdateProfile();
   },
   destroyed() {
     window.removeEventListener("resize", this.mobileUIhandler);
@@ -126,18 +154,22 @@ export default {
   margin: 8px auto;
   display: flex;
   color: #000;
+  overflow: hidden;
 }
 
-#profile .picture-icon {
+#profile .profile-icon {
   width: 50px;
   height: 50px;
+  border-radius: 90px;
   margin-right: 10px;
 }
 
-#profile h3 {
+#profile #profile-displayName,
+#profile #profile-displayName h3 {
   width: auto;
-  height: 35px;
-  font-size: 25px;
+  height: 30px;
+  font-size: 20px;
+  overflow: hidden;
   margin: 0;
 }
 
@@ -155,12 +187,6 @@ export default {
 #lists {
   display: flex;
   justify-content: center;
-}
-
-.picture-icon {
-  width: 90px;
-  height: 90px;
-  border-radius: 90px;
 }
 
 .float-right {
