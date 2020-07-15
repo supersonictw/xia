@@ -30,7 +30,21 @@ const Store = new Vuex.Store({
     },
   },
   mutations: {
-    syncContactsData(state, payload) {
+    pushContactData(state, { dataName, data }) {
+      let dataType = {
+        [Constant.STORAGE_CONTACT_DATA]: state.contactData,
+        [Constant.STORAGE_GROUP_JOINED_DATA]: state.groupJoinedData,
+        [Constant.STORAGE_GROUP_INVITED_DATA]: state.groupInvitedData,
+      };
+      assert(
+        Object.keys(dataType).includes(dataName),
+        "Invalid Name in pushContactData:" + dataName
+      );
+      dataType[dataName].push(data);
+    },
+  },
+  actions: {
+    syncContactsData({commit}, payload) {
       assert(
         typeof payload == "object" && payload.length == 2,
         "Invalid Payload in syncContactsData"
@@ -51,7 +65,12 @@ const Store = new Vuex.Store({
         let compressedString = new Buffer(buf).toString("base64");
         window.localStorage.setItem(name, compressedString);
       });
-      state.contactData = JSON.parse(jsonString);
+      data.forEach((obj) =>
+        commit("pushContactData", {
+          dataName: name,
+          data: obj,
+        })
+      );
     },
   },
 });

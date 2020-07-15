@@ -13,6 +13,7 @@
     "js-sha256": "^0.9.0",
     "node-bignumber": "^1.2.1",
     "thrift": "^0.11.0",
+    "unicode-substring": "^1.0.0",
     "utf8": "^3.0.0",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.2",

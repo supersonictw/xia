@@ -68,7 +68,7 @@ export default {
           let decompressedData = await this.decompress(compressedData);
           data = JSON.parse(decompressedData);
         }
-        this.$store.commit("syncContactsData", [name, data]);
+        this.$store.dispatch("syncContactsData", [name, data]);
       }
     },
     async syncContacts() {

@@ -28,10 +28,15 @@
     >
       <a href="#">
         <div class="contact">
-          <img class="picture-icon" :src="item.picturePath" />
+          <img
+            class="picture-icon"
+            v-if="item.picturePath"
+            :src="mediaURL + item.picturePath"
+          />
+          <img class="picture-icon" v-else src="@/assets/logo.svg" />
           <div>
-            <h3>{{ item.displayName }}</h3>
-            <p>{{ item.statusMessageAbstracted }}</p>
+            <h3>{{ subDisplayName(item.displayName) }}</h3>
+            <p>{{ subStatusMessage(item.statusMessage) }}</p>
           </div>
         </div>
       </a>
@@ -42,15 +47,37 @@
 <script>
 import Constant from "@/data/const.js";
 
+import substring from "unicode-substring";
+
 export default {
   name: "ChatList",
   methods: {
     getTabData() {
-      let data = [this.contactUser, this.contactGroup];
-      if (this.tabId >= data.length) {
-        this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
+      switch (this.tabId) {
+        case 0: {
+          let generator = function*(users) {
+            for (let userIndex in users) {
+              yield users[userIndex];
+            }
+          };
+          return generator(this.contactUser);
+        }
+        case 1: {
+          let generator = function*(groups) {
+            for (let groupIndex in groups) {
+              let group = groups[groupIndex];
+              yield {
+                displayName: group.name,
+                statusMessage: "",
+                picturePath: `/${group.pictureStatus}`,
+              };
+            }
+          };
+          return generator(this.contactGroup);
+        }
+        default:
+          this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
       }
-      return data[this.tabId];
     },
     getTabColor(e) {
       return this.tabId == e ? "actived" : "";
@@ -58,33 +85,28 @@ export default {
     switchTab(e) {
       let tabId = parseInt(e.target.id);
       let data = [this.contactUser, this.contactGroup];
-      if (tabId >= data.length) {
+      if (tabId >= data.length || tabId < 0) {
         this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
       }
       this.tabId = tabId;
     },
-    subStatusMessage(statusMessage) {
-      return statusMessage.length < Constant.CHAT_ROW_TEXT_LENGTH
-        ? statusMessage
-        : `${String.substring(0, Constant.CHAT_ROW_TEXT_LENGTH)}...`;
+    subDisplayName(displayName) {
+      return displayName.length < Constant.CONTACT_ROW_DISPLAY_NAME_LENGTH
+        ? displayName
+        : `${substring(
+            displayName,
+            0,
+            Constant.CONTACT_ROW_DISPLAY_NAME_LENGTH
+          )}...`;
     },
-    async addContactItem(
-      tabId,
-      contactId,
-      displayName,
-      picturePath,
-      statusMessage
-    ) {
-      let data = [this.contactUser, this.contactGroup];
-      if (tabId >= data.length) {
-        this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
-      }
-      data[tabId].push({
-        contactId,
-        displayName,
-        picturePath,
-        statusMessageAbstracted: this.subStatusMessage(statusMessage),
-      });
+    subStatusMessage(statusMessage) {
+      return statusMessage.length < Constant.CONTACT_ROW_STATUS_MESSAGE_LENGTH
+        ? statusMessage
+        : `${substring(
+            statusMessage,
+            0,
+            Constant.CONTACT_ROW_STATUS_MESSAGE_LENGTH
+          )}...`;
     },
   },
   data() {
@@ -94,12 +116,9 @@ export default {
       }`,
       tabId: 0,
       contactType: ["Contact", "Group"],
-      contactUser: [],
-      contactGroup: [],
+      contactUser: this.$store.state.contactData,
+      contactGroup: this.$store.state.groupJoinedData,
     };
-  },
-  mounted() {
-    console.log(this.$store.state.contactData);
   },
 };
 </script>
@@ -111,7 +130,7 @@ a {
 
 #contact-list {
   margin: 10px 10px 10px 10px;
-  width: 200px;
+  width: 250px;
   height: 350px;
   display: block;
   border: 1px solid rgba(0, 0, 0, 0.1);
