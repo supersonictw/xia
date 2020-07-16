@@ -69,6 +69,9 @@ export default {
       displayMessages: [],
     };
   },
+  created(){
+      console.log(this.$store.state.operations)
+  }
 };
 </script>
 

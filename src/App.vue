@@ -24,6 +24,7 @@ import Constant from "./data/const.js";
 
 import lineClient from "@/computes/line.js";
 
+import hash from "js-sha256";
 import zlib from "zlib";
 
 export default {
@@ -65,7 +66,6 @@ export default {
         revision = this.$cookies.get(Constant.COOKIE_OP_REVISION);
       } else {
         revision = await this.client.getLastOpRevision();
-        this.$cookies.set(Constant.COOKIE_OP_REVISION, revision);
       }
       this.$store.commit("setRevision", revision);
     },
@@ -104,12 +104,16 @@ export default {
         Constant.LINE_POLL_PATH,
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
       );
+      this.longPoll(opClient);
+    },
+    async longPoll(opClient) {
       let operations = await opClient.fetchOperations(
         Constant.FETCH_OP_NUM,
-        this.revision
+        this.$store.state.revision
       );
-      this.dispatch("longPoll", operations);
-      this.dispatch("updateRevision", operations);
+      this.$store.dispatch("opHandler", operations);
+      await this.$store.dispatch("updateRevision", operations);
+      this.longPoll(opClient);
     },
     async decompress(b64String) {
       return new Promise((resolve, reject) =>
@@ -127,10 +131,42 @@ export default {
     $route() {
       this.verifyAccess();
     },
+    async storageData(e) {
+      e.forEach((objs, index) => {
+        let alias = this.storageDataNamesAndHashes[index];
+        let nowHash = hash.sha256(objs);
+        if (nowHash !== alias[1]) {
+          let jsonString = JSON.stringify(objs);
+          zlib.gzip(jsonString, function(err, buf) {
+            let compressedString = new Buffer(buf).toString("base64");
+            window.localStorage.setItem(alias[0], compressedString);
+          });
+          alias[1] = nowHash;
+        }
+      });
+    },
+    async storageRevision() {
+      console.log(this.$store.state.revision);
+      this.$cookies.set(
+        Constant.COOKIE_OP_REVISION,
+        this.$store.state.revision
+      );
+    },
   },
   data() {
     return {
       client: null,
+      storageData: [
+        this.$store.state.contactData,
+        this.$store.state.groupJoinedData,
+        this.$store.state.groupInvitedData,
+      ],
+      storageDataNamesAndHashes: [
+        [Constant.STORAGE_CONTACT_DATA, ""],
+        [Constant.STORAGE_GROUP_JOINED_DATA, ""],
+        [Constant.STORAGE_GROUP_INVITED_DATA, ""],
+      ],
+      storageRevision: this.$store.state.revision,
     };
   },
   created() {

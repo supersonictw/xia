@@ -12,9 +12,9 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import Constant from "@/data/const.js";
+import lineType from "@/computes/line/line_types.js";
 
 import assert from "assert";
-import zlib from "zlib";
 
 Vue.use(Vuex);
 
@@ -39,6 +39,17 @@ const Store = new Vuex.Store({
           picturePath: contact.picturePath,
           displayName: contact.displayName,
         });
+      });
+      return layout;
+    },
+    messageBox: (state) => {
+      let layout = new Map();
+      state.operations.map((operation) => {
+        if (
+          operation.type == lineType.OpType.SEND_MESSAGE ||
+          operation.type == lineType.OpType.RECEIVE_MESSAGE
+        )
+          operation.message;
       });
       return layout;
     },
@@ -67,13 +78,21 @@ const Store = new Vuex.Store({
     pushOperations(state, data) {
       state.operations.push(data);
     },
+    popOperations(state, data) {
+      state.operations.pop(data);
+    },
     setRevision(state, revision) {
       state.revision = revision;
     },
   },
   actions: {
-    async longPoll({ commit }, operations) {
-      operations.forEach((op) => commit("pushOperation", op));
+    async opHandler({ commit, state }, operations) {
+      let handledOps = state.operations.map((operation) => operation.revision);
+      operations.forEach((op) => {
+        if (!handledOps.includes(op.revision) && op.revision > 0) {
+          commit("pushOperations", op);
+        }
+      });
     },
     async updateRevision({ commit }, operations) {
       let opLength = operations.length;
@@ -90,7 +109,6 @@ const Store = new Vuex.Store({
       );
       let name = payload[0],
         data = payload[1];
-      let jsonString = JSON.stringify(data);
       let acceptableType = [
         Constant.STORAGE_CONTACT_DATA,
         Constant.STORAGE_GROUP_JOINED_DATA,
@@ -100,10 +118,6 @@ const Store = new Vuex.Store({
         acceptableType.includes(name),
         "Invalid Name in syncContactsData:" + name
       );
-      zlib.gzip(jsonString, function(err, buf) {
-        let compressedString = new Buffer(buf).toString("base64");
-        window.localStorage.setItem(name, compressedString);
-      });
       data.forEach((obj) =>
         commit("pushContactData", {
           dataName: name,
