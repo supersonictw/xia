@@ -32,10 +32,25 @@ export default {
   LINE_AUTH_PATH: "/api/v4/TalkService.do",
   LINE_QUERY_PATH: "/S4",
   LINE_POLL_PATH: "/P4",
+  get LINE_MEDIA_URL() {
+    return `${this.LINE_USE_HTTPS ? "https" : "http"}://${
+      this.LINE_MEDIA_HOST
+    }`;
+  },
   COOKIE_ACCESS_KEY: "XIA_AccessKey",
   COOKIE_ACCESS_CERTIFICATE_PREFIX: "XIA_AccessCertificate",
   COOKIE_OP_REVISION: "XIA_OpRevision",
+  get ALL_COOKIES() {
+    return [this.COOKIE_ACCESS_KEY, this.COOKIE_OP_REVISION];
+  },
   STORAGE_CONTACT_DATA: "XIA_Contacts",
   STORAGE_GROUP_JOINED_DATA: "XIA_Group_Joined",
   STORAGE_GROUP_INVITED_DATA: "XIA_Group_Invited",
+  get ALL_STORAGES() {
+    return [
+      this.STORAGE_CONTACT_DATA,
+      this.STORAGE_GROUP_JOINED_DATA,
+      this.STORAGE_GROUP_INVITED_DATA,
+    ];
+  },
 };

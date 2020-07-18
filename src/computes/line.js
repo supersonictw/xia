@@ -12,8 +12,8 @@ import thrift from "thrift";
 import Constant from "@/data/const.js";
 import talkService from "@/computes/line/TalkService.js";
 
-let lineClient = function(path, authToken = null) {
-  let header = {
+const lineClient = function(path, authToken = null) {
+  const header = {
     "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY,
   };
 
@@ -21,9 +21,9 @@ let lineClient = function(path, authToken = null) {
     header["X-Line-Access"] = authToken;
   }
 
-  let host = Constant.LINE_SERVER_HOST;
-  let port = Constant.LINE_USE_HTTPS ? 443 : 80;
-  let opts = {
+  const host = Constant.LINE_SERVER_HOST;
+  const port = Constant.LINE_USE_HTTPS ? 443 : 80;
+  const opts = {
     transport: thrift.TBufferedTransport,
     protocol: thrift.TCompactProtocol,
     headers: header,
@@ -32,8 +32,8 @@ let lineClient = function(path, authToken = null) {
     useCORS: true,
   };
 
-  let connection = thrift.createHttpConnection(host, port, opts);
-  let thriftClient = thrift.createHttpClient(talkService, connection);
+  const connection = thrift.createHttpConnection(host, port, opts);
+  const thriftClient = thrift.createHttpClient(talkService, connection);
 
   connection.on("error", (err) => {
     console.error(err);

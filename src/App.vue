@@ -30,7 +30,7 @@ import zlib from "zlib";
 export default {
   name: Constant.NAME,
   methods: {
-    verifyAccess() {
+    async verifyAccess() {
       if (this.$route.name == Constant.ROUTER_TAG_ABOUT) {
         return null;
       }
@@ -38,36 +38,39 @@ export default {
         if (this.$route.name === Constant.ROUTER_TAG_LOGIN) {
           this.$router.push({ name: Constant.ROUTER_TAG_DASHBOARD });
         }
-        this.client = lineClient(
-          Constant.LINE_QUERY_PATH,
-          this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
-        );
-        return true;
+        if (this.$store.state.ready || (await this.getProfile())) {
+          return true;
+        }
       }
       if (this.$route.name !== Constant.ROUTER_TAG_LOGIN) {
         this.$router.push({ name: Constant.ROUTER_TAG_LOGIN });
       }
       return false;
     },
-    async initialize() {
-      await this.updateProfile();
-      this.syncData();
-      await this.syncRevision();
-      this.opListener();
-      this.$store.commit("setReady");
-    },
-    async updateProfile() {
-      let profile = await this.client.getProfile();
-      this.$store.commit("updateProfile", profile);
+    async getProfile() {
+      try {
+        let profile = await this.client.getProfile();
+        this.$store.dispatch("updateProfile", profile);
+        return true;
+      } catch (e) {
+        this.revoke();
+        return false;
+      }
     },
     async syncRevision() {
-      let revision = 0;
       if (this.$cookies.isKey(Constant.COOKIE_OP_REVISION)) {
-        revision = this.$cookies.get(Constant.COOKIE_OP_REVISION);
+        this.revision = this.$cookies.get(Constant.COOKIE_OP_REVISION);
       } else {
-        revision = await this.client.getLastOpRevision();
+        this.revision = await this.client.getLastOpRevision();
       }
-      this.$store.commit("setRevision", revision);
+    },
+    async updateRevision(operations) {
+      let opLength = operations.length;
+      this.revision = operations[opLength - 1].revision.compare(
+        operations[opLength - 2].revision
+      )
+        ? operations[opLength - 2].revision
+        : operations[opLength - 1].revision;
     },
     async syncData() {
       let contactsDataType = {
@@ -81,7 +84,14 @@ export default {
           data = await contactsDataType[name]();
         } else {
           let compressedData = window.localStorage.getItem(name);
-          let decompressedData = await this.decompress(compressedData);
+          let decompressedData = await new Promise((resolve, reject) =>
+            zlib.gunzip(
+              new Buffer(compressedData, "base64"),
+              (error, result) => {
+                !error ? resolve(result) : reject(Error(error));
+              }
+            )
+          );
           data = JSON.parse(decompressedData);
         }
         this.$store.dispatch("syncContactsData", [name, data]);
@@ -107,24 +117,23 @@ export default {
       this.longPoll(opClient);
     },
     async longPoll(opClient) {
-      let operations = await opClient.fetchOperations(
-        Constant.FETCH_OP_NUM,
-        this.$store.state.revision
-      );
-      this.$store.dispatch("opHandler", operations);
-      await this.$store.dispatch("updateRevision", operations);
+      try {
+        let operations = await opClient.fetchOperations(
+          this.revision,
+          Constant.FETCH_OP_NUM
+        );
+        this.$store.dispatch("opHandler", operations);
+        await this.updateRevision(operations);
+      } catch (e) {
+        console.error(e);
+      }
       this.longPoll(opClient);
     },
-    async decompress(b64String) {
-      return new Promise((resolve, reject) =>
-        zlib.gunzip(new Buffer(b64String, "base64"), function(error, result) {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(Error(error));
-          }
-        })
-      );
+    async revoke() {
+      Constant.ALL_COOKIES.forEach((name) => this.$cookies.remove(name));
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+      window.location.reload();
     },
   },
   watch: {
@@ -145,17 +154,15 @@ export default {
         }
       });
     },
-    async storageRevision() {
-      console.log(this.$store.state.revision);
-      this.$cookies.set(
-        Constant.COOKIE_OP_REVISION,
-        this.$store.state.revision
-      );
+    revision() {
+      console.log(this.revision.toString());
+      this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);
     },
   },
   data() {
     return {
       client: null,
+      revision: 0,
       storageData: [
         this.$store.state.contactData,
         this.$store.state.groupJoinedData,
@@ -166,13 +173,18 @@ export default {
         [Constant.STORAGE_GROUP_JOINED_DATA, ""],
         [Constant.STORAGE_GROUP_INVITED_DATA, ""],
       ],
-      storageRevision: this.$store.state.revision,
     };
   },
-  created() {
-    let status = this.verifyAccess();
-    if (status && this.client) {
-      this.initialize();
+  async created() {
+    this.client = lineClient(
+      Constant.LINE_QUERY_PATH,
+      this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+    );
+    if (await this.verifyAccess()) {
+      this.syncData();
+      await this.syncRevision();
+      this.opListener();
+      this.$store.commit("setReady");
     }
   },
 };

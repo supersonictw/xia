@@ -26,10 +26,6 @@ const Store = new Vuex.Store({
     groupJoinedData: [],
     groupInvitedData: [],
     operations: [],
-    revision: 0,
-    mediaURL: `${Constant.LINE_USE_HTTPS ? "https" : "http"}://${
-      Constant.LINE_MEDIA_HOST
-    }`,
   },
   getters: {
     contactInfoForChatList: (state) => {
@@ -44,12 +40,13 @@ const Store = new Vuex.Store({
     },
     messageBox: (state) => {
       let layout = new Map();
-      state.operations.map((operation) => {
+      state.operations.forEach((operation) => {
         if (
           operation.type == lineType.OpType.SEND_MESSAGE ||
           operation.type == lineType.OpType.RECEIVE_MESSAGE
-        )
-          operation.message;
+        ) {
+          layout.set(operation.message.to, operation.message);
+        }
       });
       return layout;
     },
@@ -81,9 +78,6 @@ const Store = new Vuex.Store({
     popOperations(state, data) {
       state.operations.pop(data);
     },
-    setRevision(state, revision) {
-      state.revision = revision;
-    },
   },
   actions: {
     async opHandler({ commit, state }, operations) {
@@ -94,13 +88,8 @@ const Store = new Vuex.Store({
         }
       });
     },
-    async updateRevision({ commit }, operations) {
-      let opLength = operations.length;
-      let lastRevision = Math.max(
-        operations[opLength - 2].revision,
-        operations[opLength - 1].revision
-      );
-      commit("setRevision", lastRevision);
+    async updateProfile({ commit }, profileData) {
+      commit("updateProfile", profileData);
     },
     syncContactsData({ commit }, payload) {
       assert(
@@ -109,13 +98,8 @@ const Store = new Vuex.Store({
       );
       let name = payload[0],
         data = payload[1];
-      let acceptableType = [
-        Constant.STORAGE_CONTACT_DATA,
-        Constant.STORAGE_GROUP_JOINED_DATA,
-        Constant.STORAGE_GROUP_INVITED_DATA,
-      ];
       assert(
-        acceptableType.includes(name),
+        Constant.ALL_STORAGES.includes(name),
         "Invalid Name in syncContactsData:" + name
       );
       data.forEach((obj) =>

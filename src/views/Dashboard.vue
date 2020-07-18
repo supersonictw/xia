@@ -110,7 +110,7 @@ export default {
       profileDisplayName: "Loading...",
       profileStatusMessage: "Loading...",
       profilePicturePath: null,
-      mediaURL: this.$store.state.mediaURL,
+      mediaURL: Constant.LINE_MEDIA_URL,
     };
   },
   created() {

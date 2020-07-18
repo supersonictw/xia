@@ -43,19 +43,11 @@ export default {
         Constant.LINE_QUERY_PATH,
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
       ).logout();
-      this.wipeCookies();
+      Constant.ALL_COOKIES.forEach((name) => this.$cookies.remove(name));
       window.localStorage.clear();
       window.sessionStorage.clear();
       window.location.reload();
     },
-    wipeCookies() {
-      this.cookies.forEach((name) => this.$cookies.remove(name));
-    },
-  },
-  data() {
-    return {
-      cookies: [Constant.COOKIE_ACCESS_KEY, Constant.COOKIE_OP_REVISION],
-    };
   },
 };
 </script>

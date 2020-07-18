@@ -65,12 +65,12 @@ export default {
   },
   data() {
     return {
-      mediaURL: this.$store.state.mediaURL,
+      mediaURL: Constant.LINE_MEDIA_URL,
       displayMessages: [],
     };
   },
   created(){
-      console.log(this.$store.state.operations)
+      console.log(this.$store.getters.messageBox)
   }
 };
 </script>

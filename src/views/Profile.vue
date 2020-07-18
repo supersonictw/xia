@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import Constant from "@/data/const.js";
+
 import Back from "@/components/Back.vue";
 
 export default {
@@ -56,7 +58,7 @@ export default {
       displayName: "Loading...",
       statusMessage: "Loading...",
       picturePath: null,
-      mediaURL: this.$store.state.mediaURL,
+      mediaURL: Constant.LINE_MEDIA_URL,
     };
   },
   created() {

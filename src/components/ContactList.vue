@@ -136,7 +136,7 @@ export default {
   },
   data() {
     return {
-      mediaURL: this.$store.state.mediaURL,
+      mediaURL: Constant.LINE_MEDIA_URL,
       tabId: 0,
       contactType: ["Contact", "Group"],
       contactUser: this.$store.state.contactData,
