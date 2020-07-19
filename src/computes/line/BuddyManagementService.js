@@ -1,4 +1,4 @@
-/*jshint esversion: 8 */
+/* eslint-disable */
 /*
     XIA - LINE Web Client
     ---

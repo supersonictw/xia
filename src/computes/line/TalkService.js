@@ -1,4 +1,4 @@
-/*jshint esversion: 8 */
+/* eslint-disable */
 /*
     XIA - LINE Web Client
     ---
@@ -37,7 +37,6 @@ TalkService_acceptGroupInvitation_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -103,7 +102,6 @@ TalkService_acceptGroupInvitation_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -161,7 +159,6 @@ TalkService_acceptProximityMatches_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -181,9 +178,7 @@ TalkService_acceptProximityMatches_args.prototype.read = function(input) {
         var _size800 = 0;
         var _rtmp3804;
         this.ids = [];
-        var _etype803 = 0;
         _rtmp3804 = input.readSetBegin();
-        _etype803 = _rtmp3804.etype;
         _size800 = _rtmp3804.size;
         for (var _i805 = 0; _i805 < _size800; ++_i805)
         {
@@ -249,7 +244,6 @@ TalkService_acceptProximityMatches_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -303,7 +297,6 @@ TalkService_acquireCallRoute_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -364,7 +357,6 @@ TalkService_acquireCallRoute_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -377,9 +369,7 @@ TalkService_acquireCallRoute_result.prototype.read = function(input) {
         var _size808 = 0;
         var _rtmp3812;
         this.success = [];
-        var _etype811 = 0;
         _rtmp3812 = input.readListBegin();
-        _etype811 = _rtmp3812.etype;
         _size808 = _rtmp3812.size;
         for (var _i813 = 0; _i813 < _size808; ++_i813)
         {
@@ -449,7 +439,6 @@ TalkService_acquireCallTicket_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -510,7 +499,6 @@ TalkService_acquireCallTicket_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -573,7 +561,6 @@ TalkService_acquireEncryptedAccessToken_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -634,7 +621,6 @@ TalkService_acquireEncryptedAccessToken_result.prototype.read = function(input) 
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -701,7 +687,6 @@ TalkService_addSnsId_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -771,7 +756,6 @@ TalkService_addSnsId_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -838,7 +822,6 @@ TalkService_blockContact_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -904,7 +887,6 @@ TalkService_blockContact_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -962,7 +944,6 @@ TalkService_blockRecommendation_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1028,7 +1009,6 @@ TalkService_blockRecommendation_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1090,7 +1070,6 @@ TalkService_cancelGroupInvitation_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1117,9 +1096,7 @@ TalkService_cancelGroupInvitation_args.prototype.read = function(input) {
         var _size816 = 0;
         var _rtmp3820;
         this.contactIds = [];
-        var _etype819 = 0;
         _rtmp3820 = input.readListBegin();
-        _etype819 = _rtmp3820.etype;
         _size816 = _rtmp3820.size;
         for (var _i821 = 0; _i821 < _size816; ++_i821)
         {
@@ -1190,7 +1167,6 @@ TalkService_cancelGroupInvitation_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1248,7 +1224,6 @@ TalkService_changeVerificationMethod_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1318,7 +1293,6 @@ TalkService_changeVerificationMethod_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1368,7 +1342,7 @@ TalkService_changeVerificationMethod_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_clearIdentityCredential_args = function(args) {
+var TalkService_clearIdentityCredential_args = function() {
 };
 TalkService_clearIdentityCredential_args.prototype = {};
 TalkService_clearIdentityCredential_args.prototype.read = function(input) {
@@ -1376,9 +1350,7 @@ TalkService_clearIdentityCredential_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -1414,7 +1386,6 @@ TalkService_clearIdentityCredential_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1472,7 +1443,6 @@ TalkService_clearMessageBox_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1538,7 +1508,6 @@ TalkService_clearMessageBox_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1592,7 +1561,6 @@ TalkService_closeProximityMatch_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1649,7 +1617,6 @@ TalkService_closeProximityMatch_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1711,7 +1678,6 @@ TalkService_commitSendMessage_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1738,9 +1704,7 @@ TalkService_commitSendMessage_args.prototype.read = function(input) {
         var _size824 = 0;
         var _rtmp3828;
         this.receiverMids = [];
-        var _etype827 = 0;
         _rtmp3828 = input.readListBegin();
-        _etype827 = _rtmp3828.etype;
         _size824 = _rtmp3828.size;
         for (var _i829 = 0; _i829 < _size824; ++_i829)
         {
@@ -1815,7 +1779,6 @@ TalkService_commitSendMessage_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1828,11 +1791,7 @@ TalkService_commitSendMessage_result.prototype.read = function(input) {
         var _size832 = 0;
         var _rtmp3836;
         this.success = {};
-        var _ktype833 = 0;
-        var _vtype834 = 0;
         _rtmp3836 = input.readMapBegin();
-        _ktype833 = _rtmp3836.ktype;
-        _vtype834 = _rtmp3836.vtype;
         _size832 = _rtmp3836.size;
         for (var _i837 = 0; _i837 < _size832; ++_i837)
         {
@@ -1913,7 +1872,6 @@ TalkService_commitSendMessages_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -1933,9 +1891,7 @@ TalkService_commitSendMessages_args.prototype.read = function(input) {
         var _size842 = 0;
         var _rtmp3846;
         this.messageIds = [];
-        var _etype845 = 0;
         _rtmp3846 = input.readListBegin();
-        _etype845 = _rtmp3846.etype;
         _size842 = _rtmp3846.size;
         for (var _i847 = 0; _i847 < _size842; ++_i847)
         {
@@ -1953,9 +1909,7 @@ TalkService_commitSendMessages_args.prototype.read = function(input) {
         var _size849 = 0;
         var _rtmp3853;
         this.receiverMids = [];
-        var _etype852 = 0;
         _rtmp3853 = input.readListBegin();
-        _etype852 = _rtmp3853.etype;
         _size849 = _rtmp3853.size;
         for (var _i854 = 0; _i854 < _size849; ++_i854)
         {
@@ -2039,7 +1993,6 @@ TalkService_commitSendMessages_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -2052,11 +2005,7 @@ TalkService_commitSendMessages_result.prototype.read = function(input) {
         var _size858 = 0;
         var _rtmp3862;
         this.success = {};
-        var _ktype859 = 0;
-        var _vtype860 = 0;
         _rtmp3862 = input.readMapBegin();
-        _ktype859 = _rtmp3862.ktype;
-        _vtype860 = _rtmp3862.vtype;
         _size858 = _rtmp3862.size;
         for (var _i863 = 0; _i863 < _size858; ++_i863)
         {
@@ -2137,7 +2086,6 @@ TalkService_commitUpdateProfile_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -2157,9 +2105,7 @@ TalkService_commitUpdateProfile_args.prototype.read = function(input) {
         var _size868 = 0;
         var _rtmp3872;
         this.attrs = [];
-        var _etype871 = 0;
         _rtmp3872 = input.readListBegin();
-        _etype871 = _rtmp3872.etype;
         _size868 = _rtmp3872.size;
         for (var _i873 = 0; _i873 < _size868; ++_i873)
         {
@@ -2177,9 +2123,7 @@ TalkService_commitUpdateProfile_args.prototype.read = function(input) {
         var _size875 = 0;
         var _rtmp3879;
         this.receiverMids = [];
-        var _etype878 = 0;
         _rtmp3879 = input.readListBegin();
-        _etype878 = _rtmp3879.etype;
         _size875 = _rtmp3879.size;
         for (var _i880 = 0; _i880 < _size875; ++_i880)
         {
@@ -2263,7 +2207,6 @@ TalkService_commitUpdateProfile_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -2276,11 +2219,7 @@ TalkService_commitUpdateProfile_result.prototype.read = function(input) {
         var _size884 = 0;
         var _rtmp3888;
         this.success = {};
-        var _ktype885 = 0;
-        var _vtype886 = 0;
         _rtmp3888 = input.readMapBegin();
-        _ktype885 = _rtmp3888.ktype;
-        _vtype886 = _rtmp3888.vtype;
         _size884 = _rtmp3888.size;
         for (var _i889 = 0; _i889 < _size884; ++_i889)
         {
@@ -2357,7 +2296,6 @@ TalkService_confirmEmail_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -2423,7 +2361,6 @@ TalkService_confirmEmail_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -2485,7 +2422,6 @@ TalkService_createGroup_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -2512,9 +2448,7 @@ TalkService_createGroup_args.prototype.read = function(input) {
         var _size894 = 0;
         var _rtmp3898;
         this.contactIds = [];
-        var _etype897 = 0;
         _rtmp3898 = input.readListBegin();
-        _etype897 = _rtmp3898.etype;
         _size894 = _rtmp3898.size;
         for (var _i899 = 0; _i899 < _size894; ++_i899)
         {
@@ -2589,7 +2523,6 @@ TalkService_createGroup_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -2677,7 +2610,6 @@ TalkService_createQrcodeBase64Image_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -2807,7 +2739,6 @@ TalkService_createQrcodeBase64Image_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -2874,7 +2805,6 @@ TalkService_createRoom_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -2894,9 +2824,7 @@ TalkService_createRoom_args.prototype.read = function(input) {
         var _size902 = 0;
         var _rtmp3906;
         this.contactIds = [];
-        var _etype905 = 0;
         _rtmp3906 = input.readListBegin();
-        _etype905 = _rtmp3906.etype;
         _size902 = _rtmp3906.size;
         for (var _i907 = 0; _i907 < _size902; ++_i907)
         {
@@ -2966,7 +2894,6 @@ TalkService_createRoom_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -3016,7 +2943,7 @@ TalkService_createRoom_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_createSession_args = function(args) {
+var TalkService_createSession_args = function() {
 };
 TalkService_createSession_args.prototype = {};
 TalkService_createSession_args.prototype.read = function(input) {
@@ -3024,9 +2951,7 @@ TalkService_createSession_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -3066,7 +2991,6 @@ TalkService_createSession_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -3129,7 +3053,6 @@ TalkService_fetchAnnouncements_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -3190,7 +3113,6 @@ TalkService_fetchAnnouncements_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -3203,9 +3125,7 @@ TalkService_fetchAnnouncements_result.prototype.read = function(input) {
         var _size910 = 0;
         var _rtmp3914;
         this.success = [];
-        var _etype913 = 0;
         _rtmp3914 = input.readListBegin();
-        _etype913 = _rtmp3914.etype;
         _size910 = _rtmp3914.size;
         for (var _i915 = 0; _i915 < _size910; ++_i915)
         {
@@ -3280,7 +3200,6 @@ TalkService_fetchMessages_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -3350,7 +3269,6 @@ TalkService_fetchMessages_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -3363,9 +3281,7 @@ TalkService_fetchMessages_result.prototype.read = function(input) {
         var _size918 = 0;
         var _rtmp3922;
         this.success = [];
-        var _etype921 = 0;
         _rtmp3922 = input.readListBegin();
-        _etype921 = _rtmp3922.etype;
         _size918 = _rtmp3922.size;
         for (var _i923 = 0; _i923 < _size918; ++_i923)
         {
@@ -3440,7 +3356,6 @@ TalkService_fetchOperations_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -3510,7 +3425,6 @@ TalkService_fetchOperations_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -3523,9 +3437,7 @@ TalkService_fetchOperations_result.prototype.read = function(input) {
         var _size926 = 0;
         var _rtmp3930;
         this.success = [];
-        var _etype929 = 0;
         _rtmp3930 = input.readListBegin();
-        _etype929 = _rtmp3930.etype;
         _size926 = _rtmp3930.size;
         for (var _i931 = 0; _i931 < _size926; ++_i931)
         {
@@ -3608,7 +3520,6 @@ TalkService_fetchOps_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -3702,7 +3613,6 @@ TalkService_fetchOps_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -3715,9 +3625,7 @@ TalkService_fetchOps_result.prototype.read = function(input) {
         var _size934 = 0;
         var _rtmp3938;
         this.success = [];
-        var _etype937 = 0;
         _rtmp3938 = input.readListBegin();
-        _etype937 = _rtmp3938.etype;
         _size934 = _rtmp3938.size;
         for (var _i939 = 0; _i939 < _size934; ++_i939)
         {
@@ -3792,7 +3700,6 @@ TalkService_findAndAddContactsByEmail_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -3812,9 +3719,7 @@ TalkService_findAndAddContactsByEmail_args.prototype.read = function(input) {
         var _size942 = 0;
         var _rtmp3946;
         this.emails = [];
-        var _etype945 = 0;
         _rtmp3946 = input.readSetBegin();
-        _etype945 = _rtmp3946.etype;
         _size942 = _rtmp3946.size;
         for (var _i947 = 0; _i947 < _size942; ++_i947)
         {
@@ -3884,7 +3789,6 @@ TalkService_findAndAddContactsByEmail_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -3897,11 +3801,7 @@ TalkService_findAndAddContactsByEmail_result.prototype.read = function(input) {
         var _size950 = 0;
         var _rtmp3954;
         this.success = {};
-        var _ktype951 = 0;
-        var _vtype952 = 0;
         _rtmp3954 = input.readMapBegin();
-        _ktype951 = _rtmp3954.ktype;
-        _vtype952 = _rtmp3954.vtype;
         _size950 = _rtmp3954.size;
         for (var _i955 = 0; _i955 < _size950; ++_i955)
         {
@@ -3979,7 +3879,6 @@ TalkService_findAndAddContactsByMid_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4049,7 +3948,6 @@ TalkService_findAndAddContactsByMid_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4062,11 +3960,7 @@ TalkService_findAndAddContactsByMid_result.prototype.read = function(input) {
         var _size960 = 0;
         var _rtmp3964;
         this.success = {};
-        var _ktype961 = 0;
-        var _vtype962 = 0;
         _rtmp3964 = input.readMapBegin();
-        _ktype961 = _rtmp3964.ktype;
-        _vtype962 = _rtmp3964.vtype;
         _size960 = _rtmp3964.size;
         for (var _i965 = 0; _i965 < _size960; ++_i965)
         {
@@ -4144,7 +4038,6 @@ TalkService_findAndAddContactsByPhone_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4164,9 +4057,7 @@ TalkService_findAndAddContactsByPhone_args.prototype.read = function(input) {
         var _size970 = 0;
         var _rtmp3974;
         this.phones = [];
-        var _etype973 = 0;
         _rtmp3974 = input.readSetBegin();
-        _etype973 = _rtmp3974.etype;
         _size970 = _rtmp3974.size;
         for (var _i975 = 0; _i975 < _size970; ++_i975)
         {
@@ -4236,7 +4127,6 @@ TalkService_findAndAddContactsByPhone_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4249,11 +4139,7 @@ TalkService_findAndAddContactsByPhone_result.prototype.read = function(input) {
         var _size978 = 0;
         var _rtmp3982;
         this.success = {};
-        var _ktype979 = 0;
-        var _vtype980 = 0;
         _rtmp3982 = input.readMapBegin();
-        _ktype979 = _rtmp3982.ktype;
-        _vtype980 = _rtmp3982.vtype;
         _size978 = _rtmp3982.size;
         for (var _i983 = 0; _i983 < _size978; ++_i983)
         {
@@ -4331,7 +4217,6 @@ TalkService_findAndAddContactsByUserid_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4401,7 +4286,6 @@ TalkService_findAndAddContactsByUserid_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4414,11 +4298,7 @@ TalkService_findAndAddContactsByUserid_result.prototype.read = function(input) {
         var _size988 = 0;
         var _rtmp3992;
         this.success = {};
-        var _ktype989 = 0;
-        var _vtype990 = 0;
         _rtmp3992 = input.readMapBegin();
-        _ktype989 = _rtmp3992.ktype;
-        _vtype990 = _rtmp3992.vtype;
         _size988 = _rtmp3992.size;
         for (var _i993 = 0; _i993 < _size988; ++_i993)
         {
@@ -4492,7 +4372,6 @@ TalkService_findContactByUserid_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4553,7 +4432,6 @@ TalkService_findContactByUserid_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4617,7 +4495,6 @@ TalkService_findContactByUserTicket_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4678,7 +4555,6 @@ TalkService_findContactByUserTicket_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4742,7 +4618,6 @@ TalkService_findContactsByEmail_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4755,9 +4630,7 @@ TalkService_findContactsByEmail_args.prototype.read = function(input) {
         var _size998 = 0;
         var _rtmp31002;
         this.emails = [];
-        var _etype1001 = 0;
         _rtmp31002 = input.readSetBegin();
-        _etype1001 = _rtmp31002.etype;
         _size998 = _rtmp31002.size;
         for (var _i1003 = 0; _i1003 < _size998; ++_i1003)
         {
@@ -4825,7 +4698,6 @@ TalkService_findContactsByEmail_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4838,11 +4710,7 @@ TalkService_findContactsByEmail_result.prototype.read = function(input) {
         var _size1006 = 0;
         var _rtmp31010;
         this.success = {};
-        var _ktype1007 = 0;
-        var _vtype1008 = 0;
         _rtmp31010 = input.readMapBegin();
-        _ktype1007 = _rtmp31010.ktype;
-        _vtype1008 = _rtmp31010.vtype;
         _size1006 = _rtmp31010.size;
         for (var _i1011 = 0; _i1011 < _size1006; ++_i1011)
         {
@@ -4916,7 +4784,6 @@ TalkService_findContactsByPhone_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -4929,9 +4796,7 @@ TalkService_findContactsByPhone_args.prototype.read = function(input) {
         var _size1016 = 0;
         var _rtmp31020;
         this.phones = [];
-        var _etype1019 = 0;
         _rtmp31020 = input.readSetBegin();
-        _etype1019 = _rtmp31020.etype;
         _size1016 = _rtmp31020.size;
         for (var _i1021 = 0; _i1021 < _size1016; ++_i1021)
         {
@@ -4999,7 +4864,6 @@ TalkService_findContactsByPhone_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -5012,11 +4876,7 @@ TalkService_findContactsByPhone_result.prototype.read = function(input) {
         var _size1024 = 0;
         var _rtmp31028;
         this.success = {};
-        var _ktype1025 = 0;
-        var _vtype1026 = 0;
         _rtmp31028 = input.readMapBegin();
-        _ktype1025 = _rtmp31028.ktype;
-        _vtype1026 = _rtmp31028.vtype;
         _size1024 = _rtmp31028.size;
         for (var _i1029 = 0; _i1029 < _size1024; ++_i1029)
         {
@@ -5098,7 +4958,6 @@ TalkService_findSnsIdUserStatus_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -5180,7 +5039,6 @@ TalkService_findSnsIdUserStatus_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -5244,7 +5102,6 @@ TalkService_finishUpdateVerification_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -5301,7 +5158,6 @@ TalkService_finishUpdateVerification_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -5359,7 +5215,6 @@ TalkService_generateUserTicket_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -5429,7 +5284,6 @@ TalkService_generateUserTicket_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -5493,7 +5347,6 @@ TalkService_getAcceptedProximityMatches_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -5554,7 +5407,6 @@ TalkService_getAcceptedProximityMatches_result.prototype.read = function(input) 
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -5567,9 +5419,7 @@ TalkService_getAcceptedProximityMatches_result.prototype.read = function(input) 
         var _size1034 = 0;
         var _rtmp31038;
         this.success = [];
-        var _etype1037 = 0;
         _rtmp31038 = input.readSetBegin();
-        _etype1037 = _rtmp31038.etype;
         _size1034 = _rtmp31038.size;
         for (var _i1039 = 0; _i1039 < _size1034; ++_i1039)
         {
@@ -5625,7 +5475,7 @@ TalkService_getAcceptedProximityMatches_result.prototype.write = function(output
   return;
 };
 
-var TalkService_getActiveBuddySubscriberIds_args = function(args) {
+var TalkService_getActiveBuddySubscriberIds_args = function() {
 };
 TalkService_getActiveBuddySubscriberIds_args.prototype = {};
 TalkService_getActiveBuddySubscriberIds_args.prototype.read = function(input) {
@@ -5633,9 +5483,7 @@ TalkService_getActiveBuddySubscriberIds_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -5675,7 +5523,6 @@ TalkService_getActiveBuddySubscriberIds_result.prototype.read = function(input) 
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -5688,9 +5535,7 @@ TalkService_getActiveBuddySubscriberIds_result.prototype.read = function(input) 
         var _size1042 = 0;
         var _rtmp31046;
         this.success = [];
-        var _etype1045 = 0;
         _rtmp31046 = input.readListBegin();
-        _etype1045 = _rtmp31046.etype;
         _size1042 = _rtmp31046.size;
         for (var _i1047 = 0; _i1047 < _size1042; ++_i1047)
         {
@@ -5746,7 +5591,7 @@ TalkService_getActiveBuddySubscriberIds_result.prototype.write = function(output
   return;
 };
 
-var TalkService_getAllContactIds_args = function(args) {
+var TalkService_getAllContactIds_args = function() {
 };
 TalkService_getAllContactIds_args.prototype = {};
 TalkService_getAllContactIds_args.prototype.read = function(input) {
@@ -5754,9 +5599,7 @@ TalkService_getAllContactIds_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -5796,7 +5639,6 @@ TalkService_getAllContactIds_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -5809,9 +5651,7 @@ TalkService_getAllContactIds_result.prototype.read = function(input) {
         var _size1050 = 0;
         var _rtmp31054;
         this.success = [];
-        var _etype1053 = 0;
         _rtmp31054 = input.readListBegin();
-        _etype1053 = _rtmp31054.etype;
         _size1050 = _rtmp31054.size;
         for (var _i1055 = 0; _i1055 < _size1050; ++_i1055)
         {
@@ -5885,7 +5725,6 @@ TalkService_getAuthQrcode_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -5955,7 +5794,6 @@ TalkService_getAuthQrcode_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -6005,7 +5843,7 @@ TalkService_getAuthQrcode_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getBlockedContactIds_args = function(args) {
+var TalkService_getBlockedContactIds_args = function() {
 };
 TalkService_getBlockedContactIds_args.prototype = {};
 TalkService_getBlockedContactIds_args.prototype.read = function(input) {
@@ -6013,9 +5851,7 @@ TalkService_getBlockedContactIds_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -6055,7 +5891,6 @@ TalkService_getBlockedContactIds_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -6068,9 +5903,7 @@ TalkService_getBlockedContactIds_result.prototype.read = function(input) {
         var _size1058 = 0;
         var _rtmp31062;
         this.success = [];
-        var _etype1061 = 0;
         _rtmp31062 = input.readListBegin();
-        _etype1061 = _rtmp31062.etype;
         _size1058 = _rtmp31062.size;
         for (var _i1063 = 0; _i1063 < _size1058; ++_i1063)
         {
@@ -6144,7 +5977,6 @@ TalkService_getBlockedContactIdsByRange_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -6214,7 +6046,6 @@ TalkService_getBlockedContactIdsByRange_result.prototype.read = function(input) 
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -6227,9 +6058,7 @@ TalkService_getBlockedContactIdsByRange_result.prototype.read = function(input) 
         var _size1066 = 0;
         var _rtmp31070;
         this.success = [];
-        var _etype1069 = 0;
         _rtmp31070 = input.readListBegin();
-        _etype1069 = _rtmp31070.etype;
         _size1066 = _rtmp31070.size;
         for (var _i1071 = 0; _i1071 < _size1066; ++_i1071)
         {
@@ -6285,7 +6114,7 @@ TalkService_getBlockedContactIdsByRange_result.prototype.write = function(output
   return;
 };
 
-var TalkService_getBlockedRecommendationIds_args = function(args) {
+var TalkService_getBlockedRecommendationIds_args = function() {
 };
 TalkService_getBlockedRecommendationIds_args.prototype = {};
 TalkService_getBlockedRecommendationIds_args.prototype.read = function(input) {
@@ -6293,9 +6122,7 @@ TalkService_getBlockedRecommendationIds_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -6335,7 +6162,6 @@ TalkService_getBlockedRecommendationIds_result.prototype.read = function(input) 
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -6348,9 +6174,7 @@ TalkService_getBlockedRecommendationIds_result.prototype.read = function(input) 
         var _size1074 = 0;
         var _rtmp31078;
         this.success = [];
-        var _etype1077 = 0;
         _rtmp31078 = input.readListBegin();
-        _etype1077 = _rtmp31078.etype;
         _size1074 = _rtmp31078.size;
         for (var _i1079 = 0; _i1079 < _size1074; ++_i1079)
         {
@@ -6406,7 +6230,7 @@ TalkService_getBlockedRecommendationIds_result.prototype.write = function(output
   return;
 };
 
-var TalkService_getBuddyBlockerIds_args = function(args) {
+var TalkService_getBuddyBlockerIds_args = function() {
 };
 TalkService_getBuddyBlockerIds_args.prototype = {};
 TalkService_getBuddyBlockerIds_args.prototype.read = function(input) {
@@ -6414,9 +6238,7 @@ TalkService_getBuddyBlockerIds_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -6456,7 +6278,6 @@ TalkService_getBuddyBlockerIds_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -6469,9 +6290,7 @@ TalkService_getBuddyBlockerIds_result.prototype.read = function(input) {
         var _size1082 = 0;
         var _rtmp31086;
         this.success = [];
-        var _etype1085 = 0;
         _rtmp31086 = input.readListBegin();
-        _etype1085 = _rtmp31086.etype;
         _size1082 = _rtmp31086.size;
         for (var _i1087 = 0; _i1087 < _size1082; ++_i1087)
         {
@@ -6545,7 +6364,6 @@ TalkService_getBuddyLocation_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -6615,7 +6433,6 @@ TalkService_getBuddyLocation_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -6679,7 +6496,6 @@ TalkService_getCompactContactsModifiedSince_args.prototype.read = function(input
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -6740,7 +6556,6 @@ TalkService_getCompactContactsModifiedSince_result.prototype.read = function(inp
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -6753,9 +6568,7 @@ TalkService_getCompactContactsModifiedSince_result.prototype.read = function(inp
         var _size1090 = 0;
         var _rtmp31094;
         this.success = [];
-        var _etype1093 = 0;
         _rtmp31094 = input.readListBegin();
-        _etype1093 = _rtmp31094.etype;
         _size1090 = _rtmp31094.size;
         for (var _i1095 = 0; _i1095 < _size1090; ++_i1095)
         {
@@ -6826,7 +6639,6 @@ TalkService_getCompactGroup_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -6887,7 +6699,6 @@ TalkService_getCompactGroup_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -6951,7 +6762,6 @@ TalkService_getCompactRoom_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7012,7 +6822,6 @@ TalkService_getCompactRoom_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7076,7 +6885,6 @@ TalkService_getContact_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7137,7 +6945,6 @@ TalkService_getContact_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7201,7 +7008,6 @@ TalkService_getContacts_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7214,9 +7020,7 @@ TalkService_getContacts_args.prototype.read = function(input) {
         var _size1098 = 0;
         var _rtmp31102;
         this.ids = [];
-        var _etype1101 = 0;
         _rtmp31102 = input.readListBegin();
-        _etype1101 = _rtmp31102.etype;
         _size1098 = _rtmp31102.size;
         for (var _i1103 = 0; _i1103 < _size1098; ++_i1103)
         {
@@ -7284,7 +7088,6 @@ TalkService_getContacts_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7297,9 +7100,7 @@ TalkService_getContacts_result.prototype.read = function(input) {
         var _size1106 = 0;
         var _rtmp31110;
         this.success = [];
-        var _etype1109 = 0;
         _rtmp31110 = input.readListBegin();
-        _etype1109 = _rtmp31110.etype;
         _size1106 = _rtmp31110.size;
         for (var _i1111 = 0; _i1111 < _size1106; ++_i1111)
         {
@@ -7356,7 +7157,7 @@ TalkService_getContacts_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getCountryWithRequestIp_args = function(args) {
+var TalkService_getCountryWithRequestIp_args = function() {
 };
 TalkService_getCountryWithRequestIp_args.prototype = {};
 TalkService_getCountryWithRequestIp_args.prototype.read = function(input) {
@@ -7364,9 +7165,7 @@ TalkService_getCountryWithRequestIp_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -7406,7 +7205,6 @@ TalkService_getCountryWithRequestIp_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7455,7 +7253,7 @@ TalkService_getCountryWithRequestIp_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getFavoriteMids_args = function(args) {
+var TalkService_getFavoriteMids_args = function() {
 };
 TalkService_getFavoriteMids_args.prototype = {};
 TalkService_getFavoriteMids_args.prototype.read = function(input) {
@@ -7463,9 +7261,7 @@ TalkService_getFavoriteMids_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -7505,7 +7301,6 @@ TalkService_getFavoriteMids_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7518,9 +7313,7 @@ TalkService_getFavoriteMids_result.prototype.read = function(input) {
         var _size1114 = 0;
         var _rtmp31118;
         this.success = [];
-        var _etype1117 = 0;
         _rtmp31118 = input.readListBegin();
-        _etype1117 = _rtmp31118.etype;
         _size1114 = _rtmp31118.size;
         for (var _i1119 = 0; _i1119 < _size1114; ++_i1119)
         {
@@ -7590,7 +7383,6 @@ TalkService_getGroup_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7651,7 +7443,6 @@ TalkService_getGroup_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7701,7 +7492,7 @@ TalkService_getGroup_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getGroupIdsInvited_args = function(args) {
+var TalkService_getGroupIdsInvited_args = function() {
 };
 TalkService_getGroupIdsInvited_args.prototype = {};
 TalkService_getGroupIdsInvited_args.prototype.read = function(input) {
@@ -7709,9 +7500,7 @@ TalkService_getGroupIdsInvited_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -7751,7 +7540,6 @@ TalkService_getGroupIdsInvited_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7764,9 +7552,7 @@ TalkService_getGroupIdsInvited_result.prototype.read = function(input) {
         var _size1122 = 0;
         var _rtmp31126;
         this.success = [];
-        var _etype1125 = 0;
         _rtmp31126 = input.readListBegin();
-        _etype1125 = _rtmp31126.etype;
         _size1122 = _rtmp31126.size;
         for (var _i1127 = 0; _i1127 < _size1122; ++_i1127)
         {
@@ -7822,7 +7608,7 @@ TalkService_getGroupIdsInvited_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getGroupIdsJoined_args = function(args) {
+var TalkService_getGroupIdsJoined_args = function() {
 };
 TalkService_getGroupIdsJoined_args.prototype = {};
 TalkService_getGroupIdsJoined_args.prototype.read = function(input) {
@@ -7830,9 +7616,7 @@ TalkService_getGroupIdsJoined_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -7872,7 +7656,6 @@ TalkService_getGroupIdsJoined_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7885,9 +7668,7 @@ TalkService_getGroupIdsJoined_result.prototype.read = function(input) {
         var _size1130 = 0;
         var _rtmp31134;
         this.success = [];
-        var _etype1133 = 0;
         _rtmp31134 = input.readListBegin();
-        _etype1133 = _rtmp31134.etype;
         _size1130 = _rtmp31134.size;
         for (var _i1135 = 0; _i1135 < _size1130; ++_i1135)
         {
@@ -7957,7 +7738,6 @@ TalkService_getGroups_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -7970,9 +7750,7 @@ TalkService_getGroups_args.prototype.read = function(input) {
         var _size1138 = 0;
         var _rtmp31142;
         this.groupIds = [];
-        var _etype1141 = 0;
         _rtmp31142 = input.readListBegin();
-        _etype1141 = _rtmp31142.etype;
         _size1138 = _rtmp31142.size;
         for (var _i1143 = 0; _i1143 < _size1138; ++_i1143)
         {
@@ -8040,7 +7818,6 @@ TalkService_getGroups_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -8053,9 +7830,7 @@ TalkService_getGroups_result.prototype.read = function(input) {
         var _size1146 = 0;
         var _rtmp31150;
         this.success = [];
-        var _etype1149 = 0;
         _rtmp31150 = input.readListBegin();
-        _etype1149 = _rtmp31150.etype;
         _size1146 = _rtmp31150.size;
         for (var _i1151 = 0; _i1151 < _size1146; ++_i1151)
         {
@@ -8112,7 +7887,7 @@ TalkService_getGroups_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getHiddenContactMids_args = function(args) {
+var TalkService_getHiddenContactMids_args = function() {
 };
 TalkService_getHiddenContactMids_args.prototype = {};
 TalkService_getHiddenContactMids_args.prototype.read = function(input) {
@@ -8120,9 +7895,7 @@ TalkService_getHiddenContactMids_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -8162,7 +7935,6 @@ TalkService_getHiddenContactMids_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -8175,9 +7947,7 @@ TalkService_getHiddenContactMids_result.prototype.read = function(input) {
         var _size1154 = 0;
         var _rtmp31158;
         this.success = [];
-        var _etype1157 = 0;
         _rtmp31158 = input.readListBegin();
-        _etype1157 = _rtmp31158.etype;
         _size1154 = _rtmp31158.size;
         for (var _i1159 = 0; _i1159 < _size1154; ++_i1159)
         {
@@ -8233,7 +8003,7 @@ TalkService_getHiddenContactMids_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getIdentityIdentifier_args = function(args) {
+var TalkService_getIdentityIdentifier_args = function() {
 };
 TalkService_getIdentityIdentifier_args.prototype = {};
 TalkService_getIdentityIdentifier_args.prototype.read = function(input) {
@@ -8241,9 +8011,7 @@ TalkService_getIdentityIdentifier_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -8283,7 +8051,6 @@ TalkService_getIdentityIdentifier_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -8332,7 +8099,7 @@ TalkService_getIdentityIdentifier_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getLastAnnouncementIndex_args = function(args) {
+var TalkService_getLastAnnouncementIndex_args = function() {
 };
 TalkService_getLastAnnouncementIndex_args.prototype = {};
 TalkService_getLastAnnouncementIndex_args.prototype.read = function(input) {
@@ -8340,9 +8107,7 @@ TalkService_getLastAnnouncementIndex_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -8382,7 +8147,6 @@ TalkService_getLastAnnouncementIndex_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -8431,7 +8195,7 @@ TalkService_getLastAnnouncementIndex_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getLastOpRevision_args = function(args) {
+var TalkService_getLastOpRevision_args = function() {
 };
 TalkService_getLastOpRevision_args.prototype = {};
 TalkService_getLastOpRevision_args.prototype.read = function(input) {
@@ -8439,9 +8203,7 @@ TalkService_getLastOpRevision_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -8481,7 +8243,6 @@ TalkService_getLastOpRevision_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -8552,7 +8313,6 @@ TalkService_getMessageBox_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -8634,7 +8394,6 @@ TalkService_getMessageBox_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -8698,7 +8457,6 @@ TalkService_getMessageBoxCompactWrapUp_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -8759,7 +8517,6 @@ TalkService_getMessageBoxCompactWrapUp_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -8827,7 +8584,6 @@ TalkService_getMessageBoxCompactWrapUpList_args.prototype.read = function(input)
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -8897,7 +8653,6 @@ TalkService_getMessageBoxCompactWrapUpList_result.prototype.read = function(inpu
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -8965,7 +8720,6 @@ TalkService_getMessageBoxList_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9035,7 +8789,6 @@ TalkService_getMessageBoxList_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9048,9 +8801,7 @@ TalkService_getMessageBoxList_result.prototype.read = function(input) {
         var _size1162 = 0;
         var _rtmp31166;
         this.success = [];
-        var _etype1165 = 0;
         _rtmp31166 = input.readListBegin();
-        _etype1165 = _rtmp31166.etype;
         _size1162 = _rtmp31166.size;
         for (var _i1167 = 0; _i1167 < _size1162; ++_i1167)
         {
@@ -9129,7 +8880,6 @@ TalkService_getMessageBoxListByStatus_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9211,7 +8961,6 @@ TalkService_getMessageBoxListByStatus_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9224,9 +8973,7 @@ TalkService_getMessageBoxListByStatus_result.prototype.read = function(input) {
         var _size1170 = 0;
         var _rtmp31174;
         this.success = [];
-        var _etype1173 = 0;
         _rtmp31174 = input.readListBegin();
-        _etype1173 = _rtmp31174.etype;
         _size1170 = _rtmp31174.size;
         for (var _i1175 = 0; _i1175 < _size1170; ++_i1175)
         {
@@ -9297,7 +9044,6 @@ TalkService_getMessageBoxWrapUp_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9358,7 +9104,6 @@ TalkService_getMessageBoxWrapUp_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9426,7 +9171,6 @@ TalkService_getMessageBoxWrapUpList_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9496,7 +9240,6 @@ TalkService_getMessageBoxWrapUpList_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9572,7 +9315,6 @@ TalkService_getMessagesBySequenceNumber_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9666,7 +9408,6 @@ TalkService_getMessagesBySequenceNumber_result.prototype.read = function(input) 
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9679,9 +9420,7 @@ TalkService_getMessagesBySequenceNumber_result.prototype.read = function(input) 
         var _size1178 = 0;
         var _rtmp31182;
         this.success = [];
-        var _etype1181 = 0;
         _rtmp31182 = input.readListBegin();
-        _etype1181 = _rtmp31182.etype;
         _size1178 = _rtmp31182.size;
         for (var _i1183 = 0; _i1183 < _size1178; ++_i1183)
         {
@@ -9760,7 +9499,6 @@ TalkService_getNextMessages_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9842,7 +9580,6 @@ TalkService_getNextMessages_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9855,9 +9592,7 @@ TalkService_getNextMessages_result.prototype.read = function(input) {
         var _size1186 = 0;
         var _rtmp31190;
         this.success = [];
-        var _etype1189 = 0;
         _rtmp31190 = input.readListBegin();
-        _etype1189 = _rtmp31190.etype;
         _size1186 = _rtmp31190.size;
         for (var _i1191 = 0; _i1191 < _size1186; ++_i1191)
         {
@@ -9928,7 +9663,6 @@ TalkService_getNotificationPolicy_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -9989,7 +9723,6 @@ TalkService_getNotificationPolicy_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -10002,9 +9735,7 @@ TalkService_getNotificationPolicy_result.prototype.read = function(input) {
         var _size1194 = 0;
         var _rtmp31198;
         this.success = [];
-        var _etype1197 = 0;
         _rtmp31198 = input.readListBegin();
-        _etype1197 = _rtmp31198.etype;
         _size1194 = _rtmp31198.size;
         for (var _i1199 = 0; _i1199 < _size1194; ++_i1199)
         {
@@ -10082,7 +9813,6 @@ TalkService_getPreviousMessages_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -10164,7 +9894,6 @@ TalkService_getPreviousMessages_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -10177,9 +9906,7 @@ TalkService_getPreviousMessages_result.prototype.read = function(input) {
         var _size1202 = 0;
         var _rtmp31206;
         this.success = [];
-        var _etype1205 = 0;
         _rtmp31206 = input.readListBegin();
-        _etype1205 = _rtmp31206.etype;
         _size1202 = _rtmp31206.size;
         for (var _i1207 = 0; _i1207 < _size1202; ++_i1207)
         {
@@ -10236,7 +9963,7 @@ TalkService_getPreviousMessages_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getProfile_args = function(args) {
+var TalkService_getProfile_args = function() {
 };
 TalkService_getProfile_args.prototype = {};
 TalkService_getProfile_args.prototype.read = function(input) {
@@ -10244,9 +9971,7 @@ TalkService_getProfile_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -10286,7 +10011,6 @@ TalkService_getProfile_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -10350,7 +10074,6 @@ TalkService_getProximityMatchCandidateList_args.prototype.read = function(input)
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -10411,7 +10134,6 @@ TalkService_getProximityMatchCandidateList_result.prototype.read = function(inpu
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -10475,7 +10197,6 @@ TalkService_getProximityMatchCandidates_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -10536,7 +10257,6 @@ TalkService_getProximityMatchCandidates_result.prototype.read = function(input) 
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -10549,9 +10269,7 @@ TalkService_getProximityMatchCandidates_result.prototype.read = function(input) 
         var _size1210 = 0;
         var _rtmp31214;
         this.success = [];
-        var _etype1213 = 0;
         _rtmp31214 = input.readSetBegin();
-        _etype1213 = _rtmp31214.etype;
         _size1210 = _rtmp31214.size;
         for (var _i1215 = 0; _i1215 < _size1210; ++_i1215)
         {
@@ -10626,7 +10344,6 @@ TalkService_getRecentMessages_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -10696,7 +10413,6 @@ TalkService_getRecentMessages_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -10709,9 +10425,7 @@ TalkService_getRecentMessages_result.prototype.read = function(input) {
         var _size1218 = 0;
         var _rtmp31222;
         this.success = [];
-        var _etype1221 = 0;
         _rtmp31222 = input.readListBegin();
-        _etype1221 = _rtmp31222.etype;
         _size1218 = _rtmp31222.size;
         for (var _i1223 = 0; _i1223 < _size1218; ++_i1223)
         {
@@ -10768,7 +10482,7 @@ TalkService_getRecentMessages_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getRecommendationIds_args = function(args) {
+var TalkService_getRecommendationIds_args = function() {
 };
 TalkService_getRecommendationIds_args.prototype = {};
 TalkService_getRecommendationIds_args.prototype.read = function(input) {
@@ -10776,9 +10490,7 @@ TalkService_getRecommendationIds_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -10818,7 +10530,6 @@ TalkService_getRecommendationIds_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -10831,9 +10542,7 @@ TalkService_getRecommendationIds_result.prototype.read = function(input) {
         var _size1226 = 0;
         var _rtmp31230;
         this.success = [];
-        var _etype1229 = 0;
         _rtmp31230 = input.readListBegin();
-        _etype1229 = _rtmp31230.etype;
         _size1226 = _rtmp31230.size;
         for (var _i1231 = 0; _i1231 < _size1226; ++_i1231)
         {
@@ -10903,7 +10612,6 @@ TalkService_getRoom_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -10964,7 +10672,6 @@ TalkService_getRoom_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -11028,7 +10735,6 @@ TalkService_getRSAKeyInfo_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -11089,7 +10795,6 @@ TalkService_getRSAKeyInfo_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -11139,7 +10844,7 @@ TalkService_getRSAKeyInfo_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getServerTime_args = function(args) {
+var TalkService_getServerTime_args = function() {
 };
 TalkService_getServerTime_args.prototype = {};
 TalkService_getServerTime_args.prototype.read = function(input) {
@@ -11147,9 +10852,7 @@ TalkService_getServerTime_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -11189,7 +10892,6 @@ TalkService_getServerTime_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -11238,7 +10940,7 @@ TalkService_getServerTime_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getSessions_args = function(args) {
+var TalkService_getSessions_args = function() {
 };
 TalkService_getSessions_args.prototype = {};
 TalkService_getSessions_args.prototype.read = function(input) {
@@ -11246,9 +10948,7 @@ TalkService_getSessions_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -11288,7 +10988,6 @@ TalkService_getSessions_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -11301,9 +11000,7 @@ TalkService_getSessions_result.prototype.read = function(input) {
         var _size1234 = 0;
         var _rtmp31238;
         this.success = [];
-        var _etype1237 = 0;
         _rtmp31238 = input.readListBegin();
-        _etype1237 = _rtmp31238.etype;
         _size1234 = _rtmp31238.size;
         for (var _i1239 = 0; _i1239 < _size1234; ++_i1239)
         {
@@ -11360,7 +11057,7 @@ TalkService_getSessions_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getSettings_args = function(args) {
+var TalkService_getSettings_args = function() {
 };
 TalkService_getSettings_args.prototype = {};
 TalkService_getSettings_args.prototype.read = function(input) {
@@ -11368,9 +11065,7 @@ TalkService_getSettings_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -11410,7 +11105,6 @@ TalkService_getSettings_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -11474,7 +11168,6 @@ TalkService_getSettingsAttributes_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -11535,7 +11228,6 @@ TalkService_getSettingsAttributes_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -11585,7 +11277,7 @@ TalkService_getSettingsAttributes_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getSystemConfiguration_args = function(args) {
+var TalkService_getSystemConfiguration_args = function() {
 };
 TalkService_getSystemConfiguration_args.prototype = {};
 TalkService_getSystemConfiguration_args.prototype.read = function(input) {
@@ -11593,9 +11285,7 @@ TalkService_getSystemConfiguration_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -11635,7 +11325,6 @@ TalkService_getSystemConfiguration_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -11685,7 +11374,7 @@ TalkService_getSystemConfiguration_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_getUserTicket_args = function(args) {
+var TalkService_getUserTicket_args = function() {
 };
 TalkService_getUserTicket_args.prototype = {};
 TalkService_getUserTicket_args.prototype.read = function(input) {
@@ -11693,9 +11382,7 @@ TalkService_getUserTicket_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -11735,7 +11422,6 @@ TalkService_getUserTicket_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -11799,7 +11485,6 @@ TalkService_getWapInvitation_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -11860,7 +11545,6 @@ TalkService_getWapInvitation_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -11910,7 +11594,7 @@ TalkService_getWapInvitation_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_invalidateUserTicket_args = function(args) {
+var TalkService_invalidateUserTicket_args = function() {
 };
 TalkService_invalidateUserTicket_args.prototype = {};
 TalkService_invalidateUserTicket_args.prototype.read = function(input) {
@@ -11918,9 +11602,7 @@ TalkService_invalidateUserTicket_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -11956,7 +11638,6 @@ TalkService_invalidateUserTicket_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12010,7 +11691,6 @@ TalkService_inviteFriendsBySms_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12023,9 +11703,7 @@ TalkService_inviteFriendsBySms_args.prototype.read = function(input) {
         var _size1242 = 0;
         var _rtmp31246;
         this.phoneNumberList = [];
-        var _etype1245 = 0;
         _rtmp31246 = input.readListBegin();
-        _etype1245 = _rtmp31246.etype;
         _size1242 = _rtmp31246.size;
         for (var _i1247 = 0; _i1247 < _size1242; ++_i1247)
         {
@@ -12089,7 +11767,6 @@ TalkService_inviteFriendsBySms_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12151,7 +11828,6 @@ TalkService_inviteIntoGroup_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12178,9 +11854,7 @@ TalkService_inviteIntoGroup_args.prototype.read = function(input) {
         var _size1250 = 0;
         var _rtmp31254;
         this.contactIds = [];
-        var _etype1253 = 0;
         _rtmp31254 = input.readListBegin();
-        _etype1253 = _rtmp31254.etype;
         _size1250 = _rtmp31254.size;
         for (var _i1255 = 0; _i1255 < _size1250; ++_i1255)
         {
@@ -12251,7 +11925,6 @@ TalkService_inviteIntoGroup_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12313,7 +11986,6 @@ TalkService_inviteIntoRoom_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12340,9 +12012,7 @@ TalkService_inviteIntoRoom_args.prototype.read = function(input) {
         var _size1258 = 0;
         var _rtmp31262;
         this.contactIds = [];
-        var _etype1261 = 0;
         _rtmp31262 = input.readListBegin();
-        _etype1261 = _rtmp31262.etype;
         _size1258 = _rtmp31262.size;
         for (var _i1263 = 0; _i1263 < _size1258; ++_i1263)
         {
@@ -12413,7 +12083,6 @@ TalkService_inviteIntoRoom_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12475,7 +12144,6 @@ TalkService_inviteViaEmail_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12553,7 +12221,6 @@ TalkService_inviteViaEmail_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12611,7 +12278,6 @@ TalkService_isIdentityIdentifierAvailable_args.prototype.read = function(input) 
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12681,7 +12347,6 @@ TalkService_isIdentityIdentifierAvailable_result.prototype.read = function(input
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12744,7 +12409,6 @@ TalkService_isUseridAvailable_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12805,7 +12469,6 @@ TalkService_isUseridAvailable_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12876,7 +12539,6 @@ TalkService_kickoutFromGroup_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -12903,9 +12565,7 @@ TalkService_kickoutFromGroup_args.prototype.read = function(input) {
         var _size1266 = 0;
         var _rtmp31270;
         this.contactIds = [];
-        var _etype1269 = 0;
         _rtmp31270 = input.readListBegin();
-        _etype1269 = _rtmp31270.etype;
         _size1266 = _rtmp31270.size;
         for (var _i1271 = 0; _i1271 < _size1266; ++_i1271)
         {
@@ -12976,7 +12636,6 @@ TalkService_kickoutFromGroup_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13034,7 +12693,6 @@ TalkService_leaveGroup_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13100,7 +12758,6 @@ TalkService_leaveGroup_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13158,7 +12815,6 @@ TalkService_leaveRoom_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13224,7 +12880,6 @@ TalkService_leaveRoom_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13278,7 +12933,6 @@ TalkService_loginZ_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13340,7 +12994,6 @@ TalkService_loginZ_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13428,7 +13081,6 @@ TalkService_loginWithIdentityCredential_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13558,7 +13210,6 @@ TalkService_loginWithIdentityCredential_result.prototype.read = function(input) 
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13645,7 +13296,6 @@ TalkService_loginWithIdentityCredentialForCertificate_args.prototype.read = func
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13775,7 +13425,6 @@ TalkService_loginWithIdentityCredentialForCertificate_result.prototype.read = fu
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13839,7 +13488,6 @@ TalkService_loginWithVerifier_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13900,7 +13548,6 @@ TalkService_loginWithVerifier_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -13963,7 +13610,6 @@ TalkService_loginWithVerifierForCerificate_args.prototype.read = function(input)
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14024,7 +13670,6 @@ TalkService_loginWithVerifierForCerificate_result.prototype.read = function(inpu
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14088,7 +13733,6 @@ TalkService_loginWithVerifierForCertificate_args.prototype.read = function(input
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14149,7 +13793,6 @@ TalkService_loginWithVerifierForCertificate_result.prototype.read = function(inp
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14199,7 +13842,7 @@ TalkService_loginWithVerifierForCertificate_result.prototype.write = function(ou
   return;
 };
 
-var TalkService_logout_args = function(args) {
+var TalkService_logout_args = function() {
 };
 TalkService_logout_args.prototype = {};
 TalkService_logout_args.prototype.read = function(input) {
@@ -14207,9 +13850,7 @@ TalkService_logout_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -14245,7 +13886,6 @@ TalkService_logout_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14299,7 +13939,6 @@ TalkService_logoutSession_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14356,7 +13995,6 @@ TalkService_logoutSession_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14396,7 +14034,7 @@ TalkService_logoutSession_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_noop_args = function(args) {
+var TalkService_noop_args = function() {
 };
 TalkService_noop_args.prototype = {};
 TalkService_noop_args.prototype.read = function(input) {
@@ -14404,9 +14042,7 @@ TalkService_noop_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -14442,7 +14078,6 @@ TalkService_noop_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14496,7 +14131,6 @@ TalkService_notifiedRedirect_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14509,11 +14143,7 @@ TalkService_notifiedRedirect_args.prototype.read = function(input) {
         var _size1274 = 0;
         var _rtmp31278;
         this.paramMap = {};
-        var _ktype1275 = 0;
-        var _vtype1276 = 0;
         _rtmp31278 = input.readMapBegin();
-        _ktype1275 = _rtmp31278.ktype;
-        _vtype1276 = _rtmp31278.vtype;
         _size1274 = _rtmp31278.size;
         for (var _i1279 = 0; _i1279 < _size1274; ++_i1279)
         {
@@ -14580,7 +14210,6 @@ TalkService_notifiedRedirect_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14638,7 +14267,6 @@ TalkService_notifyBuddyOnAir_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14658,9 +14286,7 @@ TalkService_notifyBuddyOnAir_args.prototype.read = function(input) {
         var _size1284 = 0;
         var _rtmp31288;
         this.receiverMids = [];
-        var _etype1287 = 0;
         _rtmp31288 = input.readListBegin();
-        _etype1287 = _rtmp31288.etype;
         _size1284 = _rtmp31288.size;
         for (var _i1289 = 0; _i1289 < _size1284; ++_i1289)
         {
@@ -14730,7 +14356,6 @@ TalkService_notifyBuddyOnAir_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14743,11 +14368,7 @@ TalkService_notifyBuddyOnAir_result.prototype.read = function(input) {
         var _size1292 = 0;
         var _rtmp31296;
         this.success = {};
-        var _ktype1293 = 0;
-        var _vtype1294 = 0;
         _rtmp31296 = input.readMapBegin();
-        _ktype1293 = _rtmp31296.ktype;
-        _vtype1294 = _rtmp31296.vtype;
         _size1292 = _rtmp31296.size;
         for (var _i1297 = 0; _i1297 < _size1292; ++_i1297)
         {
@@ -14824,7 +14445,6 @@ TalkService_notifyIndividualEvent_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14844,9 +14464,7 @@ TalkService_notifyIndividualEvent_args.prototype.read = function(input) {
         var _size1302 = 0;
         var _rtmp31306;
         this.receiverMids = [];
-        var _etype1305 = 0;
         _rtmp31306 = input.readListBegin();
-        _etype1305 = _rtmp31306.etype;
         _size1302 = _rtmp31306.size;
         for (var _i1307 = 0; _i1307 < _size1302; ++_i1307)
         {
@@ -14912,7 +14530,6 @@ TalkService_notifyIndividualEvent_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -14970,7 +14587,6 @@ TalkService_notifyInstalled_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15018,7 +14634,7 @@ TalkService_notifyInstalled_args.prototype.write = function(output) {
   return;
 };
 
-var TalkService_notifyInstalled_result = function(args) {
+var TalkService_notifyInstalled_result = function() {
 };
 TalkService_notifyInstalled_result.prototype = {};
 TalkService_notifyInstalled_result.prototype.read = function(input) {
@@ -15026,9 +14642,7 @@ TalkService_notifyInstalled_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -15064,7 +14678,6 @@ TalkService_notifyRegistrationComplete_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15112,7 +14725,7 @@ TalkService_notifyRegistrationComplete_args.prototype.write = function(output) {
   return;
 };
 
-var TalkService_notifyRegistrationComplete_result = function(args) {
+var TalkService_notifyRegistrationComplete_result = function() {
 };
 TalkService_notifyRegistrationComplete_result.prototype = {};
 TalkService_notifyRegistrationComplete_result.prototype.read = function(input) {
@@ -15120,9 +14733,7 @@ TalkService_notifyRegistrationComplete_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -15158,7 +14769,6 @@ TalkService_notifySleep_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15224,7 +14834,6 @@ TalkService_notifySleep_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15282,7 +14891,6 @@ TalkService_notifyUpdated_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15349,7 +14957,6 @@ TalkService_notifyUpdated_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15403,7 +15010,6 @@ TalkService_openProximityMatch_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15465,7 +15071,6 @@ TalkService_openProximityMatch_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15532,7 +15137,6 @@ TalkService_registerBuddyUser_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15602,7 +15206,6 @@ TalkService_registerBuddyUser_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15669,7 +15272,6 @@ TalkService_registerBuddyUserid_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15735,7 +15337,6 @@ TalkService_registerBuddyUserid_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15789,7 +15390,6 @@ TalkService_registerDevice_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15850,7 +15450,6 @@ TalkService_registerDevice_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -15925,7 +15524,6 @@ TalkService_registerDeviceWithIdentityCredential_args.prototype.read = function(
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -16019,7 +15617,6 @@ TalkService_registerDeviceWithIdentityCredential_result.prototype.read = functio
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -16090,7 +15687,6 @@ TalkService_registerDeviceWithoutPhoneNumber_args.prototype.read = function(inpu
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -16173,7 +15769,6 @@ TalkService_registerDeviceWithoutPhoneNumber_result.prototype.read = function(in
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -16260,7 +15855,6 @@ TalkService_registerDeviceWithoutPhoneNumberWithIdentityCredential_args.prototyp
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -16391,7 +15985,6 @@ TalkService_registerDeviceWithoutPhoneNumberWithIdentityCredential_result.protot
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -16458,7 +16051,6 @@ TalkService_registerUserid_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -16528,7 +16120,6 @@ TalkService_registerUserid_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -16603,7 +16194,6 @@ TalkService_registerWapDevice_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -16698,7 +16288,6 @@ TalkService_registerWapDevice_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -16773,7 +16362,6 @@ TalkService_registerWithExistingSnsIdAndIdentityCredential_args.prototype.read =
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -16869,7 +16457,6 @@ TalkService_registerWithExistingSnsIdAndIdentityCredential_result.prototype.read
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -16952,7 +16539,6 @@ TalkService_registerWithSnsId_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17071,7 +16657,6 @@ TalkService_registerWithSnsId_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17155,7 +16740,6 @@ TalkService_registerWithSnsIdAndIdentityCredential_args.prototype.read = functio
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17275,7 +16859,6 @@ TalkService_registerWithSnsIdAndIdentityCredential_result.prototype.read = funct
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17324,7 +16907,7 @@ TalkService_registerWithSnsIdAndIdentityCredential_result.prototype.write = func
   return;
 };
 
-var TalkService_reissueDeviceCredential_args = function(args) {
+var TalkService_reissueDeviceCredential_args = function() {
 };
 TalkService_reissueDeviceCredential_args.prototype = {};
 TalkService_reissueDeviceCredential_args.prototype.read = function(input) {
@@ -17332,9 +16915,7 @@ TalkService_reissueDeviceCredential_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -17374,7 +16955,6 @@ TalkService_reissueDeviceCredential_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17441,7 +17021,6 @@ TalkService_reissueUserTicket_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17511,7 +17090,6 @@ TalkService_reissueUserTicket_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17578,7 +17156,6 @@ TalkService_rejectGroupInvitation_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17644,7 +17221,6 @@ TalkService_rejectGroupInvitation_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17684,7 +17260,7 @@ TalkService_rejectGroupInvitation_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_releaseSession_args = function(args) {
+var TalkService_releaseSession_args = function() {
 };
 TalkService_releaseSession_args.prototype = {};
 TalkService_releaseSession_args.prototype.read = function(input) {
@@ -17692,9 +17268,7 @@ TalkService_releaseSession_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -17730,7 +17304,6 @@ TalkService_releaseSession_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17788,7 +17361,6 @@ TalkService_removeAllMessages_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17854,7 +17426,6 @@ TalkService_removeAllMessages_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17912,7 +17483,6 @@ TalkService_removeBuddyLocation_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -17978,7 +17548,6 @@ TalkService_removeBuddyLocation_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18032,7 +17601,6 @@ TalkService_removeMessage_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18093,7 +17661,6 @@ TalkService_removeMessage_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18156,7 +17723,6 @@ TalkService_removeMessageFromMyHome_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18217,7 +17783,6 @@ TalkService_removeMessageFromMyHome_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18280,7 +17845,6 @@ TalkService_removeSnsId_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18341,7 +17905,6 @@ TalkService_removeSnsId_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18412,7 +17975,6 @@ TalkService_report_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18490,7 +18052,6 @@ TalkService_report_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18556,7 +18117,6 @@ TalkService_reportContacts_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18583,9 +18143,7 @@ TalkService_reportContacts_args.prototype.read = function(input) {
         var _size1310 = 0;
         var _rtmp31314;
         this.contactReports = [];
-        var _etype1313 = 0;
         _rtmp31314 = input.readListBegin();
-        _etype1313 = _rtmp31314.etype;
         _size1310 = _rtmp31314.size;
         for (var _i1315 = 0; _i1315 < _size1310; ++_i1315)
         {
@@ -18673,7 +18231,6 @@ TalkService_reportContacts_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18686,9 +18243,7 @@ TalkService_reportContacts_result.prototype.read = function(input) {
         var _size1318 = 0;
         var _rtmp31322;
         this.success = [];
-        var _etype1321 = 0;
         _rtmp31322 = input.readListBegin();
-        _etype1321 = _rtmp31322.etype;
         _size1318 = _rtmp31322.size;
         for (var _i1323 = 0; _i1323 < _size1318; ++_i1323)
         {
@@ -18763,7 +18318,6 @@ TalkService_reportGroups_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18783,9 +18337,7 @@ TalkService_reportGroups_args.prototype.read = function(input) {
         var _size1326 = 0;
         var _rtmp31330;
         this.groups = [];
-        var _etype1329 = 0;
         _rtmp31330 = input.readListBegin();
-        _etype1329 = _rtmp31330.etype;
         _size1326 = _rtmp31330.size;
         for (var _i1331 = 0; _i1331 < _size1326; ++_i1331)
         {
@@ -18852,7 +18404,6 @@ TalkService_reportGroups_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18910,7 +18461,6 @@ TalkService_reportProfile_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -18977,7 +18527,6 @@ TalkService_reportProfile_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19035,7 +18584,6 @@ TalkService_reportRooms_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19055,9 +18603,7 @@ TalkService_reportRooms_args.prototype.read = function(input) {
         var _size1334 = 0;
         var _rtmp31338;
         this.rooms = [];
-        var _etype1337 = 0;
         _rtmp31338 = input.readListBegin();
-        _etype1337 = _rtmp31338.etype;
         _size1334 = _rtmp31338.size;
         for (var _i1339 = 0; _i1339 < _size1334; ++_i1339)
         {
@@ -19124,7 +18670,6 @@ TalkService_reportRooms_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19182,7 +18727,6 @@ TalkService_reportSettings_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19249,7 +18793,6 @@ TalkService_reportSettings_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19311,7 +18854,6 @@ TalkService_reportSpammer_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19331,9 +18873,7 @@ TalkService_reportSpammer_args.prototype.read = function(input) {
         var _size1342 = 0;
         var _rtmp31346;
         this.spammerReasons = [];
-        var _etype1345 = 0;
         _rtmp31346 = input.readListBegin();
-        _etype1345 = _rtmp31346.etype;
         _size1342 = _rtmp31346.size;
         for (var _i1347 = 0; _i1347 < _size1342; ++_i1347)
         {
@@ -19351,9 +18891,7 @@ TalkService_reportSpammer_args.prototype.read = function(input) {
         var _size1349 = 0;
         var _rtmp31353;
         this.spamMessageIds = [];
-        var _etype1352 = 0;
         _rtmp31353 = input.readListBegin();
-        _etype1352 = _rtmp31353.etype;
         _size1349 = _rtmp31353.size;
         for (var _i1354 = 0; _i1354 < _size1349; ++_i1354)
         {
@@ -19433,7 +18971,6 @@ TalkService_reportSpammer_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19495,7 +19032,6 @@ TalkService_requestAccountPasswordReset_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19573,7 +19109,6 @@ TalkService_requestAccountPasswordReset_result.prototype.read = function(input) 
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19627,7 +19162,6 @@ TalkService_requestEmailConfirmation_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19689,7 +19223,6 @@ TalkService_requestEmailConfirmation_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19757,7 +19290,6 @@ TalkService_requestIdentityUnbind_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19823,7 +19355,6 @@ TalkService_requestIdentityUnbind_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19877,7 +19408,6 @@ TalkService_resendEmailConfirmation_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -19938,7 +19468,6 @@ TalkService_resendEmailConfirmation_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20002,7 +19531,6 @@ TalkService_resendPinCode_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20059,7 +19587,6 @@ TalkService_resendPinCode_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20113,7 +19640,6 @@ TalkService_resendPinCodeBySMS_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20170,7 +19696,6 @@ TalkService_resendPinCodeBySMS_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20232,7 +19757,6 @@ TalkService_sendChatChecked_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20310,7 +19834,6 @@ TalkService_sendChatChecked_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20372,7 +19895,6 @@ TalkService_sendChatRemoved_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20450,7 +19972,6 @@ TalkService_sendChatRemoved_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20512,7 +20033,6 @@ TalkService_sendContentPreviewUpdated_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20539,9 +20059,7 @@ TalkService_sendContentPreviewUpdated_args.prototype.read = function(input) {
         var _size1358 = 0;
         var _rtmp31362;
         this.receiverMids = [];
-        var _etype1361 = 0;
         _rtmp31362 = input.readListBegin();
-        _etype1361 = _rtmp31362.etype;
         _size1358 = _rtmp31362.size;
         for (var _i1363 = 0; _i1363 < _size1358; ++_i1363)
         {
@@ -20616,7 +20134,6 @@ TalkService_sendContentPreviewUpdated_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20629,11 +20146,7 @@ TalkService_sendContentPreviewUpdated_result.prototype.read = function(input) {
         var _size1366 = 0;
         var _rtmp31370;
         this.success = {};
-        var _ktype1367 = 0;
-        var _vtype1368 = 0;
         _rtmp31370 = input.readMapBegin();
-        _ktype1367 = _rtmp31370.ktype;
-        _vtype1368 = _rtmp31370.vtype;
         _size1366 = _rtmp31370.size;
         for (var _i1371 = 0; _i1371 < _size1366; ++_i1371)
         {
@@ -20714,7 +20227,6 @@ TalkService_sendContentReceipt_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20792,7 +20304,6 @@ TalkService_sendContentReceipt_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20832,7 +20343,7 @@ TalkService_sendContentReceipt_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_sendDummyPush_args = function(args) {
+var TalkService_sendDummyPush_args = function() {
 };
 TalkService_sendDummyPush_args.prototype = {};
 TalkService_sendDummyPush_args.prototype.read = function(input) {
@@ -20840,9 +20351,7 @@ TalkService_sendDummyPush_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -20878,7 +20387,6 @@ TalkService_sendDummyPush_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -20936,7 +20444,6 @@ TalkService_sendEvent_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21007,7 +20514,6 @@ TalkService_sendEvent_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21075,7 +20581,6 @@ TalkService_sendMessage_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21146,7 +20651,6 @@ TalkService_sendMessage_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21218,7 +20722,6 @@ TalkService_sendMessageIgnored_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21245,9 +20748,7 @@ TalkService_sendMessageIgnored_args.prototype.read = function(input) {
         var _size1376 = 0;
         var _rtmp31380;
         this.messageIds = [];
-        var _etype1379 = 0;
         _rtmp31380 = input.readListBegin();
-        _etype1379 = _rtmp31380.etype;
         _size1376 = _rtmp31380.size;
         for (var _i1381 = 0; _i1381 < _size1376; ++_i1381)
         {
@@ -21318,7 +20819,6 @@ TalkService_sendMessageIgnored_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21380,7 +20880,6 @@ TalkService_sendMessageReceipt_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21407,9 +20906,7 @@ TalkService_sendMessageReceipt_args.prototype.read = function(input) {
         var _size1384 = 0;
         var _rtmp31388;
         this.messageIds = [];
-        var _etype1387 = 0;
         _rtmp31388 = input.readListBegin();
-        _etype1387 = _rtmp31388.etype;
         _size1384 = _rtmp31388.size;
         for (var _i1389 = 0; _i1389 < _size1384; ++_i1389)
         {
@@ -21480,7 +20977,6 @@ TalkService_sendMessageReceipt_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21538,7 +21034,6 @@ TalkService_sendMessageToMyHome_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21609,7 +21104,6 @@ TalkService_sendMessageToMyHome_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21681,7 +21175,6 @@ TalkService_setBuddyLocation_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21760,7 +21253,6 @@ TalkService_setBuddyLocation_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21822,7 +21314,6 @@ TalkService_setIdentityCredential_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21900,7 +21391,6 @@ TalkService_setIdentityCredential_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -21966,7 +21456,6 @@ TalkService_setNotificationsEnabled_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -22056,7 +21545,6 @@ TalkService_setNotificationsEnabled_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -22134,7 +21622,6 @@ TalkService_startUpdateVerification_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -22265,7 +21752,6 @@ TalkService_startUpdateVerification_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -22357,7 +21843,6 @@ TalkService_startVerification_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -22500,7 +21985,6 @@ TalkService_startVerification_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -22572,7 +22056,6 @@ TalkService_storeUpdateProfileAttribute_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -22650,7 +22133,6 @@ TalkService_storeUpdateProfileAttribute_result.prototype.read = function(input) 
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -22708,7 +22190,6 @@ TalkService_syncContactBySnsIds_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -22728,9 +22209,7 @@ TalkService_syncContactBySnsIds_args.prototype.read = function(input) {
         var _size1392 = 0;
         var _rtmp31396;
         this.modifications = [];
-        var _etype1395 = 0;
         _rtmp31396 = input.readListBegin();
-        _etype1395 = _rtmp31396.etype;
         _size1392 = _rtmp31396.size;
         for (var _i1397 = 0; _i1397 < _size1392; ++_i1397)
         {
@@ -22801,7 +22280,6 @@ TalkService_syncContactBySnsIds_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -22814,9 +22292,7 @@ TalkService_syncContactBySnsIds_result.prototype.read = function(input) {
         var _size1400 = 0;
         var _rtmp31404;
         this.success = [];
-        var _etype1403 = 0;
         _rtmp31404 = input.readListBegin();
-        _etype1403 = _rtmp31404.etype;
         _size1400 = _rtmp31404.size;
         for (var _i1405 = 0; _i1405 < _size1400; ++_i1405)
         {
@@ -22891,7 +22367,6 @@ TalkService_syncContacts_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -22911,9 +22386,7 @@ TalkService_syncContacts_args.prototype.read = function(input) {
         var _size1408 = 0;
         var _rtmp31412;
         this.localContacts = [];
-        var _etype1411 = 0;
         _rtmp31412 = input.readListBegin();
-        _etype1411 = _rtmp31412.etype;
         _size1408 = _rtmp31412.size;
         for (var _i1413 = 0; _i1413 < _size1408; ++_i1413)
         {
@@ -22984,7 +22457,6 @@ TalkService_syncContacts_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -22997,11 +22469,7 @@ TalkService_syncContacts_result.prototype.read = function(input) {
         var _size1416 = 0;
         var _rtmp31420;
         this.success = {};
-        var _ktype1417 = 0;
-        var _vtype1418 = 0;
         _rtmp31420 = input.readMapBegin();
-        _ktype1417 = _rtmp31420.ktype;
-        _vtype1418 = _rtmp31420.vtype;
         _size1416 = _rtmp31420.size;
         for (var _i1421 = 0; _i1421 < _size1416; ++_i1421)
         {
@@ -23079,7 +22547,6 @@ TalkService_trySendMessage_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23150,7 +22617,6 @@ TalkService_trySendMessage_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23218,7 +22684,6 @@ TalkService_unblockContact_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23284,7 +22749,6 @@ TalkService_unblockContact_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23342,7 +22806,6 @@ TalkService_unblockRecommendation_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23408,7 +22871,6 @@ TalkService_unblockRecommendation_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23448,7 +22910,7 @@ TalkService_unblockRecommendation_result.prototype.write = function(output) {
   return;
 };
 
-var TalkService_unregisterUserAndDevice_args = function(args) {
+var TalkService_unregisterUserAndDevice_args = function() {
 };
 TalkService_unregisterUserAndDevice_args.prototype = {};
 TalkService_unregisterUserAndDevice_args.prototype.read = function(input) {
@@ -23456,9 +22918,7 @@ TalkService_unregisterUserAndDevice_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
-    var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
       break;
     }
@@ -23498,7 +22958,6 @@ TalkService_unregisterUserAndDevice_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23561,7 +23020,6 @@ TalkService_updateApnsDeviceToken_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23618,7 +23076,6 @@ TalkService_updateApnsDeviceToken_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23676,7 +23133,6 @@ TalkService_updateBuddySetting_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23742,7 +23198,6 @@ TalkService_updateBuddySetting_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23796,7 +23251,6 @@ TalkService_updateC2DMRegistrationId_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23853,7 +23307,6 @@ TalkService_updateC2DMRegistrationId_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -23919,7 +23372,6 @@ TalkService_updateContactSetting_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24009,7 +23461,6 @@ TalkService_updateContactSetting_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24067,7 +23518,6 @@ TalkService_updateCustomModeSettings_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24087,11 +23537,7 @@ TalkService_updateCustomModeSettings_args.prototype.read = function(input) {
         var _size1426 = 0;
         var _rtmp31430;
         this.paramMap = {};
-        var _ktype1427 = 0;
-        var _vtype1428 = 0;
         _rtmp31430 = input.readMapBegin();
-        _ktype1427 = _rtmp31430.ktype;
-        _vtype1428 = _rtmp31430.vtype;
         _size1426 = _rtmp31430.size;
         for (var _i1431 = 0; _i1431 < _size1426; ++_i1431)
         {
@@ -24160,7 +23606,6 @@ TalkService_updateCustomModeSettings_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24218,7 +23663,6 @@ TalkService_updateDeviceInfo_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24285,7 +23729,6 @@ TalkService_updateDeviceInfo_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24343,7 +23786,6 @@ TalkService_updateGroup_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24410,7 +23852,6 @@ TalkService_updateGroup_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24468,7 +23909,6 @@ TalkService_updateNotificationToken_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24534,7 +23974,6 @@ TalkService_updateNotificationToken_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24592,7 +24031,6 @@ TalkService_updateNotificationTokenWithBytes_args.prototype.read = function(inpu
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24658,7 +24096,6 @@ TalkService_updateNotificationTokenWithBytes_result.prototype.read = function(in
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24716,7 +24153,6 @@ TalkService_updateProfile_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24783,7 +24219,6 @@ TalkService_updateProfile_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24845,7 +24280,6 @@ TalkService_updateProfileAttribute_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24923,7 +24357,6 @@ TalkService_updateProfileAttribute_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -24977,7 +24410,6 @@ TalkService_updateRegion_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25034,7 +24466,6 @@ TalkService_updateRegion_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25092,7 +24523,6 @@ TalkService_updateSettings_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25159,7 +24589,6 @@ TalkService_updateSettings_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25217,7 +24646,6 @@ TalkService_updateSettings2_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25288,7 +24716,6 @@ TalkService_updateSettings2_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25359,7 +24786,6 @@ TalkService_updateSettingsAttribute_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25437,7 +24863,6 @@ TalkService_updateSettingsAttribute_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25499,7 +24924,6 @@ TalkService_updateSettingsAttributes_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25582,7 +25006,6 @@ TalkService_updateSettingsAttributes_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25653,7 +25076,6 @@ TalkService_verifyIdentityCredential_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25731,7 +25153,6 @@ TalkService_verifyIdentityCredential_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25785,7 +25206,6 @@ TalkService_verifyIdentityCredentialWithResult_args.prototype.read = function(in
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25847,7 +25267,6 @@ TalkService_verifyIdentityCredentialWithResult_result.prototype.read = function(
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -25919,7 +25338,6 @@ TalkService_verifyPhone_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -26001,7 +25419,6 @@ TalkService_verifyPhone_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -26068,7 +25485,6 @@ TalkService_verifyQrcode_args.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
@@ -26138,7 +25554,6 @@ TalkService_verifyQrcode_result.prototype.read = function(input) {
   while (true)
   {
     var ret = input.readFieldBegin();
-    var fname = ret.fname;
     var ftype = ret.ftype;
     var fid = ret.fid;
     if (ftype == Thrift.Type.STOP) {
