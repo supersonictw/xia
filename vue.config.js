@@ -10,7 +10,6 @@
 */
 
 module.exports = {
-    publicPath: process.env.NODE_ENV === 'production' ? '/xia/' : '/',
     devServer: {
         disableHostCheck: true
     }
