@@ -43,6 +43,7 @@ const routes = [
     path: "/chat",
     name: Constant.ROUTER_TAG_CHAT,
     component: Chat,
+    props: true,
   },
   {
     path: "/about",

@@ -15,7 +15,7 @@
       v-for="(item, itemId) in getDisplayMessages"
       :key="itemId"
     >
-      <a href="#" :id="item.id" @click.prevent="enterChat">
+      <a href="#" @click.prevent="enterChat(item.id)">
         <div class="contact">
           <img class="picture-icon" :src="mediaURL + item.picturePath" />
           <div>
@@ -40,8 +40,11 @@ import lineType from "@/computes/line/line_types.js";
 export default {
   name: "ChatList",
   methods: {
-    enterChat() {
-      this.$router.push({ name: Constant.ROUTER_TAG_CHAT });
+    enterChat(chatId) {
+      this.$router.push({
+        name: Constant.ROUTER_TAG_CHAT,
+        params: { targetEncryptedId: chatId },
+      });
     },
     subLastMessage(lastMessage) {
       if (lastMessage == null) return;
@@ -97,10 +100,15 @@ export default {
   computed: {
     getDisplayMessages() {
       const messageBox = [];
-      for (let [targetId, message] of this.$store.getters.messageBox) {
+      for (let [targetId, message] of this.$store.getters.previewMessageBox) {
         let contactData = this.getContactInfo(message);
+        let targetEncryptedId = hash.sha256(targetId);
+        this.$store.commit("registerChatEncryptedId", {
+          targetEncryptedId,
+          targetId,
+        });
         messageBox.push({
-          id: hash.sha256(targetId),
+          id: targetEncryptedId,
           displayName: contactData.displayName,
           picturePath: contactData.picturePath,
           lastMessage: message.text,

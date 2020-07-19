@@ -13,12 +13,23 @@
     <Back />
     <div id="chat">
       <div class="header">
-        <h2>{{ TargetName }}</h2>
+        <h2>{{ chatTitle }}</h2>
       </div>
-      <div id="msg-container"></div>
+      <div id="msg-container">
+        <div
+          :class="getOriginType(item)"
+          v-for="(item, itemId) in getMessages"
+          :key="itemId"
+        >
+          <h3 v-if="item.from_ != getMyUserId" class="name">
+            {{ getUserInfo(item.from_).displayName }}
+          </h3>
+          <p>{{ item.text }}</p>
+        </div>
+      </div>
       <div id="msg-input-box">
-        <textarea id="msg-input"></textarea>
-        <a title="Send" href="#" @click.prevent="">
+        <textarea id="msg-input" v-model="inputText"></textarea>
+        <a title="Send" href="#" @click.prevent="sendTextMessage">
           <div id="msg-submit">
             <svg
               alt="Send"
@@ -44,7 +55,12 @@
 </template>
 
 <script>
+import Constant from "@/data/const.js";
+
 import Back from "@/components/Back.vue";
+
+import lineClient from "@/computes/line.js";
+import lineType from "@/computes/line/line_types.js";
 
 export default {
   name: "Chat",
@@ -52,18 +68,67 @@ export default {
     Back,
   },
   methods: {
-    addMessage(msgOriginType, msgOrigin, msg) {
-      msgOriginType = msgOriginType || "self";
-      document
-        .getElementById("msg-container")
-        .append(
-          `<div class="${msgOriginType}"><h3 class="name">${msgOrigin}</h3><p>${msg}</p></div>`
-        );
+    getOriginType(message) {
+      return message.from_ === this.getMyUserId ? "self" : "another";
+    },
+    sendTextMessage() {
+      if (this.inputText.length < 1) return;
+      this.client.sendMessage(
+        Constant.THRIFT_DEFAULT_SEQ,
+        new lineType.Message({
+          type: lineType.ContentType.NONE,
+          to: this.targetId,
+          text: this.inputText,
+        })
+      );
+      this.inputText = "";
+    },
+    getUserInfo(userId) {
+      if (this.$store.getters.contactInfo.has(userId)) {
+        return this.$store.getters.contactInfo.get(userId);
+      } else {
+        let contactData = this.client.getContact(userId);
+        this.$store.commit("pushContactMetaData", {
+          typeName: lineType.SyncCategory.CONTACT,
+          data: contactData,
+        });
+        return contactData;
+      }
     },
   },
+  computed: {
+    targetId() {
+      if (this.$store.state.chatEncryptedIds.has(this.targetEncryptedId))
+        return this.$store.state.chatEncryptedIds.get(this.targetEncryptedId);
+      this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
+      return "";
+    },
+    chatTitle() {
+      if (this.targetId.startsWith("u")) {
+        if (this.$store.getters.contactInfo.has(this.targetId))
+          return this.$store.getters.contactInfo.get(this.targetId).displayName;
+      }
+      if (this.targetId.startsWith("c")) {
+        if (this.$store.getters.groupInfo.has(this.targetId))
+          return this.$store.getters.groupInfo.get(this.targetId).displayName;
+      }
+      return "Unknown";
+    },
+    getMessages() {
+      return this.$store.getters.messageBox.get(this.targetId);
+    },
+    getMyUserId() {
+      return this.$store.state.profile.UserId;
+    },
+  },
+  props: ["targetEncryptedId"],
   data() {
     return {
-      TargetName: "Contact",
+      inputText: "",
+      client: lineClient(
+        Constant.LINE_QUERY_PATH,
+        this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+      ),
     };
   },
 };
@@ -88,7 +153,7 @@ export default {
 
 #msg-container {
   min-width: 100px;
-  min-height: 500px;
+  height: 500px;
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;

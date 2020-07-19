@@ -51,7 +51,7 @@ export default {
     async getProfile() {
       try {
         const profile = await this.client.getProfile();
-        this.$store.dispatch("updateProfile", profile);
+        this.$store.commit("updateProfile", profile);
         return true;
       } catch (e) {
         this.revoke();

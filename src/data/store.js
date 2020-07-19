@@ -25,11 +25,12 @@ const Store = new Vuex.Store({
     ready: 0,
     profile: {},
     contactIds: [],
+    operations: [],
     groupJoinedIds: [],
     groupInvitedIds: [],
     allContactMetaData: [],
     allGroupMetaData: [],
-    operations: [],
+    chatEncryptedIds: new Map(),
   },
   getters: {
     contactInfo: (state) => {
@@ -71,27 +72,36 @@ const Store = new Vuex.Store({
           operation.type == lineType.OpType.SEND_MESSAGE ||
           operation.type == lineType.OpType.RECEIVE_MESSAGE
         ) {
-          layout.set(
-            (function(obj) {
-              switch (obj.message.toType) {
-                case lineType.MIDType.USER:
-                  switch (obj.type) {
-                    case lineType.OpType.SEND_MESSAGE:
-                      return obj.message.to;
-                    case lineType.OpType.RECEIVE_MESSAGE:
-                      return obj.message.from_;
-                    default:
-                      return null;
-                  }
-                case lineType.MIDType.ROOM:
-                case lineType.MIDType.GROUP:
-                  return obj.message.to;
-              }
-            })(operation),
-            operation.message
-          );
+          let targetId = (function(obj) {
+            switch (obj.message.toType) {
+              case lineType.MIDType.USER:
+                switch (obj.type) {
+                  case lineType.OpType.SEND_MESSAGE:
+                    return obj.message.to;
+                  case lineType.OpType.RECEIVE_MESSAGE:
+                    return obj.message.from_;
+                  default:
+                    return null;
+                }
+              case lineType.MIDType.ROOM:
+              case lineType.MIDType.GROUP:
+                return obj.message.to;
+            }
+          })(operation);
+          if (layout.has(targetId)) {
+            layout.get(targetId).push(operation.message);
+          } else {
+            layout.set(targetId, [operation.message]);
+          }
         }
       });
+      return layout;
+    },
+    previewMessageBox: (_, getters) => {
+      let layout = new Map();
+      for (let [boxIndex, boxData] of getters.messageBox) {
+        layout.set(boxIndex, boxData[boxData.length - 1]);
+      }
       return layout;
     },
   },
@@ -134,6 +144,9 @@ const Store = new Vuex.Store({
     popOperations(state, data) {
       state.operations.pop(data);
     },
+    registerChatEncryptedId(state, { targetEncryptedId, targetId }) {
+      state.chatEncryptedIds.set(targetEncryptedId, targetId);
+    },
   },
   actions: {
     async opHandler({ commit }, operations) {
@@ -142,9 +155,6 @@ const Store = new Vuex.Store({
           commit("pushOperations", op);
         }
       });
-    },
-    async updateProfile({ commit }, profileData) {
-      commit("updateProfile", profileData);
     },
     async syncContactIds({ commit }, { dataName, idList }) {
       assert(
