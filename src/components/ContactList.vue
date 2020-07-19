@@ -53,38 +53,12 @@ export default {
   name: "ChatList",
   methods: {
     getTabData() {
+      if (!this.$store.state.ready) return;
       switch (this.tabId) {
-        case 0: {
-          let generator = function*(users) {
-            for (let user of users) {
-              yield user;
-            }
-          };
-          return generator(this.contactUser);
-        }
-        case 1: {
-          let generator = function*(groups, joinedNum) {
-            for (let groupIndex in groups) {
-              let group = groups[groupIndex];
-              let statusMessage = "";
-              if (groupIndex >= joinedNum) {
-                statusMessage += `${Constant.GROUP_INVITING_ICON} `;
-              }
-              statusMessage += `Members: ${
-                group.members ? group.members.length : 0
-              }`;
-              let picturePath = group.pictureStatus
-                ? `/${group.pictureStatus}`
-                : null;
-              yield {
-                displayName: group.name,
-                statusMessage,
-                picturePath,
-              };
-            }
-          };
-          return generator(this.contactGroup, this.contactGroupJoined.length);
-        }
+        case 0:
+          return this.contactUserInfo;
+        case 1:
+          return this.contactGroupInfo;
         default:
           this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
       }
@@ -93,8 +67,8 @@ export default {
       return this.tabId == e ? "actived" : "";
     },
     switchTab(e) {
-      let tabId = parseInt(e.target.id);
-      let data = [this.contactUser, this.contactGroup];
+      const tabId = parseInt(e.target.id);
+      const data = [this.contactUser, this.contactGroup];
       if (tabId >= data.length || tabId < 0) {
         this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
       }
@@ -128,10 +102,48 @@ export default {
     },
   },
   computed: {
+    contactUserInfo() {
+      const layout = [];
+      for (let user of this.contactUser) {
+        let data = this.$store.getters.contactInfo.get(user);
+        layout.push(data);
+      }
+      return layout.sort(function(a, b) {
+        if (a.displayName < b.displayName) {
+          return -1;
+        }
+        if (a.displayName > b.displayName) {
+          return 1;
+        }
+        return 0;
+      });
+    },
+    contactGroupInfo() {
+      const layout = [];
+      for (let groupIndex in this.contactGroup) {
+        let group = this.contactGroup[groupIndex];
+        let data = this.$store.getters.groupInfo.get(group);
+        data.statusMessage = "";
+        if (groupIndex >= this.contactGroupJoined.length) {
+          data.statusMessage += `${Constant.GROUP_INVITING_ICON} `;
+        }
+        data.statusMessage += `Members: ${
+          group.members ? group.members.length : 0
+        }`;
+        layout.push(data);
+      }
+      return layout.sort(function(a, b) {
+        if (a.displayName < b.displayName) {
+          return -1;
+        }
+        if (a.displayName > b.displayName) {
+          return 1;
+        }
+        return 0;
+      });
+    },
     contactGroup() {
-      return this.$store.state.groupJoinedData.concat(
-        this.$store.state.groupInvitedData
-      );
+      return [].concat(this.contactGroupJoined, this.contactGroupInvited);
     },
   },
   data() {
@@ -139,9 +151,9 @@ export default {
       mediaURL: Constant.LINE_MEDIA_URL,
       tabId: 0,
       contactType: ["Contact", "Group"],
-      contactUser: this.$store.state.contactData,
-      contactGroupJoined: this.$store.state.groupJoinedData,
-      contactGroupInvited: this.$store.state.groupInvitedData,
+      contactUser: this.$store.state.contactIds,
+      contactGroupJoined: this.$store.state.groupJoinedIds,
+      contactGroupInvited: this.$store.state.groupInvitedIds,
     };
   },
 };

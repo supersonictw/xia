@@ -89,7 +89,7 @@ export default {
           )}...`;
     },
     tabSwitcher() {
-      let tabs = [this.tabName, this.tabSwitcherName];
+      const tabs = [this.tabName, this.tabSwitcherName];
       this.tabName = this.tabName == tabs[0] ? tabs[1] : tabs[0];
       this.tabSwitcherName =
         this.tabSwitcherName == tabs[0] ? tabs[1] : tabs[0];

@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 /*
     XIA - LINE Web Client
     ---
@@ -15,6 +16,7 @@ import Constant from "@/data/const.js";
 import lineType from "@/computes/line/line_types.js";
 
 import assert from "assert";
+import hash from "js-sha256";
 
 Vue.use(Vuex);
 
@@ -22,30 +24,72 @@ const Store = new Vuex.Store({
   state: {
     ready: 0,
     profile: {},
-    contactData: [],
-    groupJoinedData: [],
-    groupInvitedData: [],
+    contactIds: [],
+    groupJoinedIds: [],
+    groupInvitedIds: [],
+    allContactMetaData: [],
+    allGroupMetaData: [],
     operations: [],
   },
   getters: {
-    contactInfoForChatList: (state) => {
-      let layout = new Map();
-      state.contactData.forEach((contact) => {
+    contactInfo: (state) => {
+      const layout = new Map();
+      state.allContactMetaData.forEach((contact) => {
         layout.set(contact.mid, {
-          picturePath: contact.picturePath,
           displayName: contact.displayName,
+          picturePath: contact.picturePath,
+          statusMessage: contact.statusMessage,
         });
       });
       return layout;
     },
+    groupInfo: (state) => {
+      const layout = new Map();
+      state.allGroupMetaData.forEach((group) => {
+        layout.set(group.id, {
+          displayName: group.name,
+          picturePath: `/${group.pictureStatus}`,
+          members: group.members,
+          invitee: group.invitee,
+        });
+      });
+      return layout;
+    },
+    chatIdByHash: (state) => {
+      const layout = new Map();
+      []
+        .concat(state.allContactMetaData, state.allGroupMetaData)
+        .forEach((obj) => {
+          layout.set(hash.sha256(obj.id), obj.id);
+        });
+      return layout;
+    },
     messageBox: (state) => {
-      let layout = new Map();
+      const layout = new Map();
       state.operations.forEach((operation) => {
         if (
           operation.type == lineType.OpType.SEND_MESSAGE ||
           operation.type == lineType.OpType.RECEIVE_MESSAGE
         ) {
-          layout.set(operation.message.to, operation.message);
+          layout.set(
+            (function(obj) {
+              switch (obj.message.toType) {
+                case lineType.MIDType.USER:
+                  switch (obj.type) {
+                    case lineType.OpType.SEND_MESSAGE:
+                      return obj.message.to;
+                    case lineType.OpType.RECEIVE_MESSAGE:
+                      return obj.message.from_;
+                    default:
+                      return null;
+                  }
+                case lineType.MIDType.ROOM:
+                case lineType.MIDType.GROUP:
+                  return obj.message.to;
+              }
+            })(operation),
+            operation.message
+          );
         }
       });
       return layout;
@@ -56,21 +100,33 @@ const Store = new Vuex.Store({
       state.ready++;
     },
     updateProfile(state, profileData) {
+      state.profile.UserId = profileData.mid;
       state.profile.DisplayName = profileData.displayName;
       state.profile.PicturePath = profileData.picturePath;
       state.profile.StatusMessage = profileData.statusMessage;
     },
-    pushContactData(state, { dataName, data }) {
-      let dataType = {
-        [Constant.STORAGE_CONTACT_DATA]: state.contactData,
-        [Constant.STORAGE_GROUP_JOINED_DATA]: state.groupJoinedData,
-        [Constant.STORAGE_GROUP_INVITED_DATA]: state.groupInvitedData,
+    pushContactId(state, { dataName, id }) {
+      const dataType = {
+        [Constant.STORAGE_CONTACT_IDS]: state.contactIds,
+        [Constant.STORAGE_GROUP_JOINED_IDS]: state.groupJoinedIds,
+        [Constant.STORAGE_GROUP_INVITED_IDS]: state.groupInvitedIds,
       };
       assert(
         Object.keys(dataType).includes(dataName),
-        "Invalid Name in pushContactData:" + dataName
+        "Invalid Name in pushContactId:" + dataName
       );
-      dataType[dataName].push(data);
+      dataType[dataName].push(id);
+    },
+    pushContactMetaData(state, { typeName, data }) {
+      const dataType = {
+        [lineType.SyncCategory.CONTACT]: state.allContactMetaData,
+        [lineType.SyncCategory.GROUP]: state.allGroupMetaData,
+      };
+      assert(
+        Object.keys(dataType).includes(typeName.toString()),
+        "Invalid Name in pushContactMetaData"
+      );
+      dataType[typeName].push(data);
     },
     pushOperations(state, data) {
       state.operations.push(data);
@@ -80,10 +136,9 @@ const Store = new Vuex.Store({
     },
   },
   actions: {
-    async opHandler({ commit, state }, operations) {
-      let handledOps = state.operations.map((operation) => operation.revision);
+    async opHandler({ commit }, operations) {
       operations.forEach((op) => {
-        if (!handledOps.includes(op.revision) && op.revision > 0) {
+        if (op.revision > 0) {
           commit("pushOperations", op);
         }
       });
@@ -91,20 +146,28 @@ const Store = new Vuex.Store({
     async updateProfile({ commit }, profileData) {
       commit("updateProfile", profileData);
     },
-    syncContactsData({ commit }, payload) {
+    async syncContactIds({ commit }, { dataName, idList }) {
       assert(
-        typeof payload == "object" && payload.length == 2,
-        "Invalid Payload in syncContactsData"
+        Constant.ALL_CONTACT_IDS_STORAGES.includes(dataName),
+        "Invalid Name in syncContactIds:" + dataName
       );
-      let name = payload[0],
-        data = payload[1];
+      idList.forEach((id) =>
+        commit("pushContactId", {
+          dataName,
+          id,
+        })
+      );
+    },
+    async syncContactMetaData({ commit }, { typeName, data }) {
       assert(
-        Constant.ALL_STORAGES.includes(name),
-        "Invalid Name in syncContactsData:" + name
+        [lineType.SyncCategory.CONTACT, lineType.SyncCategory.GROUP].includes(
+          typeName
+        ),
+        "Invalid typeName in syncContactMetaData"
       );
       data.forEach((obj) =>
-        commit("pushContactData", {
-          dataName: name,
+        commit("pushContactMetaData", {
+          typeName,
           data: obj,
         })
       );

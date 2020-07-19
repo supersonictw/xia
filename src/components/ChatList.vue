@@ -12,7 +12,7 @@
   <div id="chat-list">
     <div
       class="chat-item"
-      v-for="(item, itemId) in getDisplayMessages()"
+      v-for="(item, itemId) in getDisplayMessages"
       :key="itemId"
     >
       <a href="#" :id="item.id" @click.prevent="enterChat">
@@ -34,6 +34,9 @@ import Constant from "@/data/const.js";
 import hash from "js-sha256";
 import substring from "unicode-substring";
 
+import lineClient from "@/computes/line.js";
+import lineType from "@/computes/line/line_types.js";
+
 export default {
   name: "ChatList",
   methods: {
@@ -41,37 +44,76 @@ export default {
       this.$router.push({ name: Constant.ROUTER_TAG_CHAT });
     },
     subLastMessage(lastMessage) {
+      if (lastMessage == null) return;
       return lastMessage.length < Constant.CHAT_ROW_TEXT_LENGTH
         ? lastMessage
         : `${substring(lastMessage, 0, Constant.CHAT_ROW_TEXT_LENGTH)}...`;
     },
-    getDisplayMessages() {
-      let generator = function*(self) {
-        for (let message of self.displayMessages) {
-          let targetId = message.to;
-          let contactData = self.$store.getters.contactInfoForChatList.get(
-            targetId
-          );
-          yield {
-            id: hash.sha256(targetId),
-            displayName: contactData.displayName,
-            picturePath: contactData.picturePath,
-            lastMessage: message.text,
-          };
+    getContactInfo(message) {
+      let contactData = null;
+      switch (message.toType) {
+        case lineType.MIDType.USER: {
+          const targetId =
+            message.from_ == this.$store.state.profile.UserId
+              ? message.to
+              : message.from_;
+          if (this.$store.getters.contactInfo.has(targetId)) {
+            contactData = this.$store.getters.contactInfo.get(targetId);
+          } else {
+            contactData = lineClient(
+              Constant.LINE_QUERY_PATH,
+              this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+            ).getContact(targetId);
+            this.$store.commit("pushContactMetaData", {
+              typeName: lineType.SyncCategory.CONTACT,
+              data: contactData,
+            });
+          }
+          return contactData;
         }
-      };
-      return generator(this);
+        case lineType.MIDType.ROOM:
+        case lineType.MIDType.GROUP: {
+          if (this.$store.getters.groupInfo.has(message.to)) {
+            contactData = this.$store.getters.groupInfo.get(message.to);
+          } else {
+            contactData = lineClient(
+              Constant.LINE_QUERY_PATH,
+              this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+            ).getGroup(message.to);
+            this.$store.commit("pushContactMetaData", {
+              typeName: lineType.SyncCategory.GROUP,
+              data: contactData,
+            });
+          }
+          return contactData;
+        }
+        default:
+          console.error(
+            "Unknown toType in getContactInfo with " + message.toType
+          );
+      }
+    },
+  },
+  computed: {
+    getDisplayMessages() {
+      const messageBox = [];
+      for (let [targetId, message] of this.$store.getters.messageBox) {
+        let contactData = this.getContactInfo(message);
+        messageBox.push({
+          id: hash.sha256(targetId),
+          displayName: contactData.displayName,
+          picturePath: contactData.picturePath,
+          lastMessage: message.text,
+        });
+      }
+      return messageBox.reverse();
     },
   },
   data() {
     return {
       mediaURL: Constant.LINE_MEDIA_URL,
-      displayMessages: [],
     };
   },
-  created(){
-      console.log(this.$store.getters.messageBox)
-  }
 };
 </script>
 

@@ -96,11 +96,15 @@ export default {
         .loginZ(loginRequest)
         .catch((error) => (this.loginStatus = error.reason));
       if (loginResponse !== this.loginStatus) {
-        let status = await this.verifyPinCode(loginResponse);
-        if (status === true) {
-          window.location.reload();
-        } else {
-          this.loginStatus = "Login failed";
+        try {
+          const status = await this.verifyPinCode(loginResponse);
+          if (status === true) {
+            window.location.reload();
+          } else {
+            this.loginStatus = "Login failed";
+          }
+        } catch (e) {
+          console.error(e);
         }
       }
     },
@@ -148,6 +152,7 @@ export default {
               method: "GET",
               headers: {
                 Accept: "application/json",
+                "Cache-Control": "no-cache",
                 "X-Line-Access": loginResult.verifier,
                 "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY,
               },
@@ -185,8 +190,8 @@ export default {
       }
     },
     async getUserIP() {
-      let response = await axios("https://restapi.starinc.xyz/basic/ip");
-      let result = response.data;
+      const response = await axios("https://restapi.starinc.xyz/basic/ip");
+      const result = response.data;
       return result.data.ip_addr;
     },
     setAuthToken(authToken) {

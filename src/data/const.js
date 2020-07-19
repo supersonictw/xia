@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 /*
     XIA - LINE Web Client
     ---
@@ -43,14 +44,14 @@ export default {
   get ALL_COOKIES() {
     return [this.COOKIE_ACCESS_KEY, this.COOKIE_OP_REVISION];
   },
-  STORAGE_CONTACT_DATA: "XIA_Contacts",
-  STORAGE_GROUP_JOINED_DATA: "XIA_Group_Joined",
-  STORAGE_GROUP_INVITED_DATA: "XIA_Group_Invited",
-  get ALL_STORAGES() {
+  STORAGE_CONTACT_IDS: "XIA_Contacts",
+  STORAGE_GROUP_JOINED_IDS: "XIA_Group_Joined",
+  STORAGE_GROUP_INVITED_IDS: "XIA_Group_Invited",
+  get ALL_CONTACT_IDS_STORAGES() {
     return [
-      this.STORAGE_CONTACT_DATA,
-      this.STORAGE_GROUP_JOINED_DATA,
-      this.STORAGE_GROUP_INVITED_DATA,
+      this.STORAGE_CONTACT_IDS,
+      this.STORAGE_GROUP_JOINED_IDS,
+      this.STORAGE_GROUP_INVITED_IDS,
     ];
   },
 };

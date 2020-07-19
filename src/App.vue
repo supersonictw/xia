@@ -23,6 +23,7 @@
 import Constant from "./data/const.js";
 
 import lineClient from "@/computes/line.js";
+import lineType from "@/computes/line/line_types.js";
 
 import hash from "js-sha256";
 import zlib from "zlib";
@@ -49,7 +50,7 @@ export default {
     },
     async getProfile() {
       try {
-        let profile = await this.client.getProfile();
+        const profile = await this.client.getProfile();
         this.$store.dispatch("updateProfile", profile);
         return true;
       } catch (e) {
@@ -65,7 +66,7 @@ export default {
       }
     },
     async updateRevision(operations) {
-      let opLength = operations.length;
+      const opLength = operations.length;
       this.revision = operations[opLength - 1].revision.compare(
         operations[opLength - 2].revision
       )
@@ -73,17 +74,14 @@ export default {
         : operations[opLength - 1].revision;
     },
     async syncData() {
-      let contactsDataType = {
-        [Constant.STORAGE_CONTACT_DATA]: this.syncContacts,
-        [Constant.STORAGE_GROUP_JOINED_DATA]: this.syncGroupsJoined,
-        [Constant.STORAGE_GROUP_INVITED_DATA]: this.syncGroupsInvited,
-      };
-      for (let name in contactsDataType) {
-        let data = "Unknown";
-        if (!(name in window.localStorage)) {
-          data = await contactsDataType[name]();
-        } else {
-          let compressedData = window.localStorage.getItem(name);
+      await this.syncContactIds();
+      await this.syncContactMetaData();
+    },
+    async syncContactIds() {
+      for (let dataName of Constant.ALL_CONTACT_IDS_STORAGES) {
+        let idList = null;
+        if (dataName in window.localStorage) {
+          let compressedData = window.localStorage.getItem(dataName);
           let decompressedData = await new Promise((resolve, reject) =>
             zlib.gunzip(
               new Buffer(compressedData, "base64"),
@@ -92,25 +90,52 @@ export default {
               }
             )
           );
-          data = JSON.parse(decompressedData);
+          idList = JSON.parse(decompressedData);
+        } else {
+          switch (dataName) {
+            case Constant.STORAGE_CONTACT_IDS:
+              idList = await this.client.getAllContactIds();
+              break;
+            case Constant.STORAGE_GROUP_JOINED_IDS:
+              idList = await this.client.getGroupIdsJoined();
+              break;
+            case Constant.STORAGE_GROUP_INVITED_IDS:
+              idList = await this.client.getGroupIdsInvited();
+              break;
+            default:
+              console.error("Unknown Contact Name with " + dataName);
+          }
         }
-        this.$store.dispatch("syncContactsData", [name, data]);
+        if (idList) {
+          this.$store.dispatch("syncContactIds", { dataName, idList });
+        } else {
+          console.error("Error occurs in syncContactIds with " + dataName);
+        }
       }
     },
-    async syncContacts() {
-      let contactIds = await this.client.getAllContactIds();
-      return await this.client.getContacts(contactIds);
-    },
-    async syncGroupsJoined() {
-      let groupIds = await this.client.getGroupIdsJoined();
-      return await this.client.getGroups(groupIds);
-    },
-    async syncGroupsInvited() {
-      let groupIds = await this.client.getGroupIdsInvited();
-      return await this.client.getGroups(groupIds);
+    async syncContactMetaData() {
+      // Sync Contacts(User) Information
+      const contactIdLists = [this.$store.state.contactIds];
+      const contactData = await this.client.getContacts(
+        [].concat(...contactIdLists)
+      );
+      this.$store.dispatch("syncContactMetaData", {
+        typeName: lineType.SyncCategory.CONTACT,
+        data: contactData,
+      });
+      // Sync Group Information
+      const groupIdLists = [
+        this.$store.state.groupJoinedIds,
+        this.$store.state.groupInvitedIds,
+      ];
+      const groupData = await this.client.getGroups([].concat(...groupIdLists));
+      this.$store.dispatch("syncContactMetaData", {
+        typeName: lineType.SyncCategory.GROUP,
+        data: groupData,
+      });
     },
     async opListener() {
-      let opClient = lineClient(
+      const opClient = lineClient(
         Constant.LINE_POLL_PATH,
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
       );
@@ -118,7 +143,7 @@ export default {
     },
     async longPoll(opClient) {
       try {
-        let operations = await opClient.fetchOperations(
+        const operations = await opClient.fetchOperations(
           this.revision,
           Constant.FETCH_OP_NUM
         );
@@ -155,7 +180,6 @@ export default {
       });
     },
     revision() {
-      console.log(this.revision.toString());
       this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);
     },
   },
@@ -164,14 +188,14 @@ export default {
       client: null,
       revision: 0,
       storageData: [
-        this.$store.state.contactData,
-        this.$store.state.groupJoinedData,
-        this.$store.state.groupInvitedData,
+        this.$store.state.contactIds,
+        this.$store.state.groupJoinedIds,
+        this.$store.state.groupInvitedIds,
       ],
       storageDataNamesAndHashes: [
-        [Constant.STORAGE_CONTACT_DATA, ""],
-        [Constant.STORAGE_GROUP_JOINED_DATA, ""],
-        [Constant.STORAGE_GROUP_INVITED_DATA, ""],
+        [Constant.STORAGE_CONTACT_IDS, ""],
+        [Constant.STORAGE_GROUP_JOINED_IDS, ""],
+        [Constant.STORAGE_GROUP_INVITED_IDS, ""],
       ],
     };
   },
@@ -181,7 +205,7 @@ export default {
       this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
     );
     if (await this.verifyAccess()) {
-      this.syncData();
+      await this.syncData();
       await this.syncRevision();
       this.opListener();
       this.$store.commit("setReady");
