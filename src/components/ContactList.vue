@@ -50,7 +50,7 @@ import Constant from "@/data/const.js";
 import substring from "unicode-substring";
 
 export default {
-  name: "ChatList",
+  name: "ContactList",
   methods: {
     getTabData() {
       if (!this.$store.state.ready) return;

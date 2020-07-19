@@ -82,14 +82,7 @@ export default {
         let idList = null;
         if (dataName in window.localStorage) {
           let compressedData = window.localStorage.getItem(dataName);
-          let decompressedData = await new Promise((resolve, reject) =>
-            zlib.gunzip(
-              new Buffer(compressedData, "base64"),
-              (error, result) => {
-                !error ? resolve(result) : reject(Error(error));
-              }
-            )
-          );
+          let decompressedData = await this.decompress(compressedData);
           idList = JSON.parse(decompressedData);
         } else {
           switch (dataName) {
@@ -114,15 +107,6 @@ export default {
       }
     },
     async syncContactMetaData() {
-      // Sync Contacts(User) Information
-      const contactIdLists = [this.$store.state.contactIds];
-      const contactData = await this.client.getContacts(
-        [].concat(...contactIdLists)
-      );
-      this.$store.dispatch("syncContactMetaData", {
-        typeName: lineType.SyncCategory.CONTACT,
-        data: contactData,
-      });
       // Sync Group Information
       const groupIdLists = [
         this.$store.state.groupJoinedIds,
@@ -132,6 +116,21 @@ export default {
       this.$store.dispatch("syncContactMetaData", {
         typeName: lineType.SyncCategory.GROUP,
         data: groupData,
+      });
+      // Sync Contacts(User) Information
+      const contactIdLists = [this.$store.state.contactIds];
+      const contactData = await this.client.getContacts(
+        [].concat(...contactIdLists)
+      );
+      const allGroupMemberData = this.$store.state.allGroupMetaData.map(
+        (group) => (group.members != null ? group.members : [])
+      );
+      const allGroupInvitedData = this.$store.state.allGroupMetaData.map(
+        (group) => (group.invitee != null ? group.invitee : [])
+      );
+      this.$store.dispatch("syncContactMetaData", {
+        typeName: lineType.SyncCategory.CONTACT,
+        data: contactData.concat(...allGroupMemberData, ...allGroupInvitedData),
       });
     },
     async opListener() {
@@ -160,24 +159,45 @@ export default {
       window.sessionStorage.clear();
       window.location.reload();
     },
+    async compress(rawString) {
+      return new Promise((resolve, reject) =>
+        zlib.gzip(rawString, function(error, result) {
+          if (!error) {
+            resolve(new Buffer(result).toString("base64"));
+          } else {
+            reject(Error(error));
+          }
+        })
+      );
+    },
+    async decompress(b64String) {
+      return new Promise((resolve, reject) =>
+        zlib.gunzip(new Buffer(b64String, "base64"), function(error, result) {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(Error(error));
+          }
+        })
+      );
+    },
   },
   watch: {
     $route() {
       this.verifyAccess();
     },
-    async storageData(e) {
-      e.forEach((objs, index) => {
+    async storageData(events) {
+      for (let index in events) {
+        let objs = events[index];
         let alias = this.storageDataNamesAndHashes[index];
         let nowHash = hash.sha256(objs);
         if (nowHash !== alias[1]) {
           let jsonString = JSON.stringify(objs);
-          zlib.gzip(jsonString, function(err, buf) {
-            let compressedString = new Buffer(buf).toString("base64");
-            window.localStorage.setItem(alias[0], compressedString);
-          });
+          let compressedString = await this.compress(jsonString);
+          window.localStorage.setItem(alias[0], compressedString);
           alias[1] = nowHash;
         }
-      });
+      }
     },
     revision() {
       this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);

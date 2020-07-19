@@ -139,6 +139,14 @@ const Store = new Vuex.Store({
       dataType[typeName].push(data);
     },
     pushOperations(state, data) {
+      if (state.operations.length > Constant.OPERATIONS_NUM_LIMIT) {
+        for (let i; i < Constant.OPERATIONS_NUM_LIMIT; i++) {
+          state.operations.pop(state.operations[i]);
+        }
+        console.warn(
+          "Automatically release some operations cache for preventing memory leak."
+        );
+      }
       state.operations.push(data);
     },
     popOperations(state, data) {
@@ -181,6 +189,9 @@ const Store = new Vuex.Store({
           data: obj,
         })
       );
+    },
+    async pushContactMetaDataForAsync({ commit }, { typeName, data }) {
+      commit("pushContactMetaData", { typeName, data });
     },
   },
 });

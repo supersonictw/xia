@@ -84,11 +84,12 @@ export default {
       this.inputText = "";
     },
     getUserInfo(userId) {
+      console.log(this.$store.getters.contactInfo.has(userId));
       if (this.$store.getters.contactInfo.has(userId)) {
         return this.$store.getters.contactInfo.get(userId);
       } else {
         let contactData = this.client.getContact(userId);
-        this.$store.commit("pushContactMetaData", {
+        this.$store.dispatch("pushContactMetaDataForAsync", {
           typeName: lineType.SyncCategory.CONTACT,
           data: contactData,
         });

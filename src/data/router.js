@@ -40,7 +40,7 @@ const routes = [
     component: Profile,
   },
   {
-    path: "/chat",
+    path: "/chat/:targetEncryptedId",
     name: Constant.ROUTER_TAG_CHAT,
     component: Chat,
     props: true,
