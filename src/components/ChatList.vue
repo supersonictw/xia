@@ -103,18 +103,30 @@ export default {
       for (let [targetId, message] of this.$store.getters.previewMessageBox) {
         let contactData = this.getContactInfo(message);
         let targetEncryptedId = hash.sha256(targetId);
-        this.$store.commit("registerChatEncryptedId", {
-          targetEncryptedId,
-          targetId,
-        });
+        let layoutMessage = "";
+        if (!this.$store.state.chatEncryptedIds.has(this.targetEncryptedId))
+          this.$store.commit("registerChatEncryptedId", {
+            targetEncryptedId,
+            targetId,
+          });
+        switch (message.contentType) {
+          case lineType.ContentType.STICKER:
+            layoutMessage = "(Sticker)";
+            break;
+          default:
+            layoutMessage = message.text;
+        }
         messageBox.push({
           id: targetEncryptedId,
           displayName: contactData.displayName,
           picturePath: contactData.picturePath,
-          lastMessage: message.text,
+          lastMessage: layoutMessage,
+          time: message.createdTime,
         });
       }
-      return messageBox.reverse();
+      return messageBox.sort(function(a, b) {
+        return b.time.compare(a.time);
+      });
     },
   },
   data() {

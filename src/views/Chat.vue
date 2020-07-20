@@ -72,6 +72,7 @@ export default {
       return message.from_ === this.getMyUserId ? "self" : "another";
     },
     sendTextMessage() {
+      this.moveToBottom();
       if (this.inputText.length < 1) return;
       this.client.sendMessage(
         Constant.THRIFT_DEFAULT_SEQ,
@@ -95,6 +96,10 @@ export default {
         });
         return contactData;
       }
+    },
+    moveToBottom() {
+      const messageBoxElement = document.getElementById("msg-container");
+      messageBoxElement.scroll(0, messageBoxElement.scrollHeight);
     },
   },
   computed: {
@@ -122,6 +127,17 @@ export default {
       return this.$store.state.profile.UserId;
     },
   },
+  watch: {
+    getMessages() {
+      const messageBoxElement = document.getElementById("msg-container");
+      if (
+        messageBoxElement.scrollTop + messageBoxElement.clientHeight ==
+        messageBoxElement.scrollHeight
+      ) {
+        setTimeout(this.moveToBottom, 100);
+      }
+    },
+  },
   props: ["targetEncryptedId"],
   data() {
     return {
@@ -131,6 +147,9 @@ export default {
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
       ),
     };
+  },
+  mounted() {
+    this.moveToBottom();
   },
 };
 </script>
