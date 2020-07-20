@@ -26,6 +26,7 @@ export default {
   ROUTER_TAG_CONTACT: "Contact",
   ROUTER_TAG_CHAT: "Chat",
   ROUTER_TAG_ABOUT: "About",
+  ROUTER_TAG_ERROR: "Error",
   ROUTER_TAG_NOT_FOUND: "Not Found",
   LINE_USE_HTTPS: true,
   LINE_APPLICATION_IDENTITY: "CHROMEOS\t2.3.8\tChrome_OS\tXIA",

@@ -11,12 +11,27 @@
 <template>
   <div class="album py-5 bg-light">
     <div class="container">
-      <h2 class="pt-3">404</h2>
-      <p>The page you request is not exists.</p>
+      <h2 class="pt-3">Internal Error</h2>
+      <p>Reason: {{ getErrorReason }}</p>
       <router-link to="/">Go to Index</router-link>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: "Error",
+  props: ["reason"],
+  computed: {
+    getErrorReason() {
+      if (this.reason) {
+        return this.reason;
+      }
+      return "Unknown";
+    },
+  },
+};
+</script>
 
 <style scoped>
 .container {

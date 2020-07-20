@@ -85,16 +85,26 @@ export default {
       this.inputText = "";
     },
     getUserInfo(userId) {
-      console.log(this.$store.getters.contactInfo.has(userId));
       if (this.$store.getters.contactInfo.has(userId)) {
         return this.$store.getters.contactInfo.get(userId);
-      } else {
-        let contactData = this.client.getContact(userId);
-        this.$store.dispatch("pushContactMetaDataForAsync", {
-          typeName: lineType.SyncCategory.CONTACT,
-          data: contactData,
-        });
-        return contactData;
+      }
+      this.$router.push({
+        name: Constant.ROUTER_TAG_ERROR,
+        params: { reason: "Contact MetaData not synchronized completely." },
+      });
+    },
+    sendReadTag() {
+      const lastMessageFetched = this.getMessages[this.getMessages.length - 1];
+      if (
+        this.lastReadMessageId != lastMessageFetched.id &&
+        lastMessageFetched.from_ != this.getMyUserId
+      ) {
+        this.client.sendChatChecked(
+          Constant.THRIFT_DEFAULT_SEQ,
+          this.targetId,
+          lastMessageFetched.id
+        );
+        this.lastReadMessageId = lastMessageFetched.id;
       }
     },
     moveToBottom() {
@@ -136,6 +146,7 @@ export default {
       ) {
         setTimeout(this.moveToBottom, 100);
       }
+      this.sendReadTag();
     },
   },
   props: ["targetEncryptedId"],
@@ -146,6 +157,7 @@ export default {
         Constant.LINE_QUERY_PATH,
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
       ),
+      lastReadMessageId: "",
     };
   },
   mounted() {

@@ -20,6 +20,7 @@ import Profile from "@/views/Profile.vue";
 import Contact from "@/views/Contact.vue";
 import Chat from "@/views/Chat.vue";
 import About from "@/views/About.vue";
+import ErrorPage from "@/views/Error.vue";
 import NotFound from "@/views/NotFound.vue";
 
 Vue.use(VueRouter);
@@ -56,6 +57,12 @@ const routes = [
     path: "/about",
     name: Constant.ROUTER_TAG_ABOUT,
     component: About,
+  },
+  {
+    path: "/error",
+    name: Constant.ROUTER_TAG_ERROR,
+    component: ErrorPage,
+    props: true,
   },
   {
     path: "*",
