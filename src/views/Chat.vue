@@ -21,10 +21,15 @@
           v-for="(item, itemId) in getMessages"
           :key="itemId"
         >
-          <h3 v-if="item.from_ != getMyUserId" class="name">
-            {{ getUserInfo(item.from_).displayName }}
+          <h3 v-if="item.origin != getMyUserId" class="name">
+            {{ getUserInfo(item.origin).displayName }}
           </h3>
-          <p>{{ item.text }}</p>
+          <div class="content">
+            <p v-if="item.type == 1">
+              <img :src="item.content" />
+            </p>
+            <p v-else>{{ item.content }}</p>
+          </div>
         </div>
       </div>
       <div id="msg-input-box">
@@ -69,7 +74,16 @@ export default {
   },
   methods: {
     getOriginType(message) {
-      return message.from_ === this.getMyUserId ? "self" : "another";
+      return message.origin === this.getMyUserId ? "self" : "another";
+    },
+    getStickerImageURL(contentMetadata) {
+      const stickerVersion =
+        Math.floor(contentMetadata.STKVER / 1000000) +
+        "/" +
+        Math.floor(contentMetadata.STKVER / 1000) +
+        "/" +
+        (contentMetadata.STKVER % 1000);
+      return `${Constant.LINE_STICKER_URL}/products/${stickerVersion}/${contentMetadata.STKPKGID}/${Constant.LINE_STICKER_PLATFORM}/stickers/${contentMetadata.STKID}.png`;
     },
     sendTextMessage() {
       this.moveToBottom();
@@ -94,7 +108,9 @@ export default {
       });
     },
     sendReadTag() {
-      const lastMessageFetched = this.getMessages[this.getMessages.length - 1];
+      const lastMessageFetched = this.getRawMessages[
+        this.getRawMessages.length - 1
+      ];
       if (
         this.lastReadMessageId != lastMessageFetched.id &&
         lastMessageFetched.from_ != this.getMyUserId
@@ -131,6 +147,30 @@ export default {
       return "Unknown";
     },
     getMessages() {
+      let layout = [];
+      this.getRawMessages.forEach((message) => {
+        let layoutType = 0;
+        let layoutMessage = "";
+        switch (message.contentType) {
+          case lineType.ContentType.STICKER:
+            console.log(message);
+            layoutType = lineType.ContentType.IMAGE;
+            layoutMessage = this.getStickerImageURL(message.contentMetadata);
+            break;
+          default:
+            layoutType = lineType.ContentType.NONE;
+            layoutMessage = message.text;
+        }
+        layout.push({
+          id: message.id,
+          type: layoutType,
+          origin: message.from_,
+          content: layoutMessage,
+        });
+      });
+      return layout;
+    },
+    getRawMessages() {
       return this.$store.getters.messageBox.get(this.targetId);
     },
     getMyUserId() {
@@ -138,7 +178,7 @@ export default {
     },
   },
   watch: {
-    getMessages() {
+    getRawMessages() {
       const messageBoxElement = document.getElementById("msg-container");
       if (
         messageBoxElement.scrollTop + messageBoxElement.clientHeight ==
@@ -161,7 +201,7 @@ export default {
     };
   },
   mounted() {
-    this.moveToBottom();
+    if (document.getElementById("msg-container")) this.moveToBottom();
   },
 };
 </script>
@@ -200,6 +240,12 @@ export default {
 
 #msg-container .another {
   text-align: left;
+}
+
+.content img {
+  max-width: 300px;
+  max-height: 300px;
+  overflow: hidden;
 }
 
 #msg-input-box {

@@ -11,6 +11,7 @@
 
 export default {
   NAME: "XIA",
+  VERSION: "1.0.0",
   FETCH_OP_NUM: 50,
   MOBILE_UI_WIDTH: 780,
   THRIFT_DEFAULT_SEQ: 0,
@@ -29,9 +30,18 @@ export default {
   ROUTER_TAG_ERROR: "Error",
   ROUTER_TAG_NOT_FOUND: "Not Found",
   LINE_USE_HTTPS: true,
-  LINE_APPLICATION_IDENTITY: "CHROMEOS\t2.3.8\tChrome_OS\tXIA",
+  LINE_PLATFORM_ID: "CHROMEOS",
+  LINE_PLATFORM_NAME: "Chrome_OS",
+  get LINE_PLATFORM_VERSION() {
+    return this.NAME;
+  },
+  get LINE_APPLICATION_IDENTITY() {
+    return `${this.LINE_PLATFORM_ID}\t${this.VERSION}\t${this.LINE_PLATFORM_NAME}\t${this.LINE_PLATFORM_VERSION}`;
+  },
   LINE_SERVER_HOST: "gf.line.naver.jp",
   LINE_MEDIA_HOST: "obs.line-apps.com",
+  LINE_STICKER_HOST: "sdl-stickershop.line.naver.jp",
+  LINE_STICKER_PLATFORM: "PC",
   LINE_CERTIFICATE_PATH: "/Q",
   LINE_LOGIN_PATH: "/api/v4p/rs",
   LINE_AUTH_PATH: "/api/v4/TalkService.do",
@@ -40,6 +50,11 @@ export default {
   get LINE_MEDIA_URL() {
     return `${this.LINE_USE_HTTPS ? "https" : "http"}://${
       this.LINE_MEDIA_HOST
+    }`;
+  },
+  get LINE_STICKER_URL() {
+    return `${this.LINE_USE_HTTPS ? "https" : "http"}://${
+      this.LINE_STICKER_HOST
     }`;
   },
   COOKIE_ACCESS_KEY: "XIA_AccessKey",
