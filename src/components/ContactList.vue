@@ -26,7 +26,11 @@
       v-for="(item, itemId) in getTabData()"
       :key="itemId"
     >
-      <a :title="getItemTitle(item)" href="#">
+      <a
+        :title="getItemTitle(item)"
+        @click.prevent="enterContact(item.id)"
+        href="#"
+      >
         <div class="contact">
           <img
             class="picture-icon"
@@ -47,11 +51,18 @@
 <script>
 import Constant from "@/data/const.js";
 
+import hash from "js-sha256";
 import substring from "unicode-substring";
 
 export default {
   name: "ContactList",
   methods: {
+    enterContact(chatId) {
+      this.$router.push({
+        name: Constant.ROUTER_TAG_CONTACT,
+        params: { targetEncryptedId: chatId },
+      });
+    },
     getTabData() {
       if (!this.$store.state.ready) return;
       switch (this.tabId) {
@@ -106,6 +117,11 @@ export default {
       const layout = [];
       for (let user of this.contactUser) {
         let data = this.$store.getters.contactInfo.get(user);
+        data.id = hash.sha256(user);
+        this.$store.commit("registerChatEncryptedId", {
+          targetEncryptedId: data.id,
+          targetId: user,
+        });
         layout.push(data);
       }
       return layout.sort(function(a, b) {
@@ -123,13 +139,18 @@ export default {
       for (let groupIndex in this.contactGroup) {
         let group = this.contactGroup[groupIndex];
         let data = this.$store.getters.groupInfo.get(group);
+        data.id = hash.sha256(group);
         data.statusMessage = "";
         if (groupIndex >= this.contactGroupJoined.length) {
           data.statusMessage += `${Constant.GROUP_INVITING_ICON} `;
         }
         data.statusMessage += `Members: ${
-          group.members ? group.members.length : 0
+          data.members ? data.members.length : 0
         }`;
+        this.$store.commit("registerChatEncryptedId", {
+          targetEncryptedId: data.id,
+          targetId: group,
+        });
         layout.push(data);
       }
       return layout.sort(function(a, b) {

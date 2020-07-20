@@ -23,6 +23,7 @@ export default {
   ROUTER_TAG_LOGIN: "Login",
   ROUTER_TAG_DASHBOARD: "Dashboard",
   ROUTER_TAG_PROFILE: "Profile",
+  ROUTER_TAG_CONTACT: "Contact",
   ROUTER_TAG_CHAT: "Chat",
   ROUTER_TAG_ABOUT: "About",
   ROUTER_TAG_NOT_FOUND: "Not Found",
