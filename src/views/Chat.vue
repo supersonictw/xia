@@ -170,28 +170,30 @@ export default {
     },
     getMessages() {
       let layout = [];
-      this.getRawMessages.forEach((message) => {
-        let layoutType = lineType.ContentType.NONE;
-        let layoutMessage = "";
-        switch (message.contentType) {
-          case lineType.ContentType.IMAGE:
-            this.getImageResource(message.id);
-            layoutType = lineType.ContentType.IMAGE;
-            break;
-          case lineType.ContentType.STICKER:
-            this.getStickerImageResource(message.id, message.contentMetadata);
-            layoutType = lineType.ContentType.IMAGE;
-            break;
-          default:
-            layoutMessage = message.text;
-        }
-        layout.push({
-          id: message.id,
-          type: layoutType,
-          origin: message.from_,
-          content: layoutMessage,
+      if (this.getRawMessages) {
+        this.getRawMessages.forEach((message) => {
+          let layoutType = lineType.ContentType.NONE;
+          let layoutMessage = "";
+          switch (message.contentType) {
+            case lineType.ContentType.IMAGE:
+              this.getImageResource(message.id);
+              layoutType = lineType.ContentType.IMAGE;
+              break;
+            case lineType.ContentType.STICKER:
+              this.getStickerImageResource(message.id, message.contentMetadata);
+              layoutType = lineType.ContentType.IMAGE;
+              break;
+            default:
+              layoutMessage = message.text;
+          }
+          layout.push({
+            id: message.id,
+            type: layoutType,
+            origin: message.from_,
+            content: layoutMessage,
+          });
         });
-      });
+      }
       return layout;
     },
     getRawMessages() {
