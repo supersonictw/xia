@@ -54,7 +54,8 @@ export default {
         this.$store.commit("updateProfile", profile);
         return true;
       } catch (e) {
-        this.revoke();
+        console.error(e);
+        if (e.name == "TalkException") this.revoke();
         return false;
       }
     },
@@ -150,6 +151,7 @@ export default {
         await this.updateRevision(operations);
       } catch (e) {
         console.error(e);
+        if (e.name == "TalkException") this.revoke();
       }
       this.longPoll(opClient);
     },

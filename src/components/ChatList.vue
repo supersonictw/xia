@@ -110,6 +110,9 @@ export default {
             targetId,
           });
         switch (message.contentType) {
+          case lineType.ContentType.IMAGE:
+            layoutMessage = "(Image)";
+            break;
           case lineType.ContentType.STICKER:
             layoutMessage = "(Sticker)";
             break;

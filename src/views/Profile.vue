@@ -40,7 +40,7 @@ export default {
         } else {
           this.waitForUpdateProfile();
         }
-      }, 1);
+      }, Constant.RETRY_TIMEOUT);
     },
     updateProfile() {
       this.displayName = this.$store.state.profile.DisplayName;

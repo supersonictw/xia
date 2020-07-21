@@ -26,7 +26,7 @@
           </h3>
           <div class="content">
             <p v-if="item.type == 1">
-              <img :src="item.content" />
+              <img :src="mediaObjects.get(item.id)" />
             </p>
             <p v-else>{{ item.content }}</p>
           </div>
@@ -64,6 +64,8 @@ import Constant from "@/data/const.js";
 
 import Back from "@/components/Back.vue";
 
+import axios from "axios";
+
 import lineClient from "@/computes/line.js";
 import lineType from "@/computes/line/line_types.js";
 
@@ -76,14 +78,34 @@ export default {
     getOriginType(message) {
       return message.origin === this.getMyUserId ? "self" : "another";
     },
-    getStickerImageURL(contentMetadata) {
+    async downloadImage(imageSource) {
+      return await axios(imageSource, {
+        method: "GET",
+        responseType: "arraybuffer",
+        headers: {
+          Accept: "image/jpeg",
+          "X-Line-Access": this.$cookies.get(Constant.COOKIE_ACCESS_KEY),
+          "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY,
+        },
+      });
+    },
+    async getStickerImageResource(messageId, contentMetadata) {
       const stickerVersion =
         Math.floor(contentMetadata.STKVER / 1000000) +
         "/" +
         Math.floor(contentMetadata.STKVER / 1000) +
         "/" +
         (contentMetadata.STKVER % 1000);
-      return `${Constant.LINE_STICKER_URL}/products/${stickerVersion}/${contentMetadata.STKPKGID}/${Constant.LINE_STICKER_PLATFORM}/stickers/${contentMetadata.STKID}.png`;
+      const stickerURL = `${Constant.LINE_STICKER_URL}/products/${stickerVersion}/${contentMetadata.STKPKGID}/${Constant.LINE_STICKER_PLATFORM}/stickers/${contentMetadata.STKID}.png`;
+      this.mediaObjects.set(messageId, stickerURL);
+    },
+    async getImageResource(messageId) {
+      const imageURL = `${Constant.LINE_MEDIA_URL}/os/m/${messageId}`;
+      const imageXHR = await this.downloadImage(imageURL);
+      const imageB64 =
+        "data:image/jpeg;base64," +
+        Buffer.from(imageXHR.data).toString("base64");
+      this.mediaObjects.set(messageId, imageB64);
     },
     sendTextMessage() {
       this.moveToBottom();
@@ -149,16 +171,18 @@ export default {
     getMessages() {
       let layout = [];
       this.getRawMessages.forEach((message) => {
-        let layoutType = 0;
+        let layoutType = lineType.ContentType.NONE;
         let layoutMessage = "";
         switch (message.contentType) {
-          case lineType.ContentType.STICKER:
-            console.log(message);
+          case lineType.ContentType.IMAGE:
+            this.getImageResource(message.id);
             layoutType = lineType.ContentType.IMAGE;
-            layoutMessage = this.getStickerImageURL(message.contentMetadata);
+            break;
+          case lineType.ContentType.STICKER:
+            this.getStickerImageResource(message.id, message.contentMetadata);
+            layoutType = lineType.ContentType.IMAGE;
             break;
           default:
-            layoutType = lineType.ContentType.NONE;
             layoutMessage = message.text;
         }
         layout.push({
@@ -198,6 +222,7 @@ export default {
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
       ),
       lastReadMessageId: "",
+      mediaObjects: new Map(),
     };
   },
   mounted() {

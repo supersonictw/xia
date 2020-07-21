@@ -71,7 +71,7 @@ export default {
         } else {
           this.waitForUpdateProfile();
         }
-      }, 1);
+      }, Constant.RETRY_TIMEOUT);
     },
     updateProfile() {
       this.profileDisplayName = this.$store.state.profile.DisplayName;
