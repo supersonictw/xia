@@ -42,8 +42,9 @@ export default {
   },
   get LINE_SERVER_HOST() {
     const LINE_SERVER_HOST = "gf.line.naver.jp";
+    const SCHEMA = `${this.LINE_USE_HTTPS ? "https" : "http"}://`;
     return this.CORS_PROXY_HOST
-      ? `${this.CORS_PROXY_HOST}/${LINE_SERVER_HOST}`
+      ? `${this.CORS_PROXY_HOST}/${SCHEMA}${LINE_SERVER_HOST}`
       : LINE_SERVER_HOST;
   },
   LINE_MEDIA_HOST: "obs.line-apps.com",
