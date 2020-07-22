@@ -33,10 +33,38 @@
         </div>
       </div>
       <div id="msg-input-box">
+        <VEmojiPicker
+          v-show="showEmojiBoxValue"
+          id="emoji-box"
+          @select="addEmoji"
+        />
+        <a title="Emoji" href="#" @click.prevent="showEmojiBox">
+          <div id="emoji-box-opener">
+            <svg
+              alt="Emoji"
+              viewBox="0 0 16 16"
+              id="emoji-box-opener-smile"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683z"
+              />
+              <path
+                d="M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"
+              />
+            </svg>
+          </div>
+        </a>
         <textarea
           id="msg-input"
           v-model="inputText"
-          @keydown.enter.prevent="sendTextMessage"
+          @keydown.enter.exact="sendTextMessage"
         ></textarea>
         <a title="Send" href="#" @click.prevent="sendTextMessage">
           <div id="msg-submit">
@@ -69,6 +97,7 @@ import Constant from "@/data/const.js";
 import Back from "@/components/Back.vue";
 
 import axios from "axios";
+import VEmojiPicker from "v-emoji-picker";
 
 import lineClient from "@/computes/line.js";
 import lineType from "@/computes/line/line_types.js";
@@ -77,6 +106,7 @@ export default {
   name: "Chat",
   components: {
     Back,
+    VEmojiPicker,
   },
   methods: {
     getOriginType(message) {
@@ -110,6 +140,12 @@ export default {
         "data:image/jpeg;base64," +
         Buffer.from(imageXHR.data).toString("base64");
       this.mediaObjects.set(messageId, imageB64);
+    },
+    showEmojiBox() {
+      this.showEmojiBoxValue = !this.showEmojiBoxValue;
+    },
+    addEmoji(emoji) {
+      this.inputText += emoji.data;
     },
     sendTextMessage() {
       this.moveToBottom();
@@ -156,8 +192,10 @@ export default {
   },
   computed: {
     targetId() {
-      if (!this.$store.state.ready)
+      if (!this.$store.state.ready) {
         this.$router.replace({ name: Constant.ROUTER_TAG_DASHBOARD });
+        return "";
+      }
       if (this.$store.getters.chatIdByHash.has(this.targetEncryptedId))
         return this.$store.getters.chatIdByHash.get(this.targetEncryptedId);
       this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
@@ -225,6 +263,7 @@ export default {
   data() {
     return {
       inputText: "",
+      showEmojiBoxValue: false,
       client: lineClient(
         Constant.LINE_QUERY_PATH,
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
@@ -284,13 +323,42 @@ export default {
 #msg-input-box {
   display: inline-flex;
   width: 70%;
-  height: 60px;
+  min-height: 60px;
   margin: 0 auto;
+}
+
+#emoji-box {
+  margin-right: 1%;
+}
+
+#emoji-box-opener {
+  width: 60px;
+  height: 60px;
+  color: #666;
+  border: 1px solid #999;
+  border-radius: 60px;
+  background: rgba(0, 0, 0, 0);
+}
+
+#emoji-box-opener:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+#emoji-box-opener:active {
+  color: rgb(255, 255, 255);
+  background: rgb(0, 0, 0);
+}
+
+#emoji-box-opener-smile {
+  width: 35px;
+  height: 35px;
+  padding-top: 13px;
 }
 
 #msg-input {
   width: 89%;
   height: 60px;
+  margin-left: 1%;
   margin-right: 1%;
   resize: none;
   border: 1px solid rgba(0, 0, 0, 0.5);
