@@ -22,7 +22,7 @@ const lineClient = function(path, authToken = null) {
     header["X-Line-Access"] = authToken;
   }
 
-  const host = Constant.LINE_SERVER_HOST;
+  const host = Constant.LINE_SERVER_HOST_FOR_THRIFT;
   const port = Constant.LINE_USE_HTTPS ? 443 : 80;
   const opts = {
     transport: thrift.TBufferedTransport,

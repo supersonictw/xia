@@ -40,12 +40,17 @@ export default {
   get LINE_APPLICATION_IDENTITY() {
     return `${this.LINE_PLATFORM_ID}\t${this.VERSION}\t${this.LINE_PLATFORM_NAME}\t${this.LINE_PLATFORM_VERSION}`;
   },
-  get LINE_SERVER_HOST() {
-    const LINE_SERVER_HOST = "gf.line.naver.jp";
+  LINE_SERVER_HOST: "gf.line.naver.jp",
+  get LINE_SERVER_HOST_FOR_THRIFT() {
+    return this.CORS_PROXY_HOST
+      ? `${this.CORS_PROXY_HOST}/${this.LINE_SERVER_HOST}`
+      : this.LINE_SERVER_HOST;
+  },
+  get LINE_SERVER_HOST_FOR_XHR() {
     const SCHEMA = `${this.LINE_USE_HTTPS ? "https" : "http"}://`;
     return this.CORS_PROXY_HOST
-      ? `${this.CORS_PROXY_HOST}/${SCHEMA}${LINE_SERVER_HOST}`
-      : LINE_SERVER_HOST;
+      ? `${this.CORS_PROXY_HOST}/${SCHEMA}${this.LINE_SERVER_HOST}`
+      : this.LINE_SERVER_HOST;
   },
   LINE_MEDIA_HOST: "obs.line-apps.com",
   LINE_STICKER_HOST: "sdl-stickershop.line.naver.jp",

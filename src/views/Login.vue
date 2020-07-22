@@ -146,7 +146,7 @@ export default {
         case lineType.LoginResultType.REQUIRE_DEVICE_CONFIRM: {
           const certificateResponse = await axios(
             `${Constant.LINE_USE_HTTPS ? "https" : "http"}://${
-              Constant.LINE_SERVER_HOST
+              Constant.LINE_SERVER_HOST_FOR_XHR
             }${Constant.LINE_CERTIFICATE_PATH}`,
             {
               method: "GET",
