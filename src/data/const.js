@@ -55,18 +55,16 @@ export default {
   LINE_QUERY_PATH: "/S4",
   LINE_POLL_PATH: "/P4",
   get LINE_MEDIA_URL() {
+    const SCHEMA = `${this.LINE_USE_HTTPS ? "https" : "http"}://`;
     return this.CORS_PROXY_HOST
-      ? `${this.LINE_USE_HTTPS ? "https" : "http"}://${this.CORS_PROXY_HOST}/${
-          this.LINE_MEDIA_HOST
-        }`
-      : `${this.LINE_USE_HTTPS ? "https" : "http"}://${this.LINE_MEDIA_HOST}`;
+      ? `${SCHEMA}${this.CORS_PROXY_HOST}/${SCHEMA}${this.LINE_MEDIA_HOST}`
+      : `${SCHEMA}${this.LINE_MEDIA_HOST}`;
   },
   get LINE_STICKER_URL() {
+    const SCHEMA = `${this.LINE_USE_HTTPS ? "https" : "http"}://`;
     return this.CORS_PROXY_HOST
-      ? `${this.LINE_USE_HTTPS ? "https" : "http"}://${this.CORS_PROXY_HOST}/${
-          this.LINE_STICKER_HOST
-        }`
-      : `${this.LINE_USE_HTTPS ? "https" : "http"}://${this.LINE_STICKER_HOST}`;
+      ? `${SCHEMA}${this.CORS_PROXY_HOST}/${SCHEMA}${this.LINE_STICKER_HOST}`
+      : `${SCHEMA}${this.LINE_STICKER_HOST}`;
   },
   COOKIE_ACCESS_KEY: "XIA_AccessKey",
   COOKIE_ACCESS_CERTIFICATE_PREFIX: "XIA_AccessCertificate",
