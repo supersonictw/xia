@@ -120,6 +120,7 @@ export default {
           Accept: "image/jpeg",
           "X-Line-Access": this.$cookies.get(Constant.COOKIE_ACCESS_KEY),
           "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY,
+          "X-Requested-With": Constant.NAME,
         },
       });
     },
