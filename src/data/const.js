@@ -30,6 +30,7 @@ export default {
   ROUTER_TAG_ABOUT: "About",
   ROUTER_TAG_ERROR: "Error",
   ROUTER_TAG_NOT_FOUND: "Not Found",
+  CORS_PROXY_HOST: "cors-anywhere.herokuapp.com",
   LINE_USE_HTTPS: true,
   LINE_PLATFORM_ID: "CHROMEOS",
   LINE_PLATFORM_NAME: "Chrome_OS",
@@ -39,7 +40,12 @@ export default {
   get LINE_APPLICATION_IDENTITY() {
     return `${this.LINE_PLATFORM_ID}\t${this.VERSION}\t${this.LINE_PLATFORM_NAME}\t${this.LINE_PLATFORM_VERSION}`;
   },
-  LINE_SERVER_HOST: "gf.line.naver.jp",
+  get LINE_SERVER_HOST() {
+    const LINE_SERVER_HOST = "gf.line.naver.jp";
+    return this.CORS_PROXY_HOST
+      ? `${this.CORS_PROXY_HOST}/${LINE_SERVER_HOST}`
+      : LINE_SERVER_HOST;
+  },
   LINE_MEDIA_HOST: "obs.line-apps.com",
   LINE_STICKER_HOST: "sdl-stickershop.line.naver.jp",
   LINE_STICKER_PLATFORM: "PC",
@@ -49,14 +55,18 @@ export default {
   LINE_QUERY_PATH: "/S4",
   LINE_POLL_PATH: "/P4",
   get LINE_MEDIA_URL() {
-    return `${this.LINE_USE_HTTPS ? "https" : "http"}://${
-      this.LINE_MEDIA_HOST
-    }`;
+    return this.CORS_PROXY_HOST
+      ? `${this.LINE_USE_HTTPS ? "https" : "http"}://${this.CORS_PROXY_HOST}/${
+          this.LINE_MEDIA_HOST
+        }`
+      : `${this.LINE_USE_HTTPS ? "https" : "http"}://${this.LINE_MEDIA_HOST}`;
   },
   get LINE_STICKER_URL() {
-    return `${this.LINE_USE_HTTPS ? "https" : "http"}://${
-      this.LINE_STICKER_HOST
-    }`;
+    return this.CORS_PROXY_HOST
+      ? `${this.LINE_USE_HTTPS ? "https" : "http"}://${this.CORS_PROXY_HOST}/${
+          this.LINE_STICKER_HOST
+        }`
+      : `${this.LINE_USE_HTTPS ? "https" : "http"}://${this.LINE_STICKER_HOST}`;
   },
   COOKIE_ACCESS_KEY: "XIA_AccessKey",
   COOKIE_ACCESS_CERTIFICATE_PREFIX: "XIA_AccessCertificate",
