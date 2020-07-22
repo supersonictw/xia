@@ -118,10 +118,6 @@ export default {
       for (let user of this.contactUser) {
         let data = this.$store.getters.contactInfo.get(user);
         data.id = hash.sha256(user);
-        this.$store.commit("registerChatEncryptedId", {
-          targetEncryptedId: data.id,
-          targetId: user,
-        });
         layout.push(data);
       }
       return layout.sort(function(a, b) {
@@ -147,10 +143,6 @@ export default {
         data.statusMessage += `Members: ${
           data.members ? data.members.length : 0
         }`;
-        this.$store.commit("registerChatEncryptedId", {
-          targetEncryptedId: data.id,
-          targetId: group,
-        });
         layout.push(data);
       }
       return layout.sort(function(a, b) {

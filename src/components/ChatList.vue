@@ -104,11 +104,6 @@ export default {
         let contactData = this.getContactInfo(message);
         let targetEncryptedId = hash.sha256(targetId);
         let layoutMessage = "";
-        if (!this.$store.state.chatEncryptedIds.has(this.targetEncryptedId))
-          this.$store.commit("registerChatEncryptedId", {
-            targetEncryptedId,
-            targetId,
-          });
         switch (message.contentType) {
           case lineType.ContentType.IMAGE:
             layoutMessage = "(Image)";

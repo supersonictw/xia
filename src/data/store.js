@@ -30,7 +30,6 @@ const Store = new Vuex.Store({
     groupInvitedIds: [],
     allContactMetaData: [],
     allGroupMetaData: [],
-    chatEncryptedIds: new Map(),
   },
   getters: {
     contactInfo: (state) => {
@@ -61,7 +60,7 @@ const Store = new Vuex.Store({
       []
         .concat(state.allContactMetaData, state.allGroupMetaData)
         .forEach((obj) => {
-          layout.set(hash.sha256(obj.id), obj.id);
+          layout.set(hash.sha256(obj.id || obj.mid), obj.id || obj.mid);
         });
       return layout;
     },
@@ -151,9 +150,6 @@ const Store = new Vuex.Store({
     },
     popOperations(state, data) {
       state.operations.pop(data);
-    },
-    registerChatEncryptedId(state, { targetEncryptedId, targetId }) {
-      state.chatEncryptedIds.set(targetEncryptedId, targetId);
     },
   },
   actions: {

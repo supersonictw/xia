@@ -78,8 +78,10 @@ export default {
   },
   computed: {
     targetId() {
-      if (this.$store.state.chatEncryptedIds.has(this.targetEncryptedId))
-        return this.$store.state.chatEncryptedIds.get(this.targetEncryptedId);
+      if (!this.$store.state.ready)
+        this.$router.replace({ name: Constant.ROUTER_TAG_DASHBOARD });
+      if (this.$store.getters.chatIdByHash.has(this.targetEncryptedId))
+        return this.$store.getters.chatIdByHash.get(this.targetEncryptedId);
       this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
       return "";
     },
