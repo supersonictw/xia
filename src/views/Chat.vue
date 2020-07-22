@@ -159,7 +159,7 @@ export default {
           text: this.inputText,
         })
       );
-      this.inputText = "";
+      setTimeout(() => (this.inputText = ""), 100);
     },
     getUserInfo(userId) {
       if (this.$store.getters.contactInfo.has(userId)) {
