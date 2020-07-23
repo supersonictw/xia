@@ -35,7 +35,7 @@ export default {
       if (this.$route.name == Constant.ROUTER_TAG_ABOUT) {
         return null;
       }
-      if (this.$cookies.isKey(Constant.COOKIE_ACCESS_KEY)) {
+      if (this.$store.state.authToken) {
         if (this.$route.name === Constant.ROUTER_TAG_LOGIN) {
           this.$router.push({ name: Constant.ROUTER_TAG_DASHBOARD });
         }
@@ -137,7 +137,7 @@ export default {
     async opListener() {
       const opClient = lineClient(
         Constant.LINE_POLL_PATH,
-        this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+        this.$store.state.authToken
       );
       this.longPoll(opClient);
     },
@@ -222,9 +222,15 @@ export default {
     };
   },
   async created() {
+    if (this.$cookies.isKey(Constant.COOKIE_ACCESS_KEY)) {
+      this.$store.commit(
+        "registerAuthToken",
+        this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+      );
+    }
     this.client = lineClient(
       Constant.LINE_QUERY_PATH,
-      this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+      this.$store.state.authToken
     );
     if (await this.verifyAccess()) {
       await this.syncData();

@@ -65,7 +65,7 @@ export default {
           } else {
             contactData = lineClient(
               Constant.LINE_QUERY_PATH,
-              this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+              this.$store.state.authToken
             ).getContact(targetId);
             this.$store.commit("pushContactMetaData", {
               typeName: lineType.SyncCategory.CONTACT,
@@ -81,7 +81,7 @@ export default {
           } else {
             contactData = lineClient(
               Constant.LINE_QUERY_PATH,
-              this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+              this.$store.state.authToken
             ).getGroup(message.to);
             this.$store.commit("pushContactMetaData", {
               typeName: lineType.SyncCategory.GROUP,

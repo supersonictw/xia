@@ -118,7 +118,7 @@ export default {
         responseType: "arraybuffer",
         headers: {
           Accept: "image/jpeg",
-          "X-Line-Access": this.$cookies.get(Constant.COOKIE_ACCESS_KEY),
+          "X-Line-Access": this.$store.state.authToken,
           "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY,
           "X-Requested-With": Constant.NAME,
         },
@@ -265,10 +265,7 @@ export default {
     return {
       inputText: "",
       showEmojiBoxValue: false,
-      client: lineClient(
-        Constant.LINE_QUERY_PATH,
-        this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
-      ),
+      client: lineClient(Constant.LINE_QUERY_PATH, this.$store.state.authToken),
       lastReadMessageId: "",
       mediaObjects: new Map(),
     };
@@ -388,5 +385,12 @@ export default {
   width: 35px;
   height: 35px;
   padding-top: 13px;
+}
+
+@media screen and (max-width: 780px) {
+  #emoji-box,
+  #emoji-box-opener {
+    display: none;
+  }
 }
 </style>

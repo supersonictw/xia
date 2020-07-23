@@ -41,7 +41,7 @@ export default {
     logout() {
       lineClient(
         Constant.LINE_QUERY_PATH,
-        this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+        this.$store.state.authToken
       ).logout();
       Constant.ALL_COOKIES.forEach((name) => this.$cookies.remove(name));
       window.localStorage.clear();

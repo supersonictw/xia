@@ -22,6 +22,7 @@ Vue.use(Vuex);
 
 const Store = new Vuex.Store({
   state: {
+    authToken: "",
     ready: 0,
     profile: {},
     contactIds: [],
@@ -105,6 +106,9 @@ const Store = new Vuex.Store({
     },
   },
   mutations: {
+    registerAuthToken(state, authToken) {
+      state.authToken = authToken;
+    },
     setReady(state) {
       state.ready++;
     },

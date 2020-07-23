@@ -105,7 +105,7 @@ export default {
       mobileUI: window.innerWidth < Constant.MOBILE_UI_WIDTH,
       client: lineClient(
         Constant.LINE_QUERY_PATH,
-        this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
+        this.$store.state.authToken
       ),
       profileDisplayName: "Loading...",
       profileStatusMessage: "Loading...",
