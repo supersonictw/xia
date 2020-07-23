@@ -11,7 +11,7 @@
 
 ![logo](src/assets/logo.svg)
 
-This is a pure client for LINE to connect their Talk Service, communicate with your friends and groups online.
+This is a pure client for [LINE](https://line.me) to connect their Talk Service, communicate with your friends and groups online.
 
 ## Warning
 
