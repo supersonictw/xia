@@ -30,7 +30,7 @@ export default {
   ROUTER_TAG_ABOUT: "About",
   ROUTER_TAG_ERROR: "Error",
   ROUTER_TAG_NOT_FOUND: "Not Found",
-  CORS_PROXY_HOST: "",
+  CORS_PROXY_HOST: "js-cors.starinc.xyz",
   LINE_USE_HTTPS: true,
   LINE_PLATFORM_ID: "CHROMEOS",
   LINE_PLATFORM_NAME: "Chrome_OS",
