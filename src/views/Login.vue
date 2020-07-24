@@ -155,7 +155,6 @@ export default {
                 "Cache-Control": "no-cache",
                 "X-Line-Access": loginResult.verifier,
                 "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY,
-                "X-Requested-With": Constant.NAME,
               },
             }
           );

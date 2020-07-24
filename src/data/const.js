@@ -64,12 +64,6 @@ export default {
     const SCHEMA = `${this.LINE_USE_HTTPS ? "https" : "http"}://`;
     return `${SCHEMA}${this.LINE_MEDIA_HOST}`;
   },
-  get LINE_MEDIA_URL_WITH_PROXY() {
-    const SCHEMA = `${this.LINE_USE_HTTPS ? "https" : "http"}://`;
-    return this.CORS_PROXY_HOST
-      ? `${SCHEMA}${this.CORS_PROXY_HOST}/${SCHEMA}${this.LINE_MEDIA_HOST}`
-      : `${SCHEMA}${this.LINE_MEDIA_HOST}`;
-  },
   get LINE_STICKER_URL() {
     const SCHEMA = `${this.LINE_USE_HTTPS ? "https" : "http"}://`;
     return `${SCHEMA}${this.LINE_STICKER_HOST}`;

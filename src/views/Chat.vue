@@ -120,7 +120,6 @@ export default {
           Accept: "image/jpeg",
           "X-Line-Access": this.$store.state.authToken,
           "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY,
-          "X-Requested-With": Constant.NAME,
         },
       });
     },
@@ -135,7 +134,7 @@ export default {
       this.mediaObjects.set(messageId, stickerURL);
     },
     async getImageResource(messageId) {
-      const imageURL = `${Constant.LINE_MEDIA_URL_WITH_PROXY}/os/m/${messageId}`;
+      const imageURL = `${Constant.LINE_MEDIA_URL}/os/m/${messageId}`;
       const imageXHR = await this.downloadImage(imageURL);
       const imageB64 =
         "data:image/jpeg;base64," +
