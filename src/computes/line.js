@@ -9,6 +9,8 @@
   (c) 2020 SuperSonic. (https://github.com/supersonictw)
 */
 
+require("error-polyfill");
+
 import thrift from "thrift";
 import Constant from "@/data/const.js";
 import talkService from "@/computes/line/TalkService.js";
