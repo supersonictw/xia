@@ -12,6 +12,7 @@
 export default {
   NAME: "XIA",
   VERSION: "1.0.0",
+  IDB_VERSION: 1,
   FETCH_OP_NUM: 50,
   RETRY_TIMEOUT: 30,
   MOBILE_UI_WIDTH: 780,

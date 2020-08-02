@@ -54,7 +54,12 @@
         />
       </div>
       <div>
-        <input type="submit" value="Login" @click.prevent="login" />
+        <input
+          type="submit"
+          value="Login"
+          @click.prevent="loginSubmit"
+          :disabled="loginWaiting"
+        />
       </div>
     </form>
     <p>IP: {{ user.ip_addr }}</p>
@@ -81,10 +86,21 @@ export default {
         identity: "",
         password: "",
       },
+      loginWaiting: false,
       loginStatus: "",
     };
   },
   methods: {
+    loginSubmit() {
+      if (this.loginWaiting) return;
+      this.loginWaiting = true;
+      try {
+        this.login();
+      } catch (e) {
+        console.error(e);
+      }
+      this.loginWaiting = false;
+    },
     async login() {
       if (this.user.identity.length < 1 || this.user.password.length < 1) {
         this.loginStatus = "Empty identity or password";

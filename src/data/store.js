@@ -13,6 +13,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import Constant from "@/data/const.js";
+import lineClient from "@/computes/line.js";
 import lineType from "@/computes/line/line_types.js";
 
 import assert from "assert";
@@ -26,7 +27,7 @@ const Store = new Vuex.Store({
     ready: 0,
     profile: {},
     contactIds: [],
-    operations: [],
+    messageBox: [],
     groupJoinedIds: [],
     groupInvitedIds: [],
     allContactMetaData: [],
@@ -67,7 +68,7 @@ const Store = new Vuex.Store({
     },
     messageBox: (state) => {
       const layout = new Map();
-      state.operations.forEach((operation) => {
+      state.messageBox.forEach((operation) => {
         if (
           operation.type == lineType.OpType.SEND_MESSAGE ||
           operation.type == lineType.OpType.RECEIVE_MESSAGE
@@ -141,28 +142,61 @@ const Store = new Vuex.Store({
       );
       dataType[typeName].push(data);
     },
-    pushOperations(state, data) {
-      if (state.operations.length > Constant.OPERATIONS_NUM_LIMIT) {
+    pushMessageBox(state, data) {
+      if (state.messageBox.length > Constant.OPERATIONS_NUM_LIMIT) {
         for (let i; i < Constant.OPERATIONS_NUM_LIMIT; i++) {
-          state.operations.pop(state.operations[i]);
+          state.messageBox.pop(state.messageBox[i]);
         }
         console.warn(
-          "Automatically release some operations cache for preventing memory leak."
+          "Automatically release some messageBox cache for preventing memory leak."
         );
       }
-      state.operations.push(data);
-    },
-    popOperations(state, data) {
-      state.operations.pop(data);
+      state.messageBox.push(data);
     },
   },
   actions: {
-    async opHandler({ commit }, operations) {
-      operations.forEach((op) => {
+    async opHandler(context, operations) {
+      for (let op of operations) {
         if (op.revision > 0) {
-          commit("pushOperations", op);
+          switch (op.type) {
+            case lineType.OpType.UPDATE_PROFILE: {
+              const data = await lineClient(
+                Constant.LINE_QUERY_PATH,
+                context.state.authToken
+              ).getProfile();
+              context.commit("updateProfile", data);
+              break;
+            }
+            case lineType.OpType.UPDATE_CONTACT: {
+              const data = await lineClient(
+                Constant.LINE_QUERY_PATH,
+                context.state.authToken
+              ).getContact(op.param1);
+              context.commit("pushContactMetaData", {
+                typeName: lineType.SyncCategory.CONTACT,
+                data,
+              });
+              break;
+            }
+            case lineType.OpType.UPDATE_GROUP:
+            case lineType.OpType.NOTIFIED_UPDATE_GROUP: {
+              const data = await lineClient(
+                Constant.LINE_QUERY_PATH,
+                context.state.authToken
+              ).getGroup(op.param1);
+              context.commit("pushContactMetaData", {
+                typeName: lineType.SyncCategory.GROUP,
+                data,
+              });
+              break;
+            }
+            case lineType.OpType.SEND_MESSAGE:
+            case lineType.OpType.RECEIVE_MESSAGE:
+              context.commit("pushMessageBox", op);
+              break;
+          }
         }
-      });
+      }
     },
     async syncContactIds({ commit }, { dataName, idList }) {
       assert(
@@ -189,9 +223,6 @@ const Store = new Vuex.Store({
           data: obj,
         })
       );
-    },
-    async pushContactMetaDataForAsync({ commit }, { typeName, data }) {
-      commit("pushContactMetaData", { typeName, data });
     },
   },
 });
