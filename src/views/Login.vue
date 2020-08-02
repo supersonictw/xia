@@ -91,11 +91,11 @@ export default {
     };
   },
   methods: {
-    loginSubmit() {
+    async loginSubmit() {
       if (this.loginWaiting) return;
       this.loginWaiting = true;
       try {
-        this.login();
+        await this.login();
       } catch (e) {
         console.error(e);
       }
