@@ -112,6 +112,15 @@ export default {
     getOriginType(message) {
       return message.origin === this.getMyUserId ? "self" : "another";
     },
+    async waitForMoveToBottom() {
+      setTimeout(() => {
+        if (document.getElementById("msg-container")) {
+          this.moveToBottom();
+        } else {
+          this.waitForMoveToBottom();
+        }
+      }, Constant.RETRY_TIMEOUT);
+    },
     async syncDisplayMessage() {
       this.messages = await this.$store.state.indexedDB.getAllFromIndex(
         Constant.OBJECTSTORE_MESSAGEBOX,
@@ -246,6 +255,7 @@ export default {
   },
   watch: {
     messageBox() {
+      this.syncDisplayMessage();
       const messageBoxElement = document.getElementById("msg-container");
       if (
         messageBoxElement.scrollTop + messageBoxElement.clientHeight ==
@@ -269,8 +279,8 @@ export default {
     };
   },
   mounted() {
-    if (document.getElementById("msg-container")) this.moveToBottom();
     this.syncDisplayMessage();
+    this.waitForMoveToBottom();
   },
 };
 </script>
