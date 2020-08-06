@@ -14,6 +14,7 @@
       <router-view class="child-view" />
     </transition>
     <div class="footer">
+      <a href="#" @click.prevent="reset">Reset XIA</a> |
       <router-link to="/about">About XIA</router-link>
     </div>
   </div>
@@ -25,7 +26,7 @@ import Constant from "./data/const.js";
 import lineClient from "@/computes/line.js";
 import lineType from "@/computes/line/line_types.js";
 
-import { openDB } from "idb";
+import { openDB, deleteDB } from "idb";
 import hash from "js-sha256";
 import zlib from "zlib";
 
@@ -161,6 +162,10 @@ export default {
       window.localStorage.clear();
       window.sessionStorage.clear();
       window.location.reload();
+    },
+    async reset() {
+      this.revoke();
+      await deleteDB(Constant.NAME);
     },
     async compress(rawString) {
       return new Promise((resolve, reject) =>
