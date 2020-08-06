@@ -37,7 +37,7 @@ export default {
       if (this.$route.name == Constant.ROUTER_TAG_ABOUT) {
         return null;
       }
-      if (this.$store.state.authToken) {
+      if (this.client && this.$store.state.authToken) {
         if (this.$route.name === Constant.ROUTER_TAG_LOGIN) {
           this.$router.push({ name: Constant.ROUTER_TAG_DASHBOARD });
         }
@@ -239,10 +239,9 @@ export default {
   },
   async created() {
     if (this.$cookies.isKey(Constant.COOKIE_ACCESS_KEY)) {
-      this.$store.commit(
-        "registerAuthToken",
-        this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
-      );
+      const authToken = this.$cookies.get(Constant.COOKIE_ACCESS_KEY);
+      this.$store.commit("registerAuthToken", authToken);
+      this.client = lineClient(Constant.LINE_QUERY_PATH, authToken);
     }
     this.$store.commit(
       "registerIndexedDB",
@@ -255,10 +254,6 @@ export default {
           store.createIndex("target", "target");
         },
       })
-    );
-    this.client = lineClient(
-      Constant.LINE_QUERY_PATH,
-      this.$store.state.authToken
     );
     if (await this.verifyAccess()) {
       await this.syncData();
