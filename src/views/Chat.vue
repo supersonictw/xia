@@ -26,7 +26,7 @@
           </h3>
           <div class="content">
             <p v-if="item.type == 1">
-              <img :src="mediaObjects.get(item.id)" />
+              <img :src="mediaObjects[item.id]" />
             </p>
             <p v-else>{{ item.content }}</p>
           </div>
@@ -112,6 +112,13 @@ export default {
     getOriginType(message) {
       return message.origin === this.getMyUserId ? "self" : "another";
     },
+    async syncDisplayMessage() {
+      this.messages = await this.$store.state.indexedDB.getAllFromIndex(
+        Constant.OBJECTSTORE_MESSAGEBOX,
+        "target",
+        this.targetId
+      );
+    },
     async downloadImage(imageSource) {
       return await axios(imageSource, {
         method: "GET",
@@ -131,7 +138,7 @@ export default {
         "/" +
         (contentMetadata.STKVER % 1000);
       const stickerURL = `${Constant.LINE_STICKER_URL}/products/${stickerVersion}/${contentMetadata.STKPKGID}/${Constant.LINE_STICKER_PLATFORM}/stickers/${contentMetadata.STKID}.png`;
-      this.mediaObjects.set(messageId, stickerURL);
+      this.$set(this.mediaObjects, messageId, stickerURL);
     },
     async getImageResource(messageId) {
       const imageURL = `${Constant.LINE_MEDIA_URL}/os/m/${messageId}`;
@@ -139,7 +146,7 @@ export default {
       const imageB64 =
         "data:image/jpeg;base64," +
         Buffer.from(imageXHR.data).toString("base64");
-      this.mediaObjects.set(messageId, imageB64);
+      this.$set(this.mediaObjects, messageId, imageB64);
     },
     showEmojiBox() {
       this.showEmojiBoxValue = !this.showEmojiBoxValue;
@@ -170,13 +177,8 @@ export default {
       });
     },
     sendReadTag() {
-      const lastMessageFetched = this.getRawMessages[
-        this.getRawMessages.length - 1
-      ];
-      if (
-        this.lastReadMessageId != lastMessageFetched.id &&
-        lastMessageFetched.from_ != this.getMyUserId
-      ) {
+      const lastMessageFetched = this.messages[this.messages.length - 1];
+      if (this.lastReadMessageId != lastMessageFetched.id) {
         this.client.sendChatChecked(
           Constant.THRIFT_DEFAULT_SEQ,
           this.targetId,
@@ -214,41 +216,36 @@ export default {
     },
     getMessages() {
       let layout = [];
-      if (this.getRawMessages) {
-        this.getRawMessages.forEach((message) => {
-          let layoutType = lineType.ContentType.NONE;
-          let layoutMessage = "";
-          switch (message.contentType) {
-            case lineType.ContentType.IMAGE:
-              this.getImageResource(message.id);
-              layoutType = lineType.ContentType.IMAGE;
-              break;
-            case lineType.ContentType.STICKER:
-              this.getStickerImageResource(message.id, message.contentMetadata);
-              layoutType = lineType.ContentType.IMAGE;
-              break;
-            default:
-              layoutMessage = message.text;
-          }
-          layout.push({
-            id: message.id,
-            type: layoutType,
-            origin: message.from_,
-            content: layoutMessage,
-          });
+      this.messages.forEach((message) => {
+        let layoutType = lineType.ContentType.NONE;
+        let layoutMessage = "";
+        switch (message.contentType) {
+          case lineType.ContentType.IMAGE:
+            this.getImageResource(message.id);
+            layoutType = lineType.ContentType.IMAGE;
+            break;
+          case lineType.ContentType.STICKER:
+            this.getStickerImageResource(message.id, message.contentMetadata);
+            layoutType = lineType.ContentType.IMAGE;
+            break;
+          default:
+            layoutMessage = message.text;
+        }
+        layout.push({
+          id: message.id,
+          type: layoutType,
+          origin: message.from_,
+          content: layoutMessage,
         });
-      }
+      });
       return layout;
-    },
-    getRawMessages() {
-      return this.$store.getters.messageBox.get(this.targetId);
     },
     getMyUserId() {
       return this.$store.state.profile.UserId;
     },
   },
   watch: {
-    getRawMessages() {
+    messageBox() {
       const messageBoxElement = document.getElementById("msg-container");
       if (
         messageBoxElement.scrollTop + messageBoxElement.clientHeight ==
@@ -265,12 +262,15 @@ export default {
       inputText: "",
       showEmojiBoxValue: false,
       client: lineClient(Constant.LINE_QUERY_PATH, this.$store.state.authToken),
+      messages: [],
+      messageBox: this.$store.state.messageBox,
       lastReadMessageId: "",
-      mediaObjects: new Map(),
+      mediaObjects: {},
     };
   },
   mounted() {
     if (document.getElementById("msg-container")) this.moveToBottom();
+    this.syncDisplayMessage();
   },
 };
 </script>

@@ -38,7 +38,7 @@ This is an opensource software, you can build and deploy this project on your ow
 ### Project setup
 
 The project is created by [Vue-CLI](https://cli.vuejs.org).
-So [Node.js](https://nodejs.org) is required on the platform you want to compile on.
+So [Node.js](https://nodejs.org) (>= v8.10.0) is required on the platform you want to compile on.
 
 If [Node.js](https://nodejs.org) with [npm](https://www.npmjs.com)(A node.js packages manager) have been installed, please type the command.
 

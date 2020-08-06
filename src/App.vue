@@ -25,6 +25,7 @@ import Constant from "./data/const.js";
 import lineClient from "@/computes/line.js";
 import lineType from "@/computes/line/line_types.js";
 
+import { openDB } from "idb";
 import hash from "js-sha256";
 import zlib from "zlib";
 
@@ -151,7 +152,7 @@ export default {
         await this.updateRevision(operations);
       } catch (e) {
         console.error(e);
-        if (e.name == "TalkException") this.revoke();
+        if (e.name == "TalkException") return this.revoke();
       }
       this.longPoll(opClient);
     },
@@ -201,6 +202,15 @@ export default {
         }
       }
     },
+    messageBox(operations) {
+      operations.forEach((operation) => {
+        this.$store.state.indexedDB.put(
+          Constant.OBJECTSTORE_MESSAGEBOX,
+          operation.message
+        );
+        this.$store.commit("popMessageBox", operation);
+      });
+    },
     revision() {
       this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);
     },
@@ -209,6 +219,7 @@ export default {
     return {
       client: null,
       revision: 0,
+      messageBox: this.$store.state.messageBox,
       storageData: [
         this.$store.state.contactIds,
         this.$store.state.groupJoinedIds,
@@ -228,6 +239,18 @@ export default {
         this.$cookies.get(Constant.COOKIE_ACCESS_KEY)
       );
     }
+    this.$store.commit(
+      "registerIndexedDB",
+      await openDB(Constant.NAME, Constant.IDB_VERSION, {
+        upgrade(db) {
+          // MessageBox
+          const store = db.createObjectStore(Constant.OBJECTSTORE_MESSAGEBOX, {
+            keyPath: "id",
+          });
+          store.createIndex("target", "target");
+        },
+      })
+    );
     this.client = lineClient(
       Constant.LINE_QUERY_PATH,
       this.$store.state.authToken

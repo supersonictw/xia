@@ -17,9 +17,14 @@
     >
       <a href="#" @click.prevent="enterChat(item.id)">
         <div class="contact">
-          <img class="picture-icon" :src="mediaURL + item.picturePath" />
+          <img
+            class="picture-icon"
+            v-if="item.picturePath"
+            :src="mediaURL + item.picturePath"
+          />
+          <img class="picture-icon" v-else src="@/assets/logo.svg" />
           <div>
-            <h3>{{ item.displayName }}</h3>
+            <h3>{{ subDisplayTitle(item.displayName) }}</h3>
             <p>{{ subLastMessage(item.lastMessage) }}</p>
           </div>
         </div>
@@ -33,6 +38,7 @@ import Constant from "@/data/const.js";
 
 import hash from "js-sha256";
 import substring from "unicode-substring";
+import int64 from "node-int64";
 
 import lineClient from "@/computes/line.js";
 import lineType from "@/computes/line/line_types.js";
@@ -40,11 +46,26 @@ import lineType from "@/computes/line/line_types.js";
 export default {
   name: "ChatList",
   methods: {
+    async waitForSyncDisplayMessage() {
+      setTimeout(() => {
+        if (this.$store.state.ready) {
+          this.syncDisplayMessage();
+        } else {
+          this.waitForSyncDisplayMessage();
+        }
+      }, Constant.RETRY_TIMEOUT);
+    },
     enterChat(chatId) {
       this.$router.push({
         name: Constant.ROUTER_TAG_CHAT,
         params: { targetEncryptedId: chatId },
       });
+    },
+    subDisplayTitle(displayTitle) {
+      if (displayTitle == null) return;
+      return displayTitle.length < Constant.CHAT_ROW_TITLE_LENGTH
+        ? displayTitle
+        : `${substring(displayTitle, 0, Constant.CHAT_ROW_TITLE_LENGTH)}...`;
     },
     subLastMessage(lastMessage) {
       if (lastMessage == null) return;
@@ -54,6 +75,7 @@ export default {
     },
     getContactInfo(message) {
       let contactData = null;
+      if (!this.$store.state.ready) return;
       switch (message.toType) {
         case lineType.MIDType.USER: {
           const targetId =
@@ -96,41 +118,82 @@ export default {
           );
       }
     },
+    async syncDisplayMessage() {
+      let cursor = await this.$store.state.indexedDB
+        .transaction(Constant.OBJECTSTORE_MESSAGEBOX)
+        .store.openCursor();
+      while (cursor) {
+        this.updateDisplayMessage(cursor.value);
+        cursor = await cursor.continue();
+      }
+    },
+    async updateDisplayMessage(message) {
+      const targetId = (function(obj, profileId) {
+        switch (obj.toType) {
+          case lineType.MIDType.USER:
+            if (obj.from_ == profileId) {
+              return obj.to;
+            } else {
+              return obj.from_;
+            }
+          case lineType.MIDType.ROOM:
+          case lineType.MIDType.GROUP:
+            return obj.to;
+        }
+      })(message, this.$store.state.profile.UserId);
+      const contactData = this.getContactInfo(message);
+      const displayName = contactData ? contactData.displayName : null;
+      const picturePath = contactData ? contactData.picturePath : null;
+      const targetEncryptedId = hash.sha256(targetId);
+      const lastMessage = (function(obj) {
+        switch (obj.contentType) {
+          case lineType.ContentType.IMAGE:
+            return "(Image)";
+          case lineType.ContentType.STICKER:
+            return "(Sticker)";
+          default:
+            return obj.text;
+        }
+      })(message);
+      message.createdTime = new int64(message.createdTime);
+      if (
+        targetId in this.previewMessageBox &&
+        this.previewMessageBox[targetId].time.compare(message.createdTime) > 0
+      )
+        return;
+      this.$set(this.previewMessageBox, targetId, {
+        id: targetEncryptedId,
+        time: message.createdTime,
+        displayName,
+        picturePath,
+        lastMessage,
+      });
+    },
   },
   computed: {
     getDisplayMessages() {
-      const messageBox = [];
-      for (let [targetId, message] of this.$store.getters.previewMessageBox) {
-        let contactData = this.getContactInfo(message);
-        let targetEncryptedId = hash.sha256(targetId);
-        let layoutMessage = "";
-        switch (message.contentType) {
-          case lineType.ContentType.IMAGE:
-            layoutMessage = "(Image)";
-            break;
-          case lineType.ContentType.STICKER:
-            layoutMessage = "(Sticker)";
-            break;
-          default:
-            layoutMessage = message.text;
-        }
-        messageBox.push({
-          id: targetEncryptedId,
-          displayName: contactData.displayName,
-          picturePath: contactData.picturePath,
-          lastMessage: layoutMessage,
-          time: message.createdTime,
-        });
-      }
-      return messageBox.sort(function(a, b) {
+      const data = Object.values(this.previewMessageBox);
+      data.sort(function(a, b) {
         return b.time.compare(a.time);
       });
+      return data;
+    },
+  },
+  watch: {
+    messageBox() {
+      if (!this.$store.state.ready) return;
+      this.syncDisplayMessage();
     },
   },
   data() {
     return {
       mediaURL: Constant.LINE_MEDIA_URL,
+      messageBox: this.$store.state.messageBox,
+      previewMessageBox: {},
     };
+  },
+  mounted() {
+    this.waitForSyncDisplayMessage();
   },
 };
 </script>
