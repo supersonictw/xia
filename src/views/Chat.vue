@@ -127,6 +127,7 @@ export default {
         "target",
         this.targetId
       );
+      this.sendReadTag();
     },
     async downloadImage(imageSource) {
       return await axios(imageSource, {
@@ -263,7 +264,6 @@ export default {
       ) {
         setTimeout(this.moveToBottom, 100);
       }
-      this.sendReadTag();
     },
   },
   props: ["targetEncryptedId"],
