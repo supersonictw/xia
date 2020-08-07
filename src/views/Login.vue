@@ -210,12 +210,10 @@ export default {
       this.$cookies.set(Constant.COOKIE_ACCESS_KEY, authToken);
     },
     setAccessCertificate(certificate) {
-      this.$cookies.set(
-        `${Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX}_${hash.sha256(
-          this.user.identity
-        )}`,
-        certificate
-      );
+      const cookieName = `${
+        Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX
+      }_${hash.sha256(this.user.identity)}`;
+      this.$cookies.set(cookieName, certificate, "1y");
     },
   },
   async created() {

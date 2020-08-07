@@ -24,6 +24,7 @@ import VueCookies from "vue-cookies";
 Vue.use(VueCookies);
 
 // Vue Settings
+Vue.$cookies.config("30d");
 Vue.config.productionTip = false;
 
 // Create Vue Application
