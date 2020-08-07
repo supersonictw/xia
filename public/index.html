@@ -11,58 +11,62 @@
   (c) 2020 SuperSonic. (https://github.com/supersonictw)
 -->
 
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <title><%= htmlWebpackPlugin.options.title %></title>
-    <style>
-      .ui {
-        font-family: Avenir, Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        margin-top: 60px;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+  <title><%= htmlWebpackPlugin.options.title %></title>
+  <style>
+    html,
+    body {
+      margin: 0;
+    }
 
-      ul {
-        list-style-type: none;
-        padding: 0;
-      }
+    .ui {
+      font-family: Avenir, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-align: center;
+      color: #2c3e50;
+    }
 
-      li {
-        display: inline-block;
-        margin: 0 10px;
-      }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
 
-      a {
-        color: #42b983;
-      }
-    </style>
-  </head>
+    li {
+      display: inline-block;
+      margin: 0 10px;
+    }
 
-  <body>
-    <noscript>
-      <strong
-        >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
-        properly without JavaScript enabled. Please enable it to
-        continue.</strong
-      >
-    </noscript>
-    <div id="app" class="ui">
-      Loading...
-    </div>
-    <div id="footer" class="ui">
-      <ul>
-        <li>
-          &copy; 2020
-          <a href="https://randychen.tk" target="_blank" rel="noopener"
-            >SuperSonic</a
-          >.
-        </li>
-      </ul>
-    </div>
-  </body>
+    a {
+      color: #42b983;
+    }
+
+    #footer {
+      margin-bottom: 60px;
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
+      properly without JavaScript enabled. Please enable it to
+      continue.</strong>
+  </noscript>
+  <div id="app" class="ui">
+    Loading...
+  </div>
+  <div id="footer" class="ui">
+    <ul>
+      <li>
+        &copy;2020 <a href="https://randychen.tk" target="_blank" rel="noopener">SuperSonic</a>.
+      </li>
+    </ul>
+  </div>
+</body>
+
 </html>

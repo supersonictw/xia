@@ -9,7 +9,7 @@
 -->
 
 <template>
-  <div>
+  <div class="view">
     <Back />
     <div id="profile">
       <img class="icon" v-if="picturePath" :src="mediaURL + picturePath" />
@@ -107,6 +107,10 @@ export default {
 </script>
 
 <style scoped>
+.view {
+  margin: 60px auto;
+}
+
 #profile {
   width: 60%;
   min-height: 300px;

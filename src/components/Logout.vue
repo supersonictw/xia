@@ -12,18 +12,7 @@
   <a title="Logout" @click.prevent="logout" href="#">
     <div id="logout">
       <div id="logout-box">
-        <svg
-          alt="Logout"
-          viewBox="0 0 16 16"
-          id="logout-door"
-          fill="currentColor"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15H1.5zM11 2v13h1V2.5a.5.5 0 0 0-.5-.5H11zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z"
-          />
-        </svg>
+        <img id="logout-icon" alt="Logout" src="@/assets/icons/logout.svg" />
         <span id="logout-text">Logout</span>
       </div>
     </div>
@@ -58,9 +47,8 @@ a {
 }
 
 #logout {
-  width: 90px;
-  height: 25px;
-  color: #42b983;
+  width: auto;
+  height: auto;
   margin-right: 30px;
   padding: 10px;
   border: 1px solid;
@@ -82,7 +70,7 @@ a {
   margin: 0;
 }
 
-#logout-door {
+#logout-icon {
   width: auto;
   height: 20px;
   margin-right: 10px;
@@ -90,25 +78,6 @@ a {
 
 #logout-text {
   width: auto;
-  height: 20px;
-}
-
-@media screen and (max-width: 600px) {
-  #logout {
-    width: 50px;
-    height: 15px;
-  }
-
-  #logout-door {
-    width: auto;
-    height: 15px;
-    margin-right: 3px;
-  }
-
-  #logout-text {
-    width: auto;
-    height: 10px;
-    font-size: 10px;
-  }
+  height: auto;
 }
 </style>

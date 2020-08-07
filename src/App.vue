@@ -45,8 +45,11 @@ export default {
           return true;
         }
       }
-      if (this.$route.name !== Constant.ROUTER_TAG_LOGIN) {
-        this.$router.push({ name: Constant.ROUTER_TAG_LOGIN });
+      if (
+        this.$route.name !== Constant.ROUTER_TAG_INTRODUCING &&
+        this.$route.name !== Constant.ROUTER_TAG_LOGIN
+      ) {
+        this.$router.push({ name: Constant.ROUTER_TAG_INTRODUCING });
       }
       return false;
     },
