@@ -28,6 +28,7 @@ const Store = new Vuex.Store({
     profile: {},
     contactIds: [],
     messageBox: [],
+    indexedDB: null,
     groupJoinedIds: [],
     groupInvitedIds: [],
     allContactMetaData: [],
@@ -66,47 +67,11 @@ const Store = new Vuex.Store({
         });
       return layout;
     },
-    messageBox: (state) => {
-      const layout = new Map();
-      state.messageBox.forEach((operation) => {
-        if (
-          operation.type == lineType.OpType.SEND_MESSAGE ||
-          operation.type == lineType.OpType.RECEIVE_MESSAGE
-        ) {
-          let targetId = (function(obj) {
-            switch (obj.message.toType) {
-              case lineType.MIDType.USER:
-                switch (obj.type) {
-                  case lineType.OpType.SEND_MESSAGE:
-                    return obj.message.to;
-                  case lineType.OpType.RECEIVE_MESSAGE:
-                    return obj.message.from_;
-                  default:
-                    return null;
-                }
-              case lineType.MIDType.ROOM:
-              case lineType.MIDType.GROUP:
-                return obj.message.to;
-            }
-          })(operation);
-          if (layout.has(targetId)) {
-            layout.get(targetId).push(operation.message);
-          } else {
-            layout.set(targetId, [operation.message]);
-          }
-        }
-      });
-      return layout;
-    },
-    previewMessageBox: (_, getters) => {
-      let layout = new Map();
-      for (let [boxIndex, boxData] of getters.messageBox) {
-        layout.set(boxIndex, boxData[boxData.length - 1]);
-      }
-      return layout;
-    },
   },
   mutations: {
+    registerIndexedDB(state, handler) {
+      state.indexedDB = handler;
+    },
     registerAuthToken(state, authToken) {
       state.authToken = authToken;
     },
@@ -142,23 +107,44 @@ const Store = new Vuex.Store({
       );
       dataType[typeName].push(data);
     },
-    pushMessageBox(state, data) {
+    pushMessageBox(state, originData) {
       if (state.messageBox.length > Constant.OPERATIONS_NUM_LIMIT) {
-        for (let i; i < Constant.OPERATIONS_NUM_LIMIT; i++) {
+        for (let i = 0; i < Constant.OPERATIONS_NUM_LIMIT; i++) {
           state.messageBox.pop(state.messageBox[i]);
         }
         console.warn(
           "Automatically release some messageBox cache for preventing memory leak."
         );
       }
+      let data = {};
+      Object.assign(data, originData);
+      data.message.target = (function(op, msg) {
+        switch (msg.toType) {
+          case lineType.MIDType.USER:
+            if (op.type == lineType.OpType.SEND_MESSAGE) {
+              return msg.to;
+            } else {
+              return msg.from_;
+            }
+          case lineType.MIDType.ROOM:
+          case lineType.MIDType.GROUP:
+            return msg.to;
+        }
+      })(data, data.message);
+      // Uint8Array to String
+      data.message.createdTime = data.message.createdTime.toString();
+      data.message.deliveredTime = data.message.deliveredTime.toString();
       state.messageBox.push(data);
+    },
+    popMessageBox(state, data) {
+      state.messageBox.pop(data);
     },
   },
   actions: {
     async opHandler(context, operations) {
-      for (let op of operations) {
-        if (op.revision > 0) {
-          switch (op.type) {
+      for (let operation of operations) {
+        if (operation.revision > 0) {
+          switch (operation.type) {
             case lineType.OpType.UPDATE_PROFILE: {
               const data = await lineClient(
                 Constant.LINE_QUERY_PATH,
@@ -171,7 +157,7 @@ const Store = new Vuex.Store({
               const data = await lineClient(
                 Constant.LINE_QUERY_PATH,
                 context.state.authToken
-              ).getContact(op.param1);
+              ).getContact(operation.param1);
               context.commit("pushContactMetaData", {
                 typeName: lineType.SyncCategory.CONTACT,
                 data,
@@ -183,7 +169,7 @@ const Store = new Vuex.Store({
               const data = await lineClient(
                 Constant.LINE_QUERY_PATH,
                 context.state.authToken
-              ).getGroup(op.param1);
+              ).getGroup(operation.param1);
               context.commit("pushContactMetaData", {
                 typeName: lineType.SyncCategory.GROUP,
                 data,
@@ -192,7 +178,7 @@ const Store = new Vuex.Store({
             }
             case lineType.OpType.SEND_MESSAGE:
             case lineType.OpType.RECEIVE_MESSAGE:
-              context.commit("pushMessageBox", op);
+              context.commit("pushMessageBox", operation);
               break;
           }
         }
