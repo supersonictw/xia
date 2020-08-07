@@ -247,11 +247,16 @@ export default {
       this.client = lineClient(Constant.LINE_QUERY_PATH, authToken);
     }
     if (await this.verifyAccess()) {
+      const resetFunction = this.reset();
       const userIdHashed = this.$store.state.profile.UserIdHashed;
       this.$store.commit(
         "registerIndexedDB",
         await openDB(Constant.NAME, Constant.IDB_VERSION, {
-          upgrade(db) {
+          upgrade(db, oldVersion) {
+            if (oldVersion === 1) {
+              resetFunction();
+              return;
+            }
             // MessageBox
             const store = db.createObjectStore(
               `${Constant.OBJECTSTORE_MESSAGEBOX_PREFIX}_${userIdHashed}`,
