@@ -18,7 +18,11 @@
         </div>
         <h1>XIA</h1>
       </div>
-      <h3>Login with LINE account</h3>
+      <h3>
+        Login with
+        <a href="https://line.me" target="_blank" rel="noopener">LINE</a>
+        account.
+      </h3>
       <p class="warning">{{ loginStatus }}</p>
       <form method="post">
         <div id="login-input-box">

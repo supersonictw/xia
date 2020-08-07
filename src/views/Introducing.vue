@@ -15,10 +15,7 @@
         <h1>XIA</h1>
         <p>LINE Web Client for any platform.</p>
         <div class="logo">
-          <img
-            alt="XIA logo"
-            src="@/assets/logo.svg"
-          />
+          <img alt="XIA logo" src="@/assets/logo.svg" />
         </div>
         <div class="login-button">
           <router-link to="/login">Login</router-link>
@@ -28,15 +25,13 @@
     <div class="intro-box with-seprate-line">
       <h2>What is XIA</h2>
       <p>
-        XIA is a <a href="https://line.me">LINE</a> Web Client based on Vue.js
-        and built for every browser that could keep in touch with your friends
-        anywhere.
+        XIA is a
+        <a href="https://line.me" target="_blank" rel="noopener">LINE</a>
+        Web Client based on Vue.js and built for every browser that could keep
+        in touch with your friends anywhere.
       </p>
       <div class="logo">
-        <img
-          alt="LINE logo"
-          src="@/assets/line_logo.png"
-        />
+        <img alt="LINE logo" src="@/assets/line_logo.png" />
       </div>
     </div>
     <div class="intro-box">
@@ -44,14 +39,13 @@
       <p>XIA keeps only the basic function to send and receive messages.</p>
       <p>
         If you hope to have a better experience, the best solution is using
-        <a href="https://line.me/download">LINE Apps</a> with installing
-        required instead.
+        <a href="https://line.me/download" target="_blank" rel="noopener">
+          LINE Apps
+        </a>
+        with installing required instead.
       </p>
       <div class="logo">
-        <img
-          alt="Chat Icon"
-          src="@/assets/icons/chat.svg"
-        />
+        <img alt="Chat Icon" src="@/assets/icons/chat.svg" />
       </div>
     </div>
   </div>
