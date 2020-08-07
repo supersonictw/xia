@@ -247,7 +247,7 @@ export default {
       this.client = lineClient(Constant.LINE_QUERY_PATH, authToken);
     }
     if (await this.verifyAccess()) {
-      const resetFunction = this.reset();
+      const resetFunction = this.reset;
       const userIdHashed = this.$store.state.profile.UserIdHashed;
       this.$store.commit(
         "registerIndexedDB",
