@@ -80,6 +80,7 @@ const Store = new Vuex.Store({
     },
     updateProfile(state, profileData) {
       state.profile.UserId = profileData.mid;
+      state.profile.UserIdHashed = hash.sha256(profileData.mid);
       state.profile.DisplayName = profileData.displayName;
       state.profile.PicturePath = profileData.picturePath;
       state.profile.StatusMessage = profileData.statusMessage;

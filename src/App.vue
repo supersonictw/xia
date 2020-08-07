@@ -213,7 +213,7 @@ export default {
     messageBox(operations) {
       operations.forEach((operation) => {
         this.$store.state.indexedDB.put(
-          Constant.OBJECTSTORE_MESSAGEBOX,
+          `${Constant.OBJECTSTORE_MESSAGEBOX_PREFIX}_${this.$store.state.profile.UserIdHashed}`,
           operation.message
         );
         this.$store.commit("popMessageBox", operation);
@@ -246,19 +246,21 @@ export default {
       this.$store.commit("registerAuthToken", authToken);
       this.client = lineClient(Constant.LINE_QUERY_PATH, authToken);
     }
-    this.$store.commit(
-      "registerIndexedDB",
-      await openDB(Constant.NAME, Constant.IDB_VERSION, {
-        upgrade(db) {
-          // MessageBox
-          const store = db.createObjectStore(Constant.OBJECTSTORE_MESSAGEBOX, {
-            keyPath: "id",
-          });
-          store.createIndex("target", "target");
-        },
-      })
-    );
     if (await this.verifyAccess()) {
+      const userIdHashed = this.$store.state.profile.UserIdHashed;
+      this.$store.commit(
+        "registerIndexedDB",
+        await openDB(Constant.NAME, Constant.IDB_VERSION, {
+          upgrade(db) {
+            // MessageBox
+            const store = db.createObjectStore(
+              `${Constant.OBJECTSTORE_MESSAGEBOX_PREFIX}_${userIdHashed}`,
+              { keyPath: "id" }
+            );
+            store.createIndex("target", "target");
+          },
+        })
+      );
       await this.syncData();
       await this.syncRevision();
       this.opListener();

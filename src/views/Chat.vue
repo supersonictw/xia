@@ -90,7 +90,7 @@ export default {
     },
     async syncDisplayMessage() {
       this.messages = await this.$store.state.indexedDB.getAllFromIndex(
-        Constant.OBJECTSTORE_MESSAGEBOX,
+        `${Constant.OBJECTSTORE_MESSAGEBOX_PREFIX}_${this.$store.state.profile.UserIdHashed}`,
         "target",
         this.targetId
       );
