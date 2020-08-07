@@ -14,6 +14,7 @@ import VueRouter from "vue-router";
 
 import Constant from "@/data/const.js";
 
+import Introducing from "@/views/Introducing.vue";
 import Login from "@/views/Login.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import Profile from "@/views/Profile.vue";
@@ -28,6 +29,11 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
+    name: Constant.ROUTER_TAG_INTRODUCING,
+    component: Introducing,
+  },
+  {
+    path: "/login",
     name: Constant.ROUTER_TAG_LOGIN,
     component: Login,
   },

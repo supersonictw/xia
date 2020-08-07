@@ -9,65 +9,56 @@
 -->
 
 <template>
-  <div>
-    <img alt="XIA logo" src="@/assets/logo.svg" />
-    <h2>LINE Web Client for any platform</h2>
-    <p>
-      This is an
-      <a
-        href="https://github.com/supersonictw/xia"
-        target="_blank"
-        rel="noopener"
-        >OSS</a
-      >
-      with
-      <a
-        href="https://github.com/supersonictw/xia/blob/master/LICENSE"
-        target="_blank"
-        rel="noopener"
-        >Mozilla Public License v.2.0</a
-      >.
-    </p>
-    <h3>Login with LINE account</h3>
-    <p class="warning">{{ loginStatus }}</p>
-    <form class="login" method="post">
-      <div>
-        <label for="line-identity">Email:</label>
-        <input
-          id="line-identity"
-          type="email"
-          autocomplete="on"
-          class="form-control"
-          v-model="user.identity"
-          required
-        />
+  <div class="view">
+    <Back />
+    <div id="login-box">
+      <div id="header">
+        <div id="logo">
+          <img alt="XIA logo" src="@/assets/logo.svg" />
+        </div>
+        <h1>XIA</h1>
       </div>
-      <div>
-        <label for="line-password">Password:</label>
-        <input
-          id="line-password"
-          type="password"
-          autocomplete="on"
-          class="form-control"
-          v-model="user.password"
-          required
-        />
-      </div>
-      <div>
-        <input
-          type="submit"
-          value="Login"
-          @click.prevent="loginSubmit"
-          :disabled="loginWaiting"
-        />
-      </div>
-    </form>
-    <p>IP: {{ user.ip_addr }}</p>
+      <h3>Login with LINE account</h3>
+      <p class="warning">{{ loginStatus }}</p>
+      <form method="post">
+        <div id="login-input-box">
+          <input
+            id="line-identity"
+            type="email"
+            autocomplete="on"
+            class="form-control login-input-box-text"
+            placeholder="Email"
+            v-model="user.identity"
+            required
+          />
+          <input
+            id="line-password"
+            type="password"
+            autocomplete="on"
+            class="form-control login-input-box-text"
+            placeholder="Password"
+            v-model="user.password"
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="submit"
+            class="login-input-box-submit"
+            value="Login"
+            @click.prevent="loginSubmit"
+            :disabled="loginWaiting"
+          />
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
 import Constant from "@/data/const.js";
+
+import Back from "@/components/Back.vue";
 
 import utf8 from "utf8";
 import axios from "axios";
@@ -79,6 +70,7 @@ import lineType from "@/computes/line/line_types.js";
 
 export default {
   name: "Login",
+  components: { Back },
   data() {
     return {
       user: {
@@ -229,16 +221,80 @@ export default {
 </script>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-
-.login,
-.login input {
-  margin: 15px 15px 15px 15px;
+.view {
+  margin: 60px auto;
 }
 
 .warning {
   color: #ff1100;
+}
+
+#login-box {
+  width: 35%;
+  height: auto;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 60px auto;
+  background: #fff;
+}
+
+#login-input-box {
+  width: auto;
+  padding: 10px;
+  margin: 0 auto;
+}
+
+.login-input-box-text {
+  width: 90%;
+  height: 30px;
+  margin: 10px auto;
+  font-size: 15px;
+  padding: 5px;
+  border: 1px solid;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.login-input-box-submit {
+  width: 80px;
+  height: 39px;
+  cursor: pointer;
+  font-size: 15px;
+  margin: 30px auto;
+  border: #42b983 1.5px solid;
+  border-radius: 5px;
+  background: rgb(255, 255, 255);
+}
+
+.login-input-box-submit:hover {
+  background: rgba(0, 125, 0, 0.1);
+}
+
+.login-input-box-submit:active {
+  background: rgb(255, 255, 255);
+}
+
+#header {
+  width: 100%;
+  height: auto;
+}
+
+#logo {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto;
+  border-color: #000;
+  border-radius: 70px;
+}
+
+#logo img {
+  width: auto;
+  height: auto;
+}
+
+@media (max-width: 600px) {
+  #login-box {
+    width: auto;
+  }
 }
 </style>

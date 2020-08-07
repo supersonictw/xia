@@ -9,7 +9,7 @@
 -->
 
 <template>
-  <div>
+  <div class="view">
     <Back />
     <div id="about">
       <img alt="XIA logo" src="@/assets/logo.svg" />
@@ -63,6 +63,10 @@ export default {
 </script>
 
 <style scoped>
+.view {
+  margin: 60px auto;
+}
+
 #about {
   width: 50%;
   margin: 0 auto;

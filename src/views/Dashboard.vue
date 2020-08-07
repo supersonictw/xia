@@ -127,7 +127,7 @@ export default {
 #dashboard {
   width: 90%;
   min-width: 300px;
-  margin: 0 auto;
+  margin: 60px auto;
 }
 
 .header {
