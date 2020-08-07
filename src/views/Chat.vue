@@ -38,7 +38,12 @@
           id="emoji-box"
           @select="addEmoji"
         />
-        <a title="Emoji" href="#" @click.prevent="showEmojiBox">
+        <a
+          id="emoji-box-opener"
+          title="Emoji"
+          href="#"
+          @click.prevent="showEmojiBox"
+        >
           <div class="icon">
             <img alt="Emoji" src="@/assets/icons/emoji.svg" />
           </div>
@@ -311,20 +316,21 @@ export default {
 
 #msg-input {
   width: 89%;
-  height: 60px;
+  height: 70px;
   margin-left: 1%;
   margin-right: 1%;
+  font-size: 20px;
   resize: none;
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 5px;
 }
 
 .icon {
-  width: 60px;
-  height: 60px;
-  color: #666;
+  width: 50px;
+  height: 50px;
+  padding: 10px;
   border: 1px solid #999;
-  border-radius: 60px;
+  border-radius: 50px;
   background: rgba(0, 0, 0, 0);
 }
 
