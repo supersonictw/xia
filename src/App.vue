@@ -271,6 +271,7 @@ export default {
       this.opListener();
       this.$store.commit("setReady");
     }
+    this.$store.commit("setLoaded");
   },
 };
 </script>

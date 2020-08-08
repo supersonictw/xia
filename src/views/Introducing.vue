@@ -18,7 +18,9 @@
           <img alt="XIA logo" src="@/assets/logo.svg" />
         </div>
         <div class="login-button">
-          <router-link to="/login">Login</router-link>
+          <router-link v-if="ready > 0" to="/dashboard">Dashboard</router-link>
+          <router-link v-else-if="ready < 0" to="/login">Login</router-link>
+          <span v-else>Loading...</span>
         </div>
       </div>
     </div>
@@ -50,6 +52,30 @@
     </div>
   </div>
 </template>
+
+<script>
+import Constant from "@/data/const.js";
+
+export default {
+  name: "Indroducing",
+  methods: {
+    async checkAccess() {
+      if (!this.$cookies.isKey(Constant.COOKIE_ACCESS_KEY)) return this.ready--;
+      if (this.$store.state.loaded) {
+        if (this.$store.state.ready) return this.ready++;
+        else return this.ready--;
+      }
+      setTimeout(this.checkAccess, Constant.RETRY_TIMEOUT);
+    },
+  },
+  data() {
+    return { ready: 0 };
+  },
+  mounted() {
+    this.checkAccess();
+  },
+};
+</script>
 
 <style scoped>
 .impact {
@@ -83,7 +109,7 @@ h3 {
 }
 
 .login-button {
-  width: 60px;
+  max-width: 90px;
   height: auto;
   padding: 10px;
   cursor: pointer;
@@ -116,7 +142,7 @@ h3 {
   height: 70px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 780px) {
   .impact {
     padding: 50px;
   }

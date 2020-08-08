@@ -103,10 +103,7 @@ export default {
       tabName: "Contacts",
       tabSwitcherName: "Chats",
       mobileUI: window.innerWidth < Constant.MOBILE_UI_WIDTH,
-      client: lineClient(
-        Constant.LINE_QUERY_PATH,
-        this.$store.state.authToken
-      ),
+      client: lineClient(Constant.LINE_QUERY_PATH, this.$store.state.authToken),
       profileDisplayName: "Loading...",
       profileStatusMessage: "Loading...",
       profilePicturePath: null,
@@ -191,5 +188,11 @@ export default {
 
 .float-right {
   float: right;
+}
+
+@media screen and (max-width: 780px) {
+  #profile-box {
+    width: 180px;
+  }
 }
 </style>

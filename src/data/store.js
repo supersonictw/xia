@@ -25,6 +25,7 @@ const Store = new Vuex.Store({
   state: {
     authToken: "",
     ready: 0,
+    loaded: 0,
     profile: {},
     contactIds: [],
     messageBox: [],
@@ -77,6 +78,9 @@ const Store = new Vuex.Store({
     },
     setReady(state) {
       state.ready++;
+    },
+    setLoaded(state) {
+      state.loaded++;
     },
     updateProfile(state, profileData) {
       state.profile.UserId = profileData.mid;

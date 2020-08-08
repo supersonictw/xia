@@ -294,7 +294,7 @@ export default {
   height: auto;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 780px) {
   #login-box {
     width: auto;
   }
