@@ -120,9 +120,7 @@ export default {
     },
     async syncDisplayMessage() {
       let cursor = await this.$store.state.indexedDB
-        .transaction(
-          `${Constant.OBJECTSTORE_MESSAGEBOX_PREFIX}_${this.$store.state.profile.UserIdHashed}`
-        )
+        .transaction(Constant.OBJECTSTORE_MESSAGEBOX)
         .store.openCursor();
       while (cursor) {
         this.updateDisplayMessage(cursor.value);

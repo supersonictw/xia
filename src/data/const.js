@@ -88,5 +88,5 @@ export default {
       this.STORAGE_GROUP_INVITED_IDS,
     ];
   },
-  OBJECTSTORE_MESSAGEBOX_PREFIX: "messageBox",
+  OBJECTSTORE_MESSAGEBOX: "messageBox",
 };

@@ -213,7 +213,7 @@ export default {
     messageBox(operations) {
       operations.forEach((operation) => {
         this.$store.state.indexedDB.put(
-          `${Constant.OBJECTSTORE_MESSAGEBOX_PREFIX}_${this.$store.state.profile.UserIdHashed}`,
+          Constant.OBJECTSTORE_MESSAGEBOX,
           operation.message
         );
         this.$store.commit("popMessageBox", operation);
@@ -248,18 +248,17 @@ export default {
     }
     if (await this.verifyAccess()) {
       const resetFunction = this.reset;
-      const userIdHashed = this.$store.state.profile.UserIdHashed;
       this.$store.commit(
         "registerIndexedDB",
         await openDB(Constant.NAME, Constant.IDB_VERSION, {
           upgrade(db, oldVersion) {
-            if (oldVersion === 1) {
+            if (oldVersion !== 0 && oldVersion < 3) {
               resetFunction();
               return;
             }
             // MessageBox
             const store = db.createObjectStore(
-              `${Constant.OBJECTSTORE_MESSAGEBOX_PREFIX}_${userIdHashed}`,
+              Constant.OBJECTSTORE_MESSAGEBOX,
               { keyPath: "id" }
             );
             store.createIndex("target", "target");
