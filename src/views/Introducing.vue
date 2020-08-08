@@ -29,8 +29,8 @@
       <p>
         XIA is a
         <a href="https://line.me" target="_blank" rel="noopener">LINE</a>
-        Web Client based on Vue.js and built for every browser that could keep
-        in touch with your friends anywhere.
+        Web Client based on Vue.js and built for every browser that everyone can
+        keep in touch anywhere with their friends.
       </p>
       <div class="logo">
         <img alt="LINE logo" src="@/assets/line_logo.png" />
