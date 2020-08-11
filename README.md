@@ -4,6 +4,7 @@
 ![Python](https://img.shields.io/badge/Vue.js-2.x-00AA77.svg)
 ![Platform](https://img.shields.io/badge/base_on-LINE-00DD00.svg)
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/43e26ace-1f8b-4b5e-8bb0-4a0c136f1114/deploy-status)](https://app.netlify.com/sites/xia-demo/deploys)
 [![Build Status](https://scrutinizer-ci.com/g/supersonictw/xia/badges/build.png?b=master)](https://scrutinizer-ci.com/g/supersonictw/xia/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/supersonictw/xia/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/supersonictw/xia/?branch=master)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/supersonictw/xia.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/supersonictw/xia/alerts/)
