@@ -9,12 +9,10 @@
 -->
 
 <template>
-  <div class="album py-5 bg-light">
-    <div class="container">
-      <h2 class="pt-3">404</h2>
-      <p>The page you request is not exists.</p>
-      <router-link to="/">Go to Index</router-link>
-    </div>
+  <div class="container">
+    <h2 class="pt-3">404</h2>
+    <p>The page you request is not exists.</p>
+    <router-link to="/">Go to Index</router-link>
   </div>
 </template>
 
@@ -24,5 +22,6 @@
   height: 150px;
   width: auto;
   background: #ffffff;
+  margin: 60px auto;
 }
 </style>

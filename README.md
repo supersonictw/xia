@@ -68,11 +68,11 @@ Please not to use the way as the production because the files by hot-reload and 
 npm run build
 ```
 
-After the command, the source file will be compiled and put in the `dist/` directory.
+After the command, the source files will be compiled and put in the `dist/` directory.
 
 ### Lints and fixes files
 
-If you are suffering a syntax mistake or something, try the command.
+If you are suffering syntax mistakes or something, try the command.
 
 ```shell
 npm run lint

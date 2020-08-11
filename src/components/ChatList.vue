@@ -19,8 +19,8 @@
         <div class="contact">
           <img
             class="picture-icon"
-            v-if="item.picturePath"
-            :src="mediaURL + item.picturePath"
+            v-if="item.pictureStatus"
+            :src="`${mediaURL}/${item.pictureStatus}`"
           />
           <img class="picture-icon" v-else src="@/assets/logo.svg" />
           <div>
@@ -40,25 +40,93 @@ import hash from "js-sha256";
 import substring from "unicode-substring";
 import int64 from "node-int64";
 
-import lineClient from "@/computes/line.js";
 import lineType from "@/computes/line/line_types.js";
 
 export default {
   name: "ChatList",
   methods: {
-    async waitForSyncDisplayMessage() {
-      setTimeout(() => {
-        if (this.$store.state.ready) {
-          this.syncDisplayMessage();
-        } else {
-          this.waitForSyncDisplayMessage();
-        }
-      }, Constant.RETRY_TIMEOUT);
-    },
     enterChat(chatId) {
       this.$router.push({
         name: Constant.ROUTER_TAG_CHAT,
-        params: { targetEncryptedId: chatId },
+        params: { targetIdHashed: chatId },
+      });
+    },
+    async getContactInfo(message) {
+      if (!this.$store.state.ready) return;
+      switch (message.toType) {
+        case lineType.MIDType.USER: {
+          const targetId =
+            message.from_ == this.$store.state.profile.userId
+              ? message.to
+              : message.from_;
+          return await this.$store.state.idbUser.get(
+            Constant.IDB_USER_CONTACT,
+            targetId
+          );
+        }
+        case lineType.MIDType.GROUP: {
+          let groupData = await this.$store.state.idbUser.get(
+            Constant.IDB_USER_GROUP_JOINED,
+            message.to
+          );
+          groupData.displayName = groupData.name;
+          delete groupData.name;
+          return groupData;
+        }
+        default:
+          console.error(
+            "Unknown toType in getContactInfo with " + message.toType
+          );
+      }
+    },
+    async waitForFetchDisplayMessage() {
+      setTimeout(() => {
+        if (this.$store.state.ready) {
+          this.fetchDisplayMessage();
+        } else {
+          this.waitForFetchDisplayMessage();
+        }
+      }, Constant.RETRY_TIMEOUT);
+    },
+    async fetchDisplayMessage() {
+      let cursor = await this.$store.state.idbUser
+        .transaction(Constant.IDB_USER_PREVIEW_MESSAGE_BOX)
+        .store.openCursor();
+      while (cursor) {
+        this.updateDisplayMessage(cursor.value);
+        cursor = await cursor.continue();
+      }
+      await this.fetchDisplayMessage();
+    },
+    async updateDisplayMessage(message) {
+      const contactData = await this.getContactInfo(message);
+      const displayName = contactData ? contactData.displayName : null;
+      const pictureStatus = contactData ? contactData.pictureStatus : null;
+      const targetIdHashed = hash.sha256(message.target);
+      const lastMessage = (function(obj) {
+        switch (obj.contentType) {
+          case lineType.ContentType.IMAGE:
+            return "(Image)";
+          case lineType.ContentType.STICKER:
+            return "(Sticker)";
+          default:
+            return obj.text;
+        }
+      })(message);
+      message.createdTime = new int64(message.createdTime);
+      if (
+        message.target in this.previewMessageBox &&
+        this.previewMessageBox[message.target].time.compare(
+          message.createdTime
+        ) > 0
+      )
+        return;
+      this.$set(this.previewMessageBox, message.target, {
+        id: targetIdHashed,
+        time: message.createdTime,
+        displayName,
+        pictureStatus,
+        lastMessage,
       });
     },
     subDisplayTitle(displayTitle) {
@@ -73,102 +141,6 @@ export default {
         ? lastMessage
         : `${substring(lastMessage, 0, Constant.CHAT_ROW_TEXT_LENGTH)}...`;
     },
-    getContactInfo(message) {
-      let contactData = null;
-      if (!this.$store.state.ready) return;
-      switch (message.toType) {
-        case lineType.MIDType.USER: {
-          const targetId =
-            message.from_ == this.$store.state.profile.UserId
-              ? message.to
-              : message.from_;
-          if (this.$store.getters.contactInfo.has(targetId)) {
-            contactData = this.$store.getters.contactInfo.get(targetId);
-          } else {
-            contactData = lineClient(
-              Constant.LINE_QUERY_PATH,
-              this.$store.state.authToken
-            ).getContact(targetId);
-            this.$store.commit("pushContactMetaData", {
-              typeName: lineType.SyncCategory.CONTACT,
-              data: contactData,
-            });
-          }
-          return contactData;
-        }
-        case lineType.MIDType.ROOM:
-        case lineType.MIDType.GROUP: {
-          if (this.$store.getters.groupInfo.has(message.to)) {
-            contactData = this.$store.getters.groupInfo.get(message.to);
-          } else {
-            contactData = lineClient(
-              Constant.LINE_QUERY_PATH,
-              this.$store.state.authToken
-            ).getGroup(message.to);
-            this.$store.commit("pushContactMetaData", {
-              typeName: lineType.SyncCategory.GROUP,
-              data: contactData,
-            });
-          }
-          return contactData;
-        }
-        default:
-          console.error(
-            "Unknown toType in getContactInfo with " + message.toType
-          );
-      }
-    },
-    async syncDisplayMessage() {
-      let cursor = await this.$store.state.indexedDB
-        .transaction(Constant.OBJECTSTORE_MESSAGEBOX)
-        .store.openCursor();
-      while (cursor) {
-        this.updateDisplayMessage(cursor.value);
-        cursor = await cursor.continue();
-      }
-    },
-    async updateDisplayMessage(message) {
-      const targetId = (function(obj, profileId) {
-        switch (obj.toType) {
-          case lineType.MIDType.USER:
-            if (obj.from_ == profileId) {
-              return obj.to;
-            } else {
-              return obj.from_;
-            }
-          case lineType.MIDType.ROOM:
-          case lineType.MIDType.GROUP:
-            return obj.to;
-        }
-      })(message, this.$store.state.profile.UserId);
-      const contactData = this.getContactInfo(message);
-      const displayName = contactData ? contactData.displayName : null;
-      const picturePath = contactData ? contactData.picturePath : null;
-      const targetEncryptedId = hash.sha256(targetId);
-      const lastMessage = (function(obj) {
-        switch (obj.contentType) {
-          case lineType.ContentType.IMAGE:
-            return "(Image)";
-          case lineType.ContentType.STICKER:
-            return "(Sticker)";
-          default:
-            return obj.text;
-        }
-      })(message);
-      message.createdTime = new int64(message.createdTime);
-      if (
-        targetId in this.previewMessageBox &&
-        this.previewMessageBox[targetId].time.compare(message.createdTime) > 0
-      )
-        return;
-      this.$set(this.previewMessageBox, targetId, {
-        id: targetEncryptedId,
-        time: message.createdTime,
-        displayName,
-        picturePath,
-        lastMessage,
-      });
-    },
   },
   computed: {
     getDisplayMessages() {
@@ -179,21 +151,14 @@ export default {
       return data;
     },
   },
-  watch: {
-    messageBox() {
-      if (!this.$store.state.ready) return;
-      this.syncDisplayMessage();
-    },
-  },
   data() {
     return {
-      mediaURL: Constant.LINE_MEDIA_URL,
-      messageBox: this.$store.state.messageBox,
       previewMessageBox: {},
+      mediaURL: Constant.LINE_MEDIA_URL,
     };
   },
   mounted() {
-    this.waitForSyncDisplayMessage();
+    this.waitForFetchDisplayMessage();
   },
 };
 </script>

@@ -13,7 +13,7 @@
     <Back />
     <div id="chat">
       <div class="header">
-        <h2>{{ chatTitle }}</h2>
+        <h2>{{ chatRoomTitle }}</h2>
       </div>
       <div id="msg-container">
         <div
@@ -34,7 +34,7 @@
       </div>
       <div id="msg-input-box">
         <VEmojiPicker
-          v-show="showEmojiBoxValue"
+          v-show="showEmojiBoxCheckpoint"
           id="emoji-box"
           @select="addEmoji"
         />
@@ -81,25 +81,53 @@ export default {
     VEmojiPicker,
   },
   methods: {
+    async fetchChatRoomInformation() {
+      if (this.targetId.startsWith("u")) {
+        this.chatRoomInfo = await this.$store.state.idbUser.get(
+          Constant.IDB_USER_CONTACT,
+          this.targetId
+        );
+        this.chatRoomTitle = this.chatRoomInfo.displayName;
+        this.chatRoomType = lineType.MIDType.USER;
+      } else if (this.targetId.startsWith("c")) {
+        this.chatRoomInfo = await this.$store.state.idbUser.get(
+          Constant.IDB_USER_GROUP_JOINED,
+          this.targetId
+        );
+        this.chatRoomTitle = this.chatRoomInfo.name;
+        this.chatRoomType = lineType.MIDType.GROUP;
+      } else {
+        this.$router.push({
+          name: Constant.ROUTER_TAG_ERROR,
+          params: { reason: "Unknown Chat Room type." },
+        });
+      }
+    },
     getOriginType(message) {
       return message.origin === this.getMyUserId ? "self" : "another";
     },
-    async waitForMoveToBottom() {
-      setTimeout(() => {
-        if (document.getElementById("msg-container")) {
-          this.moveToBottom();
-        } else {
-          this.waitForMoveToBottom();
+    async fetchDisplayMessage() {
+      if (!this.$store.state.ready)
+        setTimeout(this.fetchDisplayMessage, Constant.RETRY_TIMEOUT);
+      let cursor = await this.$store.state.idbUser
+        .transaction(Constant.IDB_USER_MESSAGE_BOX)
+        .store.openCursor();
+      while (cursor) {
+        if (cursor.value.target == this.targetId) {
+          if (this.messages.length > Constant.CHAT_DISPLAY_ROW_LITMIT)
+            this.messages.shift();
+          if (
+            !this.messageIdLastSeen ||
+            parseInt(this.messageIdLastSeen) < parseInt(cursor.value.id)
+          ) {
+            this.messages.push(cursor.value);
+            this.messageIdLastSeen = cursor.value.id;
+            this.sendReadTag(cursor.value.id);
+          }
         }
-      }, Constant.RETRY_TIMEOUT);
-    },
-    async syncDisplayMessage() {
-      this.messages = await this.$store.state.indexedDB.getAllFromIndex(
-        Constant.OBJECTSTORE_MESSAGEBOX,
-        "target",
-        this.targetId
-      );
-      this.sendReadTag();
+        cursor = await cursor.continue();
+      }
+      await this.fetchDisplayMessage();
     },
     async downloadImage(imageSource) {
       return await axios(imageSource, {
@@ -113,6 +141,7 @@ export default {
       });
     },
     async getStickerImageResource(messageId, contentMetadata) {
+      if (messageId in this.mediaObjects) return;
       const stickerVersion =
         Math.floor(contentMetadata.STKVER / 1000000) +
         "/" +
@@ -123,6 +152,7 @@ export default {
       this.$set(this.mediaObjects, messageId, stickerURL);
     },
     async getImageResource(messageId) {
+      if (messageId in this.mediaObjects) return;
       const imageURL = `${Constant.LINE_MEDIA_URL}/os/m/${messageId}`;
       const imageXHR = await this.downloadImage(imageURL);
       const imageB64 =
@@ -131,7 +161,7 @@ export default {
       this.$set(this.mediaObjects, messageId, imageB64);
     },
     showEmojiBox() {
-      this.showEmojiBoxValue = !this.showEmojiBoxValue;
+      this.showEmojiBoxCheckpoint = !this.showEmojiBoxCheckpoint;
     },
     addEmoji(emoji) {
       this.inputText += emoji.data;
@@ -150,28 +180,37 @@ export default {
       setTimeout(() => (this.inputText = ""), 100);
     },
     getUserInfo(userId) {
-      if (this.$store.getters.contactInfo.has(userId)) {
-        return this.$store.getters.contactInfo.get(userId);
+      switch (this.chatRoomType) {
+        case lineType.MIDType.USER:
+          return this.chatRoomInfo;
+        case lineType.MIDType.GROUP:
+          return this.chatRoomInfo.members.find((user) => user.mid == userId);
+        default:
+          this.$router.push({
+            name: Constant.ROUTER_TAG_ERROR,
+            params: { reason: "Contact Metadata not synchronized completely." },
+          });
       }
-      this.$router.push({
-        name: Constant.ROUTER_TAG_ERROR,
-        params: { reason: "Contact MetaData not synchronized completely." },
-      });
     },
-    sendReadTag() {
-      const lastMessageFetched = this.messages[this.messages.length - 1];
-      if (this.lastReadMessageId != lastMessageFetched.id) {
-        this.client.sendChatChecked(
-          Constant.THRIFT_DEFAULT_SEQ,
-          this.targetId,
-          lastMessageFetched.id
-        );
-        this.lastReadMessageId = lastMessageFetched.id;
+    sendReadTag(messageId) {
+      const messageBoxElement = document.getElementById("msg-container");
+      if (
+        messageBoxElement &&
+        messageBoxElement.scrollTop + messageBoxElement.clientHeight ==
+          messageBoxElement.scrollHeight
+      ) {
+        setTimeout(this.moveToBottom, 100);
       }
+      this.client.sendChatChecked(
+        Constant.THRIFT_DEFAULT_SEQ,
+        this.targetId,
+        messageId
+      );
     },
     moveToBottom() {
       const messageBoxElement = document.getElementById("msg-container");
-      messageBoxElement.scroll(0, messageBoxElement.scrollHeight);
+      if (messageBoxElement)
+        messageBoxElement.scroll(0, messageBoxElement.scrollHeight);
     },
   },
   computed: {
@@ -180,21 +219,10 @@ export default {
         this.$router.replace({ name: Constant.ROUTER_TAG_DASHBOARD });
         return "";
       }
-      if (this.$store.getters.chatIdByHash.has(this.targetEncryptedId))
-        return this.$store.getters.chatIdByHash.get(this.targetEncryptedId);
+      if (this.$store.state.chatIdsHashed.has(this.targetIdHashed))
+        return this.$store.state.chatIdsHashed.get(this.targetIdHashed);
       this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
       return "";
-    },
-    chatTitle() {
-      if (this.targetId.startsWith("u")) {
-        if (this.$store.getters.contactInfo.has(this.targetId))
-          return this.$store.getters.contactInfo.get(this.targetId).displayName;
-      }
-      if (this.targetId.startsWith("c")) {
-        if (this.$store.getters.groupInfo.has(this.targetId))
-          return this.$store.getters.groupInfo.get(this.targetId).displayName;
-      }
-      return "Unknown";
     },
     getMessages() {
       let layout = [];
@@ -223,36 +251,26 @@ export default {
       return layout;
     },
     getMyUserId() {
-      return this.$store.state.profile.UserId;
+      return this.$store.state.profile.userId;
     },
   },
-  watch: {
-    messageBox() {
-      this.syncDisplayMessage();
-      const messageBoxElement = document.getElementById("msg-container");
-      if (
-        messageBoxElement.scrollTop + messageBoxElement.clientHeight ==
-        messageBoxElement.scrollHeight
-      ) {
-        setTimeout(this.moveToBottom, 100);
-      }
-    },
-  },
-  props: ["targetEncryptedId"],
+  props: ["targetIdHashed"],
   data() {
     return {
+      chatRoomTitle: "Unknown",
+      chatRoomType: 0,
+      chatRoomInfo: {},
       inputText: "",
-      showEmojiBoxValue: false,
-      client: lineClient(Constant.LINE_QUERY_PATH, this.$store.state.authToken),
       messages: [],
-      messageBox: this.$store.state.messageBox,
-      lastReadMessageId: "",
       mediaObjects: {},
+      messageIdLastSeen: null,
+      showEmojiBoxCheckpoint: false,
+      client: lineClient(Constant.LINE_QUERY_PATH, this.$store.state.authToken),
     };
   },
-  mounted() {
-    this.syncDisplayMessage();
-    this.waitForMoveToBottom();
+  async mounted() {
+    await this.fetchChatRoomInformation();
+    this.fetchDisplayMessage();
   },
 };
 </script>
@@ -319,7 +337,7 @@ export default {
   height: 70px;
   margin-left: 1%;
   margin-right: 1%;
-  font-size: 20px;
+  font-size: 15px;
   resize: none;
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 5px;

@@ -43,9 +43,9 @@ export default {
       }, Constant.RETRY_TIMEOUT);
     },
     updateProfile() {
-      this.displayName = this.$store.state.profile.DisplayName;
-      this.statusMessage = this.$store.state.profile.StatusMessage;
-      this.picturePath = this.$store.state.profile.PicturePath;
+      this.displayName = this.$store.state.profile.displayName;
+      this.statusMessage = this.$store.state.profile.statusMessage;
+      this.picturePath = this.$store.state.profile.picturePath;
     },
   },
   computed: {

@@ -74,9 +74,9 @@ export default {
       }, Constant.RETRY_TIMEOUT);
     },
     updateProfile() {
-      this.profileDisplayName = this.$store.state.profile.DisplayName;
-      this.profileStatusMessage = this.$store.state.profile.StatusMessage;
-      this.profilePicturePath = this.$store.state.profile.PicturePath;
+      this.profileDisplayName = this.$store.state.profile.displayName;
+      this.profileStatusMessage = this.$store.state.profile.statusMessage;
+      this.profilePicturePath = this.$store.state.profile.picturePath;
     },
     subStatusMessage(statusMessage) {
       return statusMessage.length <
