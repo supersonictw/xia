@@ -14,7 +14,9 @@
       <router-view class="child-view" />
     </transition>
     <div class="footer">
-      <a href="#" @click.prevent="revoke(true)">Reset XIA</a> |
+      <span v-if="!checkReady">
+        <a href="#" @click.prevent="revoke(true)">Reset XIA</a> |
+      </span>
       <router-link to="/about">About XIA</router-link>
     </div>
   </div>
@@ -76,9 +78,8 @@ export default {
       const resetFunction = this.revoke;
       const upgradeFunction = function(db, oldVersion) {
         // Remove the old data structure
-        if (oldVersion !== 0 && oldVersion < 4) {
-          const promise = new Promise(resetFunction(true));
-          promise.then(deleteDB(Constant.NAME), deleteDB(Constant.NAME));
+        if (oldVersion !== 0 && oldVersion < 5) {
+          resetFunction(true, oldVersion);
           return;
         }
         // Databases List
@@ -368,23 +369,25 @@ export default {
         cursor = await cursor.continue();
       }
     },
-    async revoke(reset = false) {
+    async revoke(reset = false, idbOldVersion = -1) {
       Constant.ALL_COOKIES.forEach((name) => this.$cookies.remove(name));
       window.localStorage.clear();
       window.sessionStorage.clear();
       if (reset) {
-        const idbXia = this.$store.state.idbXia
-          ? this.$store.state.idbXia
-          : await this.setupDatabaseForXIA();
         let idbNames = [];
-        let cursor = await idbXia
-          .transaction(Constant.IDB_XIA_DB_LIST)
-          .store.openCursor();
-        while (cursor) {
-          idbNames.push(`${Constant.NAME}_${cursor.key}`);
-          cursor = await cursor.continue();
+        if (idbOldVersion >= 3 || idbOldVersion == -1) {
+          const idbXia = this.$store.state.idbXia
+            ? this.$store.state.idbXia
+            : await this.setupDatabaseForXIA();
+          const allIdbUsers = await idbXia.getAllKeys(Constant.IDB_XIA_DB_LIST);
+          if (allIdbUsers.length > 0) {
+            idbNames = allIdbUsers.map((name) => `${Constant.NAME}_${name}`);
+            await idbXia.clear(Constant.IDB_XIA_DB_LIST);
+          }
+          console.log(allIdbUsers, idbNames);
+        } else if (idbOldVersion != 0) {
+          await deleteDB(Constant.NAME);
         }
-        await idbXia.clear(Constant.IDB_XIA_DB_LIST);
         await Promise.all(idbNames.map((name) => deleteDB(name)));
       }
       window.location.reload();
@@ -410,6 +413,11 @@ export default {
           }
         })
       );
+    },
+  },
+  computed: {
+    checkReady() {
+      return this.$store.state.ready;
     },
   },
   watch: {
