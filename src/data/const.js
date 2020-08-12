@@ -76,7 +76,7 @@ export default {
   get ALL_COOKIES() {
     return [this.COOKIE_ACCESS_KEY];
   },
-  IDB_XIA_VERSION: 3,
+  IDB_XIA_VERSION: 4,
   IDB_XIA_DB_LIST: "dbList",
   IDB_USER_VERSION: 1,
   IDB_USER_CONTACT: "contact",

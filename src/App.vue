@@ -76,8 +76,9 @@ export default {
       const resetFunction = this.revoke;
       const upgradeFunction = function(db, oldVersion) {
         // Remove the old data structure
-        if (oldVersion !== 0 && oldVersion < 3) {
-          resetFunction(true);
+        if (oldVersion !== 0 && oldVersion < 4) {
+          const promise = new Promise(resetFunction(true));
+          promise.then(deleteDB(Constant.NAME), deleteDB(Constant.NAME));
           return;
         }
         // Databases List
