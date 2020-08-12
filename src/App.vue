@@ -78,7 +78,7 @@ export default {
       const resetFunction = this.revoke;
       const upgradeFunction = function(db, oldVersion) {
         // Remove the old data structure
-        if (oldVersion !== 0 && oldVersion < 5) {
+        if (oldVersion !== 0 && oldVersion < 3) {
           resetFunction(true, oldVersion);
           return;
         }
