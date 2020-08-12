@@ -34,8 +34,8 @@
         <div class="contact">
           <img
             class="picture-icon"
-            v-if="item.picturePath"
-            :src="mediaURL + item.picturePath"
+            v-if="item.pictureStatus"
+            :src="`${mediaURL}/${item.pictureStatus}`"
           />
           <img class="picture-icon" v-else src="@/assets/logo.svg" />
           <div>
@@ -60,16 +60,87 @@ export default {
     enterContact(chatId) {
       this.$router.push({
         name: Constant.ROUTER_TAG_CONTACT,
-        params: { targetEncryptedId: chatId },
+        params: { targetIdHashed: chatId },
       });
+    },
+    sortDataByName(data) {
+      data.sort(function(a, b) {
+        if (a.displayName < b.displayName) {
+          return -1;
+        }
+        if (a.displayName > b.displayName) {
+          return 1;
+        }
+        return 0;
+      });
+    },
+    async waitForFetchData() {
+      setTimeout(() => {
+        if (this.$store.state.ready) {
+          this.fetchContacts();
+          this.fetchGroupsJoined();
+          this.fetchGroupsInvited();
+        } else {
+          this.waitForFetchData();
+        }
+      }, Constant.RETRY_TIMEOUT);
+    },
+    async fetchContacts() {
+      let cursor = await this.$store.state.idbUser
+        .transaction(Constant.IDB_USER_CONTACT)
+        .store.openCursor();
+      while (cursor) {
+        cursor.value.id = hash.sha256(cursor.value.mid);
+        delete cursor.value.mid;
+        this.contactUser.push(cursor.value);
+        cursor = await cursor.continue();
+      }
+      this.sortDataByName(this.contactUser);
+    },
+    layoutGroupStatus(groupData, invited = false) {
+      let layout = [];
+      // Invited Icon
+      if (invited) layout.push(`${Constant.GROUP_INVITING_ICON}`);
+      // Members Count
+      const membersCount = groupData.members ? groupData.members.length : 0;
+      layout.push(`Members: ${membersCount}`);
+      return layout.join(" ");
+    },
+    async fetchGroupsJoined() {
+      let cursor = await this.$store.state.idbUser
+        .transaction(Constant.IDB_USER_GROUP_JOINED)
+        .store.openCursor();
+      while (cursor) {
+        cursor.value.id = hash.sha256(cursor.value.id);
+        cursor.value.displayName = cursor.value.name;
+        delete cursor.value.name;
+        cursor.value.statusMessage = this.layoutGroupStatus(cursor.value);
+        this.contactGroupJoined.push(cursor.value);
+        cursor = await cursor.continue();
+      }
+      this.sortDataByName(this.contactGroupJoined);
+    },
+    async fetchGroupsInvited() {
+      let cursor = await this.$store.state.idbUser
+        .transaction(Constant.IDB_USER_GROUP_INVITED)
+        .store.openCursor();
+      while (cursor) {
+        cursor.value.id = hash.sha256(cursor.value.id);
+        cursor.value.displayName = cursor.value.name;
+        delete cursor.value.name;
+        cursor.value.statusMessage = this.layoutGroupStatus(cursor.value, true);
+        this.contactGroupInvited.push(cursor.value);
+        cursor = await cursor.continue();
+      }
+      this.sortDataByName(this.contactGroupInvited);
     },
     getTabData() {
       if (!this.$store.state.ready) return;
       switch (this.tabId) {
         case 0:
-          return this.contactUserInfo;
+          return this.contactUser;
         case 1:
-          return this.contactGroupInfo;
+          return this.contactGroup;
         default:
           this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
       }
@@ -113,61 +184,22 @@ export default {
     },
   },
   computed: {
-    contactUserInfo() {
-      const layout = [];
-      for (let user of this.contactUser) {
-        let data = this.$store.getters.contactInfo.get(user);
-        data.id = hash.sha256(user);
-        layout.push(data);
-      }
-      return layout.sort(function(a, b) {
-        if (a.displayName < b.displayName) {
-          return -1;
-        }
-        if (a.displayName > b.displayName) {
-          return 1;
-        }
-        return 0;
-      });
-    },
-    contactGroupInfo() {
-      const layout = [];
-      for (let groupIndex in this.contactGroup) {
-        let group = this.contactGroup[groupIndex];
-        let data = this.$store.getters.groupInfo.get(group);
-        data.id = hash.sha256(group);
-        data.statusMessage = "";
-        if (groupIndex >= this.contactGroupJoined.length) {
-          data.statusMessage += `${Constant.GROUP_INVITING_ICON} `;
-        }
-        data.statusMessage += `Members: ${
-          data.members ? data.members.length : 0
-        }`;
-        layout.push(data);
-      }
-      return layout.sort(function(a, b) {
-        if (a.displayName < b.displayName) {
-          return -1;
-        }
-        if (a.displayName > b.displayName) {
-          return 1;
-        }
-        return 0;
-      });
-    },
     contactGroup() {
       return [].concat(this.contactGroupJoined, this.contactGroupInvited);
     },
   },
   data() {
     return {
-      mediaURL: Constant.LINE_MEDIA_URL,
       tabId: 0,
       contactType: ["Contact", "Group"],
-      contactUser: this.$store.state.contactIds,
-      contactGroupJoined: this.$store.state.groupJoinedIds,
-      contactGroupInvited: this.$store.state.groupInvitedIds,
+      mediaURL: Constant.LINE_MEDIA_URL,
+      contactUser: [],
+      contactGroupJoined: [],
+      contactGroupInvited: [],
     };
+  },
+  mounted() {
+    this.waitForFetchData();
   },
 };
 </script>

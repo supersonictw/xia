@@ -14,7 +14,9 @@
       <router-view class="child-view" />
     </transition>
     <div class="footer">
-      <a href="#" @click.prevent="reset">Reset XIA</a> |
+      <span v-if="!checkReady">
+        <a href="#" @click.prevent="revoke(true)">Reset XIA</a> |
+      </span>
       <router-link to="/about">About XIA</router-link>
     </div>
   </div>
@@ -64,80 +66,132 @@ export default {
         return false;
       }
     },
+    async setupDatabases() {
+      const xia = await this.setupDatabaseForXIA();
+      const user = await this.setupDatabaseForUser();
+      this.$store.commit("registerIndexedDB", { xia, user });
+      xia.put(Constant.IDB_XIA_DB_LIST, {
+        id: this.$store.state.profile.userIdHashed,
+      });
+    },
+    async setupDatabaseForXIA() {
+      const resetFunction = this.revoke;
+      const upgradeFunction = function(db, oldVersion) {
+        // Remove the old data structure
+        if (oldVersion !== 0 && oldVersion < 3) {
+          resetFunction(true, oldVersion);
+          return;
+        }
+        // Databases List
+        db.createObjectStore(Constant.IDB_XIA_DB_LIST, {
+          keyPath: "id",
+        });
+      };
+      return openDB(Constant.NAME, Constant.IDB_XIA_VERSION, {
+        upgrade: upgradeFunction,
+      });
+    },
+    async setupDatabaseForUser() {
+      const dbName = `${Constant.NAME}_${this.$store.state.profile.userIdHashed}`;
+      return openDB(dbName, Constant.IDB_USER_VERSION, {
+        upgrade(db) {
+          // Contact
+          db.createObjectStore(Constant.IDB_USER_CONTACT, {
+            keyPath: "mid",
+          });
+          // Group Joined
+          db.createObjectStore(Constant.IDB_USER_GROUP_JOINED, {
+            keyPath: "id",
+          });
+          // Group Invited
+          db.createObjectStore(Constant.IDB_USER_GROUP_INVITED, {
+            keyPath: "id",
+          });
+          // Preview Message Box
+          db.createObjectStore(Constant.IDB_USER_PREVIEW_MESSAGE_BOX, {
+            keyPath: "target",
+          });
+          // Message Box
+          db.createObjectStore(Constant.IDB_USER_MESSAGE_BOX, {
+            keyPath: "id",
+          }).createIndex("target", "target");
+          // Settings
+          db.createObjectStore(Constant.IDB_USER_SETTINGS, {
+            keyPath: "id",
+          });
+        },
+      });
+    },
     async syncRevision() {
-      if (this.$cookies.isKey(Constant.COOKIE_OP_REVISION)) {
-        this.revision = this.$cookies.get(Constant.COOKIE_OP_REVISION);
+      const data = await this.$store.state.idbUser.get(
+        Constant.IDB_USER_SETTINGS,
+        Constant.IDB_USER_KEY_SETTINGS_REVISION
+      );
+      if (data) {
+        this.revision = parseInt(data.value);
       } else {
         this.revision = await this.client.getLastOpRevision();
       }
     },
-    async updateRevision(operations) {
-      const opLength = operations.length;
-      this.revision = operations[opLength - 1].revision.compare(
-        operations[opLength - 2].revision
-      )
-        ? operations[opLength - 2].revision
-        : operations[opLength - 1].revision;
-    },
     async syncData() {
-      await this.syncContactIds();
-      await this.syncContactMetaData();
-    },
-    async syncContactIds() {
-      for (let dataName of Constant.ALL_CONTACT_IDS_STORAGES) {
-        let idList = null;
-        if (dataName in window.localStorage) {
-          let compressedData = window.localStorage.getItem(dataName);
-          let decompressedData = await this.decompress(compressedData);
-          idList = JSON.parse(decompressedData);
-        } else {
-          switch (dataName) {
-            case Constant.STORAGE_CONTACT_IDS:
-              idList = await this.client.getAllContactIds();
-              break;
-            case Constant.STORAGE_GROUP_JOINED_IDS:
-              idList = await this.client.getGroupIdsJoined();
-              break;
-            case Constant.STORAGE_GROUP_INVITED_IDS:
-              idList = await this.client.getGroupIdsInvited();
-              break;
-            default:
-              console.error("Unknown Contact Name with " + dataName);
-          }
+      const queryHandler = this.client;
+
+      const status = await this.$store.state.idbUser.get(
+        Constant.IDB_USER_SETTINGS,
+        Constant.IDB_USER_KEY_SETTINGS_SYNC_STATUS
+      );
+
+      const updateData = (data, dataName) =>
+        data.forEach((metadata) =>
+          this.$store.state.idbUser.put(dataName, metadata)
+        );
+
+      const syncContact = async function() {
+        const contactIds = await queryHandler.getAllContactIds();
+        if (contactIds) {
+          const contactData = await queryHandler.getContacts(contactIds);
+          updateData(contactData, Constant.IDB_USER_CONTACT);
         }
-        if (idList) {
-          this.$store.dispatch("syncContactIds", { dataName, idList });
-        } else {
-          console.error("Error occurs in syncContactIds with " + dataName);
+      };
+
+      const syncGroupJoined = async function() {
+        const groupIdsJoined = await queryHandler.getGroupIdsJoined();
+        if (groupIdsJoined) {
+          const groupDataJoined = await queryHandler.getGroups(groupIdsJoined);
+          updateData(groupDataJoined, Constant.IDB_USER_GROUP_JOINED);
+        }
+      };
+
+      const syncGroupInvited = async function() {
+        const groupIdsInvited = await queryHandler.getGroupIdsInvited();
+        if (groupIdsInvited) {
+          const groupDataInvited = await queryHandler.getGroups(
+            groupIdsInvited
+          );
+          updateData(groupDataInvited, Constant.IDB_USER_GROUP_INVITED);
+        }
+      };
+
+      if (status === true) return;
+      await Promise.all([syncContact(), syncGroupJoined(), syncGroupInvited()]);
+      await this.$store.state.idbUser.put(Constant.IDB_USER_SETTINGS, {
+        id: Constant.IDB_USER_KEY_SETTINGS_SYNC_STATUS,
+        value: true,
+      });
+    },
+    async fetchChatIdsHashed() {
+      for (let typeName of Constant.ALL_CONTACT_TYPES) {
+        let cursor = await this.$store.state.idbUser
+          .transaction(typeName)
+          .store.openCursor();
+        while (cursor) {
+          this.$store.commit("registerChatIdHashed", {
+            targetId: cursor.key,
+            idHashed: hash.sha256(cursor.key),
+          });
+          cursor = await cursor.continue();
         }
       }
-    },
-    async syncContactMetaData() {
-      // Sync Group Information
-      const groupIdLists = [
-        this.$store.state.groupJoinedIds,
-        this.$store.state.groupInvitedIds,
-      ];
-      const groupData = await this.client.getGroups([].concat(...groupIdLists));
-      this.$store.dispatch("syncContactMetaData", {
-        typeName: lineType.SyncCategory.GROUP,
-        data: groupData,
-      });
-      // Sync Contacts(User) Information
-      const contactIdLists = [this.$store.state.contactIds];
-      const contactData = await this.client.getContacts(
-        [].concat(...contactIdLists)
-      );
-      const allGroupMemberData = this.$store.state.allGroupMetaData.map(
-        (group) => (group.members != null ? group.members : [])
-      );
-      const allGroupInvitedData = this.$store.state.allGroupMetaData.map(
-        (group) => (group.invitee != null ? group.invitee : [])
-      );
-      this.$store.dispatch("syncContactMetaData", {
-        typeName: lineType.SyncCategory.CONTACT,
-        data: contactData.concat(...allGroupMemberData, ...allGroupInvitedData),
-      });
     },
     async opListener() {
       const opClient = lineClient(
@@ -152,7 +206,7 @@ export default {
           this.revision,
           Constant.FETCH_OP_NUM
         );
-        this.$store.dispatch("opHandler", operations);
+        this.opHandler(operations);
         await this.updateRevision(operations);
       } catch (e) {
         console.error(e);
@@ -160,15 +214,183 @@ export default {
       }
       this.longPoll(opClient);
     },
-    async revoke() {
+    async opHandler(operations) {
+      for (let operation of operations) {
+        switch (operation.type) {
+          case lineType.OpType.UPDATE_PROFILE: {
+            const data = await this.client.getProfile();
+            this.$store.commit("updateProfile", data);
+            break;
+          }
+          case lineType.OpType.ADD_CONTACT:
+          case lineType.OpType.UPDATE_CONTACT: {
+            const data = await this.client.getContact(operation.param1);
+            this.$store.state.idbUser.put(Constant.IDB_USER_CONTACT, data);
+            break;
+          }
+          case lineType.OpType.ACCEPT_GROUP_INVITATION: {
+            this.$store.state.idbUser.delete(
+              Constant.IDB_USER_GROUP_INVITED,
+              operation.param1
+            );
+            this.updateGroupInfo(operation.param1, true);
+            break;
+          }
+          case lineType.OpType.LEAVE_GROUP: {
+            this.clearMessageBox(operation.param1);
+            this.$store.commit(
+              "unregisterChatIdHashed",
+              hash.sha256(operation.param1)
+            );
+            this.$store.state.idbUser.delete(
+              Constant.IDB_USER_GROUP_JOINED,
+              operation.param1
+            );
+            break;
+          }
+          case lineType.OpType.NOTIFIED_CANCEL_INVITATION_GROUP: {
+            if (operation.param3.includes("\x1e")) {
+              operation.param3 = operation.param3
+                .split("\x1e")
+                .find((id) => id === this.$store.state.profile.userId);
+            }
+            if (operation.param3 == this.$store.state.profile.userId) {
+              this.$store.commit(
+                "unregisterChatIdHashed",
+                hash.sha256(operation.param1)
+              );
+              this.$store.state.idbUser.delete(
+                Constant.IDB_USER_GROUP_INVITED,
+                operation.param1
+              );
+            }
+            break;
+          }
+          case lineType.OpType.NOTIFIED_KICKOUT_FROM_GROUP:
+            if (operation.param3.includes("\x1e")) {
+              operation.param3 = operation.param3
+                .split("\x1e")
+                .find((id) => id === this.$store.state.profile.userId);
+            }
+            if (operation.param3 == this.$store.state.profile.userId) {
+              this.clearMessageBox(operation.param1);
+              this.$store.commit(
+                "unregisterChatIdHashed",
+                hash.sha256(operation.param1)
+              );
+              this.$store.state.idbUser.delete(
+                Constant.IDB_USER_GROUP_JOINED,
+                operation.param1
+              );
+            } else {
+              this.updateGroupInfo(operation.param1);
+            }
+            break;
+          case lineType.OpType.NOTIFIED_UPDATE_GROUP:
+          case lineType.OpType.NOTIFIED_INVITE_INTO_GROUP:
+          case lineType.OpType.NOTIFIED_ACCEPT_GROUP_INVITATION:
+          case lineType.OpType.NOTIFIED_LEAVE_GROUP:
+          case lineType.OpType.CREATE_GROUP:
+          case lineType.OpType.UPDATE_GROUP:
+          case lineType.OpType.CANCEL_INVITATION_GROUP:
+          case lineType.OpType.INVITE_INTO_GROUP:
+          case lineType.OpType.KICKOUT_FROM_GROUP:
+            this.updateGroupInfo(operation.param1);
+            break;
+          case lineType.OpType.SEND_MESSAGE:
+          case lineType.OpType.RECEIVE_MESSAGE:
+            // Add Target for index
+            operation.message.target = (function(obj, profileId) {
+              switch (obj.toType) {
+                case lineType.MIDType.USER:
+                  if (obj.from_ == profileId) {
+                    return obj.to;
+                  } else {
+                    return obj.from_;
+                  }
+                case lineType.MIDType.ROOM:
+                case lineType.MIDType.GROUP:
+                  return obj.to;
+              }
+            })(operation.message, this.$store.state.profile.userId);
+            // Uint8Array to String
+            operation.message.createdTime = operation.message.createdTime.toString();
+            operation.message.deliveredTime = operation.message.deliveredTime.toString();
+            this.$store.state.idbUser.put(
+              Constant.IDB_USER_PREVIEW_MESSAGE_BOX,
+              operation.message
+            );
+            this.$store.state.idbUser.put(
+              Constant.IDB_USER_MESSAGE_BOX,
+              operation.message
+            );
+            break;
+        }
+      }
+    },
+    async updateRevision(operations) {
+      const opLength = operations.length;
+      this.revision = operations[opLength - 1].revision.compare(
+        operations[opLength - 2].revision
+      )
+        ? operations[opLength - 2].revision
+        : operations[opLength - 1].revision;
+    },
+    async updateGroupInfo(groupId, accepted = false) {
+      const data = await this.client.getGroup(groupId);
+      if (
+        accepted ||
+        (await this.$store.state.idbUser.get(
+          Constant.IDB_USER_GROUP_JOINED,
+          data.id
+        ))
+      ) {
+        this.$store.state.idbUser.put(Constant.IDB_USER_GROUP_JOINED, data);
+      } else {
+        this.$store.state.idbUser.put(Constant.IDB_USER_GROUP_INVITED, data);
+        this.$store.commit("registerChatIdHashed", {
+          targetId: groupId,
+          idHashed: hash.sha256(groupId),
+        });
+      }
+    },
+    async clearMessageBox(targetId) {
+      this.$store.state.idbUser.delete(
+        Constant.IDB_USER_PREVIEW_MESSAGE_BOX,
+        targetId
+      );
+      let cursor = await this.$store.state.idbUser
+        .transaction(Constant.IDB_USER_MESSAGE_BOX, "readwrite")
+        .store.openCursor();
+      while (cursor) {
+        if (cursor.value.target == targetId) {
+          cursor.delete();
+        }
+        cursor = await cursor.continue();
+      }
+    },
+    async revoke(reset = false, idbOldVersion = -1) {
       Constant.ALL_COOKIES.forEach((name) => this.$cookies.remove(name));
       window.localStorage.clear();
       window.sessionStorage.clear();
+      if (reset) {
+        let idbNames = [];
+        if (idbOldVersion >= 3 || idbOldVersion == -1) {
+          const idbXia = this.$store.state.idbXia
+            ? this.$store.state.idbXia
+            : await this.setupDatabaseForXIA();
+          const allIdbUsers = await idbXia.getAllKeys(Constant.IDB_XIA_DB_LIST);
+          if (allIdbUsers.length > 0) {
+            idbNames = allIdbUsers.map((name) => `${Constant.NAME}_${name}`);
+            await idbXia.clear(Constant.IDB_XIA_DB_LIST);
+          }
+          console.log(allIdbUsers, idbNames);
+        } else if (idbOldVersion != 0) {
+          await deleteDB(Constant.NAME);
+        }
+        await Promise.all(idbNames.map((name) => deleteDB(name)));
+      }
       window.location.reload();
-    },
-    async reset() {
-      this.revoke();
-      await deleteDB(Constant.NAME);
     },
     async compress(rawString) {
       return new Promise((resolve, reject) =>
@@ -193,51 +415,26 @@ export default {
       );
     },
   },
+  computed: {
+    checkReady() {
+      return this.$store.state.ready;
+    },
+  },
   watch: {
     $route() {
       this.verifyAccess();
     },
-    async storageData(events) {
-      for (let index in events) {
-        let objs = events[index];
-        let alias = this.storageDataNamesAndHashes[index];
-        let nowHash = hash.sha256(objs);
-        if (nowHash !== alias[1]) {
-          let jsonString = JSON.stringify(objs);
-          let compressedString = await this.compress(jsonString);
-          window.localStorage.setItem(alias[0], compressedString);
-          alias[1] = nowHash;
-        }
-      }
-    },
-    messageBox(operations) {
-      operations.forEach((operation) => {
-        this.$store.state.indexedDB.put(
-          `${Constant.OBJECTSTORE_MESSAGEBOX_PREFIX}_${this.$store.state.profile.UserIdHashed}`,
-          operation.message
-        );
-        this.$store.commit("popMessageBox", operation);
-      });
-    },
     revision() {
-      this.$cookies.set(Constant.COOKIE_OP_REVISION, this.revision);
+      this.$store.state.idbUser.put(Constant.IDB_USER_SETTINGS, {
+        id: Constant.IDB_USER_KEY_SETTINGS_REVISION,
+        value: this.revision.toString(),
+      });
     },
   },
   data() {
     return {
       client: null,
       revision: 0,
-      messageBox: this.$store.state.messageBox,
-      storageData: [
-        this.$store.state.contactIds,
-        this.$store.state.groupJoinedIds,
-        this.$store.state.groupInvitedIds,
-      ],
-      storageDataNamesAndHashes: [
-        [Constant.STORAGE_CONTACT_IDS, ""],
-        [Constant.STORAGE_GROUP_JOINED_IDS, ""],
-        [Constant.STORAGE_GROUP_INVITED_IDS, ""],
-      ],
     };
   },
   async created() {
@@ -247,26 +444,9 @@ export default {
       this.client = lineClient(Constant.LINE_QUERY_PATH, authToken);
     }
     if (await this.verifyAccess()) {
-      const resetFunction = this.reset;
-      const userIdHashed = this.$store.state.profile.UserIdHashed;
-      this.$store.commit(
-        "registerIndexedDB",
-        await openDB(Constant.NAME, Constant.IDB_VERSION, {
-          upgrade(db, oldVersion) {
-            if (oldVersion === 1) {
-              resetFunction();
-              return;
-            }
-            // MessageBox
-            const store = db.createObjectStore(
-              `${Constant.OBJECTSTORE_MESSAGEBOX_PREFIX}_${userIdHashed}`,
-              { keyPath: "id" }
-            );
-            store.createIndex("target", "target");
-          },
-        })
-      );
+      await this.setupDatabases();
       await this.syncData();
+      await this.fetchChatIdsHashed();
       await this.syncRevision();
       this.opListener();
       this.$store.commit("setReady");
