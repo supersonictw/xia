@@ -28,7 +28,7 @@
             <p v-if="item.type == 1">
               <img :src="mediaObjects[item.id]" />
             </p>
-            <p v-else>{{ item.content }}</p>
+            <p v-else v-html="item.content"></p>
           </div>
         </div>
       </div>
@@ -212,6 +212,19 @@ export default {
       if (messageBoxElement)
         messageBoxElement.scroll(0, messageBoxElement.scrollHeight);
     },
+    escapeHtml(text) {
+      let map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;",
+      };
+
+      return text.replace(/[&<>"']/g, function(m) {
+        return map[m];
+      });
+    },
   },
   computed: {
     targetId() {
@@ -245,7 +258,7 @@ export default {
           id: message.id,
           type: layoutType,
           origin: message.from_,
-          content: layoutMessage,
+          content: this.escapeHtml(layoutMessage).replace(/\n/g, "<br />"),
         });
       });
       return layout;

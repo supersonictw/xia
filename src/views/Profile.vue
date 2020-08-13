@@ -16,7 +16,7 @@
       <img class="icon" v-else src="@/assets/logo.svg" />
       <h1 id="displayName">{{ displayName }}</h1>
       <div id="statusMessage-box">
-        <p id="statusMessage">{{ statusMessageWithLines }}</p>
+        <p id="statusMessage" v-html="statusMessageWithLinesAndEscaped"></p>
       </div>
     </div>
   </div>
@@ -47,10 +47,23 @@ export default {
       this.statusMessage = this.$store.state.profile.statusMessage;
       this.picturePath = this.$store.state.profile.picturePath;
     },
+    escapeHtml(text) {
+      let map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;",
+      };
+
+      return text.replace(/[&<>"']/g, function(m) {
+        return map[m];
+      });
+    },
   },
   computed: {
-    statusMessageWithLines() {
-      return this.statusMessage.replace(/\r\n/g, "<br />");
+    statusMessageWithLinesAndEscaped() {
+      return this.escapeHtml(this.statusMessage).replace(/\n/g, "<br />");
     },
   },
   data() {

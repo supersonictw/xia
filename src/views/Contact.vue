@@ -20,7 +20,7 @@
       <img class="icon" v-else src="@/assets/logo.svg" />
       <h1 id="displayName">{{ displayName }}</h1>
       <div id="statusMessage-box">
-        <p id="statusMessage">{{ statusMessage }}</p>
+        <p id="statusMessage" v-html="statusMessageWithLinesAndEscaped"></p>
       </div>
     </div>
     <div v-if="groupInviting" id="contact-buttons">
@@ -113,6 +113,19 @@ export default {
         );
       }
     },
+    escapeHtml(text) {
+      let map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;",
+      };
+
+      return text.replace(/[&<>"']/g, function(m) {
+        return map[m];
+      });
+    },
   },
   computed: {
     targetId() {
@@ -125,8 +138,8 @@ export default {
       this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
       return "";
     },
-    statusMessageWithLines() {
-      return this.statusMessage.replace(/\r\n/g, "<br />");
+    statusMessageWithLinesAndEscaped() {
+      return this.escapeHtml(this.statusMessage).replace(/\n/g, "<br />");
     },
   },
   props: ["targetIdHashed"],

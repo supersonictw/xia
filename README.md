@@ -4,7 +4,6 @@
 ![Python](https://img.shields.io/badge/Vue.js-2.x-00AA77.svg)
 ![Platform](https://img.shields.io/badge/base_on-LINE-00DD00.svg)
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/43e26ace-1f8b-4b5e-8bb0-4a0c136f1114/deploy-status)](https://app.netlify.com/sites/xia-demo/deploys)
 [![Build Status](https://scrutinizer-ci.com/g/supersonictw/xia/badges/build.png?b=master)](https://scrutinizer-ci.com/g/supersonictw/xia/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/supersonictw/xia/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/supersonictw/xia/?branch=master)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/supersonictw/xia.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/supersonictw/xia/alerts/)
@@ -29,8 +28,21 @@ The software is licensed under [Mozilla Public License v.2.0](LICENSE).
 
 ## Online Service
 
-The service is availabled and hosted by
-[![Netlify](netlify.svg)](https://xia-demo.netlify.app).
+[![Netlify Status](https://api.netlify.com/api/v1/badges/43e26ace-1f8b-4b5e-8bb0-4a0c136f1114/deploy-status)](https://app.netlify.com/sites/xia-demo/deploys)
+
+There is an online client available, which maintains by me, for anyone can use LINE though XIA on any browser.
+
+The Service URL: [https://tinyurl.com/line-online](https://tinyurl.com/line-online)
+
+The service is hosted by
+[![Netlify](netlify.svg)](https://www.netlify.com).
+
+## CORS Proxy
+
+`https://js-cors.starinc.xyz` is the proxy service that to resolve the [CORS Problem](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) while connecting to the LINE Server.
+
+The service provider is
+[![Star Inc.](starinc.jpg)](https://www.starinc.xyz)
 
 ## Build on yourself
 
