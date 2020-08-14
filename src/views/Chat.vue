@@ -32,9 +32,10 @@
           <div v-if="configureMsgBox(1, item)" class="contact">
             <img
               class="picture-icon"
-              v-if="chatRoomPicture"
+              v-if="getUserInfo(item.origin).pictureStatus"
               :src="`${mediaURL}/${getUserInfo(item.origin).pictureStatus}`"
             />
+            <img class="picture-icon" v-else src="@/assets/logo.svg" />
             <h3 v-if="item.origin != getMyUserId" class="name">
               {{ getUserInfo(item.origin).displayName }}
             </h3>
@@ -127,6 +128,12 @@ export default {
   },
   methods: {
     async fetchChatRoomInformation() {
+      if (this.targetId === -1) {
+        if (!this.$store.state.ready) {
+          this.$router.push({ name: Constant.ROUTER_TAG_DASHBOARD });
+          return false;
+        }
+      }
       if (this.targetId.startsWith("u")) {
         this.chatRoomInfo = await this.$store.state.idbUser.get(
           Constant.IDB_USER_CONTACT,
@@ -135,6 +142,7 @@ export default {
         this.chatRoomTitle = this.chatRoomInfo.displayName;
         this.chatRoomPicture = this.chatRoomInfo.pictureStatus;
         this.chatRoomType = lineType.MIDType.USER;
+        return true;
       } else if (this.targetId.startsWith("c")) {
         this.chatRoomInfo = await this.$store.state.idbUser.get(
           Constant.IDB_USER_GROUP_JOINED,
@@ -143,12 +151,12 @@ export default {
         this.chatRoomTitle = this.chatRoomInfo.name;
         this.chatRoomPicture = this.chatRoomInfo.pictureStatus;
         this.chatRoomType = lineType.MIDType.GROUP;
-      } else {
-        this.$router.replace({
-          name: Constant.ROUTER_TAG_ERROR,
-          params: { reason: "Unknown Chat Room type." },
-        });
+        return true;
       }
+      this.$router.replace({
+        name: Constant.ROUTER_TAG_ERROR,
+        params: { reason: "Unknown Chat Room type." },
+      });
     },
     configureMsgBox(queryType, message) {
       switch (queryType) {
@@ -381,8 +389,7 @@ export default {
   computed: {
     targetId() {
       if (!this.$store.state.ready) {
-        this.$router.replace({ name: Constant.ROUTER_TAG_DASHBOARD });
-        return "";
+        return -1;
       }
       if (this.$store.state.chatIdsHashed.has(this.targetIdHashed))
         return this.$store.state.chatIdsHashed.get(this.targetIdHashed);
@@ -443,8 +450,7 @@ export default {
     };
   },
   async mounted() {
-    await this.fetchChatRoomInformation();
-    this.fetchDisplayMessage();
+    if (await this.fetchChatRoomInformation()) this.fetchDisplayMessage();
   },
 };
 </script>
