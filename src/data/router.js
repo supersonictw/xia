@@ -21,6 +21,7 @@ import Profile from "@/views/Profile.vue";
 import Contact from "@/views/Contact.vue";
 import Chat from "@/views/Chat.vue";
 import About from "@/views/About.vue";
+import Redirect from "@/views/Redirect.vue";
 import ErrorPage from "@/views/Error.vue";
 import NotFound from "@/views/NotFound.vue";
 
@@ -63,6 +64,12 @@ const routes = [
     path: "/about",
     name: Constant.ROUTER_TAG_ABOUT,
     component: About,
+  },
+  {
+    path: "/redirect",
+    name: Constant.ROUTER_TAG_REDIRECT,
+    component: Redirect,
+    props: true,
   },
   {
     path: "/error",

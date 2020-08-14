@@ -25,6 +25,7 @@ export default {
   ROUTER_TAG_CONTACT: "Contact",
   ROUTER_TAG_CHAT: "Chat",
   ROUTER_TAG_ABOUT: "About",
+  ROUTER_TAG_REDIRECT: "Redirect",
   ROUTER_TAG_ERROR: "Error",
   ROUTER_TAG_NOT_FOUND: "Not Found",
   CORS_PROXY_HOST: "js-cors.starinc.xyz",

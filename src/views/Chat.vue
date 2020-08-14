@@ -130,7 +130,13 @@ export default {
     async fetchChatRoomInformation() {
       if (this.targetId === -1) {
         if (!this.$store.state.ready) {
-          this.$router.push({ name: Constant.ROUTER_TAG_DASHBOARD });
+          this.$router.replace({
+            name: Constant.ROUTER_TAG_REDIRECT,
+            params: {
+              next: Constant.ROUTER_TAG_CHAT,
+              data: { targetIdHashed: this.targetIdHashed },
+            },
+          });
           return false;
         }
       }
@@ -271,7 +277,11 @@ export default {
           });
           break;
         case 1:
-          if (fileList.length != 1) break;
+          if (
+            fileList.length != 1 ||
+            this.checkFileTypeForSendMessage(fileList[0].type) === -1
+          )
+            break;
           message = new lineType.Message({
             to: this.targetId,
             contentType: this.checkFileTypeForSendMessage(fileList[0].type),
