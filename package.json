@@ -16,7 +16,6 @@
     "node-bignumber": "^1.2.1",
     "node-int64": "^0.4.0",
     "thrift": "^0.11.0",
-    "unicode-substring": "^1.0.0",
     "utf8": "^3.0.0",
     "v-emoji-picker": "^2.2.0",
     "vue": "^2.6.11",

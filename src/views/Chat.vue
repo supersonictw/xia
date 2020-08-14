@@ -13,18 +13,33 @@
     <Back />
     <div id="chat">
       <div class="header">
-        <h2>{{ chatRoomTitle }}</h2>
+        <img
+          class="picture-icon"
+          v-if="chatRoomPicture"
+          :src="`${mediaURL}/${chatRoomPicture}`"
+        />
+        <img class="picture-icon" v-else src="@/assets/logo.svg" />
+        <div class="row-box">
+          <h2 class="text-box">{{ chatRoomTitle }}</h2>
+        </div>
       </div>
       <div id="msg-container">
         <div
-          :class="getOriginType(item)"
+          :class="`${configureMsgBox(0, item)} msg-box`"
           v-for="(item, itemId) in getMessages"
           :key="itemId"
         >
-          <h3 v-if="item.origin != getMyUserId" class="name">
-            {{ getUserInfo(item.origin).displayName }}
-          </h3>
-          <div class="content">
+          <div v-if="configureMsgBox(1, item)" class="contact">
+            <img
+              class="picture-icon"
+              v-if="chatRoomPicture"
+              :src="`${mediaURL}/${getUserInfo(item.origin).pictureStatus}`"
+            />
+            <h3 v-if="item.origin != getMyUserId" class="name">
+              {{ getUserInfo(item.origin).displayName }}
+            </h3>
+          </div>
+          <div :class="`${configureMsgBox(2, item)} content`">
             <p v-if="item.type == 1">
               <img :src="mediaObjects[item.id]" />
             </p>
@@ -33,11 +48,6 @@
         </div>
       </div>
       <div id="msg-input-box">
-        <VEmojiPicker
-          v-show="showEmojiBoxCheckpoint"
-          id="emoji-box"
-          @select="addEmoji"
-        />
         <a
           id="emoji-box-opener"
           title="Emoji"
@@ -48,12 +58,47 @@
             <img alt="Emoji" src="@/assets/icons/emoji.svg" />
           </div>
         </a>
+        <VEmojiPicker
+          v-show="showEmojiBoxCheckpoint"
+          id="emoji-box"
+          @select="addEmoji"
+        />
+        <div class="dropdown">
+          <div class="icon">
+            <img alt="Menu" src="@/assets/icons/append.svg" />
+          </div>
+          <div class="dropdown-content">
+            <a id="text" href="#" @click.prevent="updateInputType">
+              <img
+                class="dropdown-content-icon"
+                alt="Text"
+                src="@/assets/icons/emoji.svg"
+              />Text
+            </a>
+            <a id="image" href="#" @click.prevent="updateInputType">
+              <img
+                class="dropdown-content-icon"
+                alt="Image"
+                src="@/assets/icons/emoji.svg"
+              />Image
+            </a>
+          </div>
+        </div>
         <textarea
-          id="msg-input"
+          v-show="inputType == 0"
+          class="msg-input msg-input-text"
           v-model="inputText"
-          @keydown.enter.exact="sendTextMessage"
-        ></textarea>
-        <a title="Send" href="#" @click.prevent="sendTextMessage">
+          @keydown.enter.exact="sendMessage"
+        />
+        <input
+          v-show="inputType == 1"
+          ref="file"
+          type="file"
+          id="file-upload"
+          class="msg-input msg-input-div"
+          :disabled="checkUploadBox"
+        />
+        <a title="Send" href="#" @click.prevent="sendMessage">
           <div class="icon">
             <img alt="Send" src="@/assets/icons/send.svg" />
           </div>
@@ -88,6 +133,7 @@ export default {
           this.targetId
         );
         this.chatRoomTitle = this.chatRoomInfo.displayName;
+        this.chatRoomPicture = this.chatRoomInfo.pictureStatus;
         this.chatRoomType = lineType.MIDType.USER;
       } else if (this.targetId.startsWith("c")) {
         this.chatRoomInfo = await this.$store.state.idbUser.get(
@@ -95,16 +141,29 @@ export default {
           this.targetId
         );
         this.chatRoomTitle = this.chatRoomInfo.name;
+        this.chatRoomPicture = this.chatRoomInfo.pictureStatus;
         this.chatRoomType = lineType.MIDType.GROUP;
       } else {
-        this.$router.push({
+        this.$router.replace({
           name: Constant.ROUTER_TAG_ERROR,
           params: { reason: "Unknown Chat Room type." },
         });
       }
     },
-    getOriginType(message) {
-      return message.origin === this.getMyUserId ? "self" : "another";
+    configureMsgBox(queryType, message) {
+      switch (queryType) {
+        case 0:
+          return message.origin === this.getMyUserId ? "self" : "another";
+        case 1:
+          return (
+            message.origin != this.getMyUserId &&
+            this.chatRoomType != lineType.MIDType.USER
+          );
+        case 2:
+          return this.chatRoomType === lineType.MIDType.USER
+            ? "content-contact"
+            : "";
+      }
     },
     async fetchDisplayMessage() {
       if (!this.$store.state.ready)
@@ -151,9 +210,16 @@ export default {
       const stickerURL = `${Constant.LINE_STICKER_URL}/products/${stickerVersion}/${contentMetadata.STKPKGID}/${Constant.LINE_STICKER_PLATFORM}/stickers/${contentMetadata.STKID}.png`;
       this.$set(this.mediaObjects, messageId, stickerURL);
     },
-    async getImageResource(messageId) {
-      if (messageId in this.mediaObjects) return;
-      const imageURL = `${Constant.LINE_MEDIA_URL}/os/m/${messageId}`;
+    async getImageResource(messageId, messageOrigin) {
+      if (!messageId || messageId in this.mediaObjects) return;
+      if (this.getMyUserId == messageOrigin && this.checkUploadBox) {
+        return setTimeout(
+          (messageId, messageOrigin) =>
+            this.getImageResource(messageId, messageOrigin),
+          Constant.RETRY_TIMEOUT
+        );
+      }
+      const imageURL = `${this.mediaURL}/os/m/${messageId}`;
       const imageXHR = await this.downloadImage(imageURL);
       const imageB64 =
         "data:image/jpeg;base64," +
@@ -163,21 +229,107 @@ export default {
     showEmojiBox() {
       this.showEmojiBoxCheckpoint = !this.showEmojiBoxCheckpoint;
     },
+    updateInputType(e) {
+      switch (e.target.id) {
+        case "text":
+          this.inputType = 0;
+          break;
+        case "image":
+          this.inputType = 1;
+          break;
+      }
+    },
     addEmoji(emoji) {
       this.inputText += emoji.data;
     },
-    sendTextMessage() {
+    sendMessage() {
       this.moveToBottom();
-      if (this.inputText.length < 1) return;
-      this.client.sendMessage(
-        Constant.THRIFT_DEFAULT_SEQ,
-        new lineType.Message({
-          type: lineType.ContentType.NONE,
-          to: this.targetId,
-          text: this.inputText,
-        })
+      if (this.inputType == 0 && this.inputText.length < 1) return;
+      this.sendMessageProccess(
+        this.inputType,
+        this.inputText,
+        this.$refs.file.files
       );
       setTimeout(() => (this.inputText = ""), 100);
+    },
+    async sendMessageProccess(inputType, inputText, fileList) {
+      let message;
+      switch (inputType) {
+        case 0:
+          message = new lineType.Message({
+            to: this.targetId,
+            type: lineType.ContentType.NONE,
+            text: inputText,
+          });
+          break;
+        case 1:
+          if (fileList.length != 1) break;
+          message = new lineType.Message({
+            to: this.targetId,
+            contentType: this.checkFileTypeForSendMessage(fileList[0].type),
+            text: null,
+            contentPreview: null,
+            contentMetadata: {
+              FILE_NAME: fileList[0].name,
+              FILE_SIZE: fileList[0].size.toString(),
+            },
+          });
+          break;
+      }
+      if (!message) {
+        this.$router.replace({
+          name: Constant.ROUTER_TAG_ERROR,
+          params: { reason: "Something was wrong while send a message" },
+        });
+        return;
+      }
+      const response = await this.client.sendMessage(
+        Constant.THRIFT_DEFAULT_SEQ,
+        message
+      );
+      if (inputType == 1) this.uploadMessageAttached(response.id, fileList);
+    },
+    async uploadMessageAttached(messageId, fileList) {
+      if (fileList.length != 1) return;
+      let data = new FormData();
+      data.append(
+        "params",
+        JSON.stringify({
+          ver: "1.0",
+          oid: messageId,
+          size: fileList[0].size,
+          name: fileList[0].name,
+          type: Object.keys(lineType.ContentType)
+            .find(
+              (key) =>
+                lineType.ContentType[key] ==
+                this.checkFileTypeForSendMessage(fileList[0].type)
+            )
+            .toLowerCase(),
+        })
+      );
+      data.append("file", fileList[0]);
+      await axios(`${this.mediaURL}/talk/m/upload.nhn`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "X-Line-Access": this.$store.state.authToken,
+          "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY,
+        },
+        data,
+      });
+      this.$refs.file.value = null;
+    },
+    checkFileTypeForSendMessage(mime) {
+      switch (mime) {
+        case "image/png":
+        case "image/jpeg":
+          return lineType.ContentType.IMAGE;
+        case "image/mpeg4":
+          return lineType.ContentType.VIDEO;
+        default:
+          return -1;
+      }
     },
     getUserInfo(userId) {
       switch (this.chatRoomType) {
@@ -186,7 +338,7 @@ export default {
         case lineType.MIDType.GROUP:
           return this.chatRoomInfo.members.find((user) => user.mid == userId);
         default:
-          this.$router.push({
+          this.$router.replace({
             name: Constant.ROUTER_TAG_ERROR,
             params: { reason: "Contact Metadata not synchronized completely." },
           });
@@ -244,7 +396,7 @@ export default {
         let layoutMessage = "";
         switch (message.contentType) {
           case lineType.ContentType.IMAGE:
-            this.getImageResource(message.id);
+            this.getImageResource(message.id, message.from_);
             layoutType = lineType.ContentType.IMAGE;
             break;
           case lineType.ContentType.STICKER:
@@ -252,7 +404,9 @@ export default {
             layoutType = lineType.ContentType.IMAGE;
             break;
           default:
-            layoutMessage = message.text;
+            layoutMessage = message.text
+              ? message.text
+              : "[Couldn't display the message on XIA.]";
         }
         layout.push({
           id: message.id,
@@ -266,18 +420,25 @@ export default {
     getMyUserId() {
       return this.$store.state.profile.userId;
     },
+    checkUploadBox() {
+      if (this.$refs.file == undefined) return;
+      return this.$refs.file.value ? true : false;
+    },
   },
   props: ["targetIdHashed"],
   data() {
     return {
       chatRoomTitle: "Unknown",
+      chatRoomPicture: null,
       chatRoomType: 0,
       chatRoomInfo: {},
+      inputType: 0,
       inputText: "",
       messages: [],
       mediaObjects: {},
       messageIdLastSeen: null,
       showEmojiBoxCheckpoint: false,
+      mediaURL: Constant.LINE_MEDIA_URL,
       client: lineClient(Constant.LINE_QUERY_PATH, this.$store.state.authToken),
     };
   },
@@ -303,6 +464,7 @@ export default {
   height: 60px;
   display: flex;
   text-align: left;
+  margin-top: 10px;
 }
 
 .header h2 {
@@ -328,6 +490,51 @@ export default {
   text-align: left;
 }
 
+.row-box {
+  width: 75%;
+  height: auto;
+}
+
+.text-box {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.picture-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  margin: 5px;
+}
+
+.msg-box {
+  margin-bottom: 25px;
+}
+
+.contact h3 {
+  margin: 0;
+  margin-left: 65px;
+}
+
+.contact .picture-icon {
+  float: left;
+}
+
+.content {
+  width: auto;
+  height: auto;
+  margin-left: 60px;
+}
+
+.content-contact {
+  margin-left: 0px;
+}
+
+.content p {
+  margin: 5px;
+}
+
 .content img {
   max-width: 300px;
   max-height: 300px;
@@ -341,19 +548,33 @@ export default {
   margin: 0 auto;
 }
 
-#emoji-box {
+#emoji-box,
+#emoji-box-opener {
   margin-right: 1%;
 }
 
-#msg-input {
+.msg-input {
   width: 89%;
   height: 70px;
   margin-left: 1%;
   margin-right: 1%;
+}
+
+.msg-input-text {
   font-size: 15px;
   resize: none;
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 5px;
+}
+
+.msg-input-div {
+  text-align: center;
+  margin: 15px auto;
+}
+
+#file-upload {
+  width: 30%;
+  height: auto;
 }
 
 .icon {
@@ -374,7 +595,53 @@ export default {
   background: rgba(0, 0, 0, 0.1);
 }
 
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  text-align: left;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 10px;
+  text-decoration: none;
+  border-radius: 10px;
+  display: block;
+}
+
+.dropdown-content-icon {
+  width: auto;
+  height: 15px;
+  margin-right: 10px;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .icon {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
 @media screen and (max-width: 780px) {
+  #msg-input-box {
+    width: 100%;
+  }
+
   #emoji-box,
   #emoji-box-opener {
     display: none;

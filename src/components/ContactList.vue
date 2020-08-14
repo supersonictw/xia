@@ -38,9 +38,9 @@
             :src="`${mediaURL}/${item.pictureStatus}`"
           />
           <img class="picture-icon" v-else src="@/assets/logo.svg" />
-          <div>
-            <h3>{{ subDisplayName(item.displayName) }}</h3>
-            <p>{{ subStatusMessage(item.statusMessage) }}</p>
+          <div class="row-box">
+            <h3 class="text-box">{{ item.displayName }}</h3>
+            <p class="text-box">{{ item.statusMessage }}</p>
           </div>
         </div>
       </a>
@@ -52,7 +52,6 @@
 import Constant from "@/data/const.js";
 
 import hash from "js-sha256";
-import substring from "unicode-substring";
 
 export default {
   name: "ContactList",
@@ -164,24 +163,6 @@ export default {
       }
       return item.displayName;
     },
-    subDisplayName(displayName) {
-      return displayName.length < Constant.CONTACT_ROW_DISPLAY_NAME_LENGTH
-        ? displayName
-        : `${substring(
-            displayName,
-            0,
-            Constant.CONTACT_ROW_DISPLAY_NAME_LENGTH
-          )}...`;
-    },
-    subStatusMessage(statusMessage) {
-      return statusMessage.length < Constant.CONTACT_ROW_STATUS_MESSAGE_LENGTH
-        ? statusMessage
-        : `${substring(
-            statusMessage,
-            0,
-            Constant.CONTACT_ROW_STATUS_MESSAGE_LENGTH
-          )}...`;
-    },
   },
   computed: {
     contactGroup() {
@@ -256,7 +237,21 @@ a {
 .contact .picture-icon {
   width: 50px;
   height: 50px;
+  border-radius: 50px;
   margin-right: 10px;
+}
+
+.row-box {
+  width: 76%;
+  height: auto;
+}
+
+.text-box {
+  width: auto;
+  height: 20px !important;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .contact h3 {
@@ -273,9 +268,10 @@ a {
   margin: 5px auto;
 }
 
-.picture-icon {
-  width: 90px;
-  height: 90px;
-  border-radius: 90px;
+@media screen and (max-width: 780px) {
+  .row-box {
+    width: 70%;
+    height: auto;
+  }
 }
 </style>

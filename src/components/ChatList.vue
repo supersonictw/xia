@@ -23,9 +23,9 @@
             :src="`${mediaURL}/${item.pictureStatus}`"
           />
           <img class="picture-icon" v-else src="@/assets/logo.svg" />
-          <div>
-            <h3>{{ subDisplayTitle(item.displayName) }}</h3>
-            <p>{{ subLastMessage(item.lastMessage) }}</p>
+          <div class="row-box">
+            <h3 class="text-box">{{ item.displayName }}</h3>
+            <p class="text-box">{{ item.lastMessage }}</p>
           </div>
         </div>
       </a>
@@ -37,7 +37,6 @@
 import Constant from "@/data/const.js";
 
 import hash from "js-sha256";
-import substring from "unicode-substring";
 import int64 from "node-int64";
 
 import lineType from "@/computes/line/line_types.js";
@@ -59,18 +58,28 @@ export default {
             message.from_ == this.$store.state.profile.userId
               ? message.to
               : message.from_;
-          return await this.$store.state.idbUser.get(
+          let contactData = await this.$store.state.idbUser.get(
             Constant.IDB_USER_CONTACT,
             targetId
           );
+          if (!contactData) {
+            contactData = {};
+            contactData.displayName = "Unknown";
+          }
+          return contactData;
         }
         case lineType.MIDType.GROUP: {
           let groupData = await this.$store.state.idbUser.get(
             Constant.IDB_USER_GROUP_JOINED,
             message.to
           );
-          groupData.displayName = groupData.name;
-          delete groupData.name;
+          if (!groupData) {
+            groupData = {};
+            groupData.displayName = "Unknown";
+          } else {
+            groupData.displayName = groupData.name;
+            delete groupData.name;
+          }
           return groupData;
         }
         default:
@@ -129,18 +138,6 @@ export default {
         lastMessage,
       });
     },
-    subDisplayTitle(displayTitle) {
-      if (displayTitle == null) return;
-      return displayTitle.length < Constant.CHAT_ROW_TITLE_LENGTH
-        ? displayTitle
-        : `${substring(displayTitle, 0, Constant.CHAT_ROW_TITLE_LENGTH)}...`;
-    },
-    subLastMessage(lastMessage) {
-      if (lastMessage == null) return;
-      return lastMessage.length < Constant.CHAT_ROW_TEXT_LENGTH
-        ? lastMessage
-        : `${substring(lastMessage, 0, Constant.CHAT_ROW_TEXT_LENGTH)}...`;
-    },
   },
   computed: {
     getDisplayMessages() {
@@ -194,7 +191,19 @@ a {
 .contact .picture-icon {
   width: 50px;
   height: 50px;
+  border-radius: 50px;
   margin-right: 10px;
+}
+
+.row-box {
+  width: 420px;
+  height: auto;
+}
+
+.text-box {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .contact h3 {
@@ -211,9 +220,10 @@ a {
   margin: 0;
 }
 
-.picture-icon {
-  width: 90px;
-  height: 90px;
-  border-radius: 90px;
+@media screen and (max-width: 780px) {
+  .row-box {
+    width: 70%;
+    height: auto;
+  }
 }
 </style>

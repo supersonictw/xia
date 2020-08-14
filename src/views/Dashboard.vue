@@ -22,10 +22,10 @@
             />
             <img class="profile-icon" v-else src="@/assets/logo.svg" />
             <div>
-              <div id="profile-displayName">
-                <h3>{{ profileDisplayName }}</h3>
+              <div class="row-box">
+                <h3 class="text-box">{{ profileDisplayName }}</h3>
+                <p class="text-box">{{ profileStatusMessage }}</p>
               </div>
-              <p>{{ subStatusMessage(profileStatusMessage) }}</p>
             </div>
           </div>
         </router-link>
@@ -54,8 +54,6 @@ import ChatList from "@/components/ChatList.vue";
 
 import lineClient from "@/computes/line.js";
 
-import substring from "unicode-substring";
-
 export default {
   name: "Dashboard",
   components: {
@@ -77,16 +75,6 @@ export default {
       this.profileDisplayName = this.$store.state.profile.displayName;
       this.profileStatusMessage = this.$store.state.profile.statusMessage;
       this.profilePicturePath = this.$store.state.profile.picturePath;
-    },
-    subStatusMessage(statusMessage) {
-      return statusMessage.length <
-        Constant.DASHBOARD_PROFILE_STATUS_MESSAGE_LENGTH
-        ? statusMessage
-        : `${substring(
-            statusMessage,
-            0,
-            Constant.DASHBOARD_PROFILE_STATUS_MESSAGE_LENGTH
-          )}...`;
     },
     tabSwitcher() {
       const tabs = [this.tabName, this.tabSwitcherName];
@@ -161,13 +149,17 @@ export default {
   margin-right: 10px;
 }
 
-#profile #profile-displayName,
-#profile #profile-displayName h3 {
+.row-box {
   width: auto;
   height: 30px;
+}
+
+.text-box {
+  margin: 0;
   font-size: 20px;
   overflow: hidden;
-  margin: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #profile p {

@@ -70,6 +70,7 @@ export default {
         this.pictureStatus = userInfo.pictureStatus;
         this.contactType = lineType.MIDType.USER;
       } else if (this.targetId.startsWith("c")) {
+        let statusMessageArray = [];
         let groupInfo = await this.$store.state.idbUser.get(
           Constant.IDB_USER_GROUP_JOINED,
           this.targetId
@@ -80,14 +81,21 @@ export default {
             this.targetId
           );
           this.groupInviting = true;
-          groupInfo.statusMessage = `${Constant.GROUP_INVITING_ICON} This is a Group Invitation.`;
+          statusMessageArray.push(
+            `${Constant.GROUP_INVITING_ICON} This is a Group Invitation.\n`
+          );
         }
+        const membersCount = groupInfo.members ? groupInfo.members.length : 0;
+        const invitesCount = groupInfo.invitee ? groupInfo.invitee.length : 0;
+        statusMessageArray.push(
+          `Members: ${membersCount}\nInvites: ${invitesCount}`
+        );
         this.displayName = groupInfo.name;
-        this.statusMessage = groupInfo.statusMessage;
+        this.statusMessage = statusMessageArray.join("\n");
         this.pictureStatus = groupInfo.pictureStatus;
         this.contactType = lineType.MIDType.GROUP;
       } else {
-        this.$router.push({
+        this.$router.replace({
           name: Constant.ROUTER_TAG_ERROR,
           params: { reason: "Unknown Contact type." },
         });

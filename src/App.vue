@@ -78,14 +78,16 @@ export default {
       const resetFunction = this.revoke;
       const upgradeFunction = function(db, oldVersion) {
         // Remove the old data structure
-        if (oldVersion !== 0 && oldVersion < 3) {
+        if (oldVersion != 0 && oldVersion < 3) {
           resetFunction(true, oldVersion);
           return;
         }
-        // Databases List
-        db.createObjectStore(Constant.IDB_XIA_DB_LIST, {
-          keyPath: "id",
-        });
+        if (oldVersion === 0) {
+          // Databases List
+          db.createObjectStore(Constant.IDB_XIA_DB_LIST, {
+            keyPath: "id",
+          });
+        }
       };
       return openDB(Constant.NAME, Constant.IDB_XIA_VERSION, {
         upgrade: upgradeFunction,
@@ -384,7 +386,6 @@ export default {
             idbNames = allIdbUsers.map((name) => `${Constant.NAME}_${name}`);
             await idbXia.clear(Constant.IDB_XIA_DB_LIST);
           }
-          console.log(allIdbUsers, idbNames);
         } else if (idbOldVersion != 0) {
           await deleteDB(Constant.NAME);
         }
