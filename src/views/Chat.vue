@@ -99,7 +99,12 @@
           class="msg-input msg-input-div"
           :disabled="checkUploadBox"
         />
-        <a title="Send" href="#" @click.prevent="sendMessage">
+        <a
+          title="Send"
+          href="#"
+          @click.prevent="sendMessage"
+          :disabled="checkUploadBox"
+        >
           <div class="icon">
             <img alt="Send" src="@/assets/icons/send.svg" />
           </div>
@@ -118,7 +123,7 @@ import axios from "axios";
 import VEmojiPicker from "v-emoji-picker";
 
 import lineClient from "@/computes/line.js";
-import lineType from "@/computes/line/line_types.js";
+import lineType from "@/computes/line_types.js";
 
 export default {
   name: "Chat",

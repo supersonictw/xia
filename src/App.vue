@@ -26,7 +26,7 @@
 import Constant from "./data/const.js";
 
 import lineClient from "@/computes/line.js";
-import lineType from "@/computes/line/line_types.js";
+import lineType from "@/computes/line_types.js";
 
 import { openDB, deleteDB } from "idb";
 import hash from "js-sha256";

@@ -13,7 +13,7 @@ require("error-polyfill");
 
 import thrift from "thrift";
 import Constant from "@/data/const.js";
-import talkService from "@/computes/line/TalkService.js";
+import talkService from "@/computes/TalkService.js";
 
 const lineClient = function(path, authToken = null) {
   const header = {
