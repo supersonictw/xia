@@ -65,22 +65,27 @@
           @select="addEmoji"
         />
         <div class="dropdown">
-          <div class="icon">
-            <img alt="Menu" src="@/assets/icons/append.svg" />
+          <div title="Attach" class="icon">
+            <img alt="Attach" src="@/assets/icons/append.svg" />
           </div>
           <div class="dropdown-content">
-            <a id="text" href="#" @click.prevent="updateInputType">
+            <a id="text" title="Text" href="#" @click.prevent="updateInputType">
               <img
                 class="dropdown-content-icon"
                 alt="Text"
-                src="@/assets/icons/emoji.svg"
+                src="@/assets/icons/text.svg"
               />Text
             </a>
-            <a id="image" href="#" @click.prevent="updateInputType">
+            <a
+              id="image"
+              title="Image"
+              href="#"
+              @click.prevent="updateInputType"
+            >
               <img
                 class="dropdown-content-icon"
                 alt="Image"
-                src="@/assets/icons/emoji.svg"
+                src="@/assets/icons/image.svg"
               />Image
             </a>
           </div>
@@ -269,7 +274,7 @@ export default {
         this.inputText,
         this.$refs.file.files
       );
-      setTimeout(() => (this.inputText = ""), 100);
+      setTimeout(() => (this.inputText = ""), Constant.WAIT_TIMEOUT);
     },
     async sendMessageProccess(inputType, inputText, fileList) {
       let message;
@@ -368,13 +373,12 @@ export default {
       }
     },
     sendReadTag(messageId) {
-      const messageBoxElement = document.getElementById("msg-container");
+      const element = document.getElementById("msg-container");
       if (
-        messageBoxElement &&
-        messageBoxElement.scrollTop + messageBoxElement.clientHeight ==
-          messageBoxElement.scrollHeight
+        element &&
+        element.scrollTop + element.clientHeight == element.scrollHeight
       ) {
-        setTimeout(this.moveToBottom, 100);
+        setTimeout(this.moveToBottom, Constant.WAIT_TIMEOUT);
       }
       this.client.sendChatChecked(
         Constant.THRIFT_DEFAULT_SEQ,
@@ -383,9 +387,8 @@ export default {
       );
     },
     moveToBottom() {
-      const messageBoxElement = document.getElementById("msg-container");
-      if (messageBoxElement)
-        messageBoxElement.scroll(0, messageBoxElement.scrollHeight);
+      const element = document.getElementById("msg-container");
+      if (element) element.scroll(0, element.scrollHeight);
     },
     escapeHtml(text) {
       let map = {
@@ -602,6 +605,7 @@ export default {
   width: 50px;
   height: 50px;
   padding: 10px;
+  cursor: pointer;
   border: 1px solid #999;
   border-radius: 50px;
   background: rgba(0, 0, 0, 0);

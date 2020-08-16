@@ -20,6 +20,7 @@
     "v-emoji-picker": "^2.2.0",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.2",
+    "vue-image-crop-upload": "^2.5.0",
     "vue-router": "^3.3.4",
     "vuex": "^3.5.1"
   },

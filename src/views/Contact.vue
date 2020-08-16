@@ -60,6 +60,18 @@ export default {
   },
   methods: {
     async fetchContactProfile() {
+      if (this.targetId === -1) {
+        if (!this.$store.state.ready) {
+          this.$router.replace({
+            name: Constant.ROUTER_TAG_REDIRECT,
+            params: {
+              next: Constant.ROUTER_TAG_CONTACT,
+              data: { targetIdHashed: this.targetIdHashed },
+            },
+          });
+          return false;
+        }
+      }
       if (this.targetId.startsWith("u")) {
         const userInfo = await this.$store.state.idbUser.get(
           Constant.IDB_USER_CONTACT,
@@ -138,8 +150,7 @@ export default {
   computed: {
     targetId() {
       if (!this.$store.state.ready) {
-        this.$router.replace({ name: Constant.ROUTER_TAG_DASHBOARD });
-        return "";
+        return -1;
       }
       if (this.$store.state.chatIdsHashed.has(this.targetIdHashed))
         return this.$store.state.chatIdsHashed.get(this.targetIdHashed);
@@ -225,12 +236,6 @@ export default {
 .contact-button:active {
   color: rgb(255, 255, 255);
   background: rgba(150, 155, 150, 0.5);
-}
-
-.contact-button-icon {
-  width: 35px;
-  height: 35px;
-  padding-top: 13px;
 }
 
 @media screen and (max-width: 780px) {

@@ -30,7 +30,6 @@ import lineType from "@/computes/line_types.js";
 
 import { openDB, deleteDB } from "idb";
 import hash from "js-sha256";
-import zlib from "zlib";
 
 export default {
   name: Constant.NAME,
@@ -392,28 +391,6 @@ export default {
         await Promise.all(idbNames.map((name) => deleteDB(name)));
       }
       window.location.reload();
-    },
-    async compress(rawString) {
-      return new Promise((resolve, reject) =>
-        zlib.gzip(rawString, function(error, result) {
-          if (!error) {
-            resolve(new Buffer(result).toString("base64"));
-          } else {
-            reject(Error(error));
-          }
-        })
-      );
-    },
-    async decompress(b64String) {
-      return new Promise((resolve, reject) =>
-        zlib.gunzip(new Buffer(b64String, "base64"), function(error, result) {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(Error(error));
-          }
-        })
-      );
     },
   },
   computed: {

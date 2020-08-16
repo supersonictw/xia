@@ -19,6 +19,36 @@
         <p id="statusMessage" v-html="statusMessageWithLinesAndEscaped"></p>
       </div>
     </div>
+    <div id="contact-buttons">
+      <div class="dropdown">
+        <div title="Create" class="contact-button">
+          <img alt="Create" src="@/assets/icons/append.svg" />
+        </div>
+        <div class="dropdown-content">
+          <a id="group" title="Group" href="#" @click.prevent="enterCreate">
+            <img
+              class="dropdown-content-icon"
+              alt="Group"
+              src="@/assets/icons/group.svg"
+            />Group
+          </a>
+          <!-- 
+          <a id="room" title="Room" href="#" @click.prevent="enterCreate">
+            <img
+              class="dropdown-content-icon"
+              alt="Room"
+              src="@/assets/icons/room.svg"
+            />Room
+          </a>
+          -->
+        </div>
+      </div>
+      <!-- 
+      <router-link title="Settings" class="contact-button" to="/settings">
+        <img alt="Settings" class="icon" src="@/assets/icons/settings.svg" />
+      </router-link>
+      -->
+    </div>
   </div>
 </template>
 
@@ -33,19 +63,25 @@ export default {
     Back,
   },
   methods: {
-    async waitForUpdateProfile() {
+    async waitForFetchProfile() {
       setTimeout(() => {
         if (this.$store.state.ready) {
-          this.updateProfile();
+          this.fetchProfile();
         } else {
-          this.waitForUpdateProfile();
+          this.waitForFetchProfile();
         }
       }, Constant.RETRY_TIMEOUT);
     },
-    updateProfile() {
+    fetchProfile() {
       this.displayName = this.$store.state.profile.displayName;
       this.statusMessage = this.$store.state.profile.statusMessage;
       this.picturePath = this.$store.state.profile.picturePath;
+    },
+    enterCreate(e) {
+      this.$router.push({
+        name: Constant.ROUTER_TAG_CREATE,
+        params: { type: e.target.id },
+      });
     },
     escapeHtml(text) {
       let map = {
@@ -75,7 +111,7 @@ export default {
     };
   },
   created() {
-    this.waitForUpdateProfile();
+    this.waitForFetchProfile();
   },
 };
 </script>
@@ -110,6 +146,83 @@ export default {
   max-width: 100%;
   height: 150px;
   overflow: scroll;
+}
+
+#contact-buttons {
+  display: flex;
+  justify-content: center;
+  width: 60%;
+  height: 60px;
+  margin: 10px auto;
+}
+
+.contact-button {
+  width: 35px;
+  height: 35px;
+  margin: 10px;
+  margin-bottom: 0px;
+  padding: 15px;
+  cursor: pointer;
+  border: 1px solid #999;
+  border-radius: 60px;
+  background: rgba(0, 0, 0, 0);
+}
+
+.contact-button:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.contact-button:active {
+  color: rgb(255, 255, 255);
+  background: rgba(150, 155, 150, 0.5);
+}
+
+.contact-button-icon {
+  width: 35px;
+  height: 35px;
+  padding-top: 13px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  text-align: left;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 10px;
+  text-decoration: none;
+  border-radius: 10px;
+  display: block;
+}
+
+.dropdown-content-icon {
+  width: auto;
+  height: 15px;
+  margin-right: 10px;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .icon {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 @media screen and (max-width: 780px) {

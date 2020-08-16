@@ -62,16 +62,16 @@ export default {
     ChatList,
   },
   methods: {
-    async waitForUpdateProfile() {
+    async waitForFetchProfile() {
       setTimeout(() => {
         if (this.$store.state.ready) {
-          this.updateProfile();
+          this.fetchProfile();
         } else {
-          this.waitForUpdateProfile();
+          this.waitForFetchProfile();
         }
       }, Constant.RETRY_TIMEOUT);
     },
-    updateProfile() {
+    fetchProfile() {
       this.profileDisplayName = this.$store.state.profile.displayName;
       this.profileStatusMessage = this.$store.state.profile.statusMessage;
       this.profilePicturePath = this.$store.state.profile.picturePath;
@@ -100,7 +100,7 @@ export default {
   },
   created() {
     window.addEventListener("resize", this.mobileUIhandler);
-    this.waitForUpdateProfile();
+    this.waitForFetchProfile();
   },
   destroyed() {
     window.removeEventListener("resize", this.mobileUIhandler);

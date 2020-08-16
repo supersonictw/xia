@@ -20,6 +20,8 @@ import Dashboard from "@/views/Dashboard.vue";
 import Profile from "@/views/Profile.vue";
 import Contact from "@/views/Contact.vue";
 import Chat from "@/views/Chat.vue";
+import Create from "@/views/Create.vue";
+import Settings from "@/views/Settings.vue";
 import About from "@/views/About.vue";
 import Redirect from "@/views/Redirect.vue";
 import ErrorPage from "@/views/Error.vue";
@@ -59,6 +61,17 @@ const routes = [
     name: Constant.ROUTER_TAG_CHAT,
     component: Chat,
     props: true,
+  },
+  {
+    path: "/create/:type",
+    name: Constant.ROUTER_TAG_CREATE,
+    component: Create,
+    props: true,
+  },
+  {
+    path: "/settings",
+    name: Constant.ROUTER_TAG_SETTINGS,
+    component: Settings,
   },
   {
     path: "/about",
