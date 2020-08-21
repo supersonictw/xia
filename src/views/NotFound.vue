@@ -10,7 +10,7 @@
 
 <template>
   <div class="container">
-    <h2 class="pt-3">404</h2>
+    <h2>404</h2>
     <p>The page you request is not exists.</p>
     <router-link to="/">Go to Index</router-link>
   </div>

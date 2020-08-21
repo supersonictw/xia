@@ -331,11 +331,11 @@ export default {
     },
     async updateRevision(operations) {
       const opLength = operations.length;
-      this.revision = operations[opLength - 1].revision.compare(
-        operations[opLength - 2].revision
-      )
-        ? operations[opLength - 2].revision
-        : operations[opLength - 1].revision;
+      if (opLength === 0) return;
+      if (opLength === 1) return (this.revision = operations[0].revision);
+      const latestRev = operations[opLength - 1].revision;
+      const secondRev = operations[opLength - 2].revision;
+      this.revision = latestRev.compare(secondRev) ? secondRev : latestRev;
     },
     async updateGroupInfo(groupId, accepted = false) {
       const data = await this.client.getGroup(groupId);

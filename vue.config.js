@@ -10,6 +10,14 @@
 */
 
 module.exports = {
+    pages: {
+        index: {
+            title: 'XIA',
+            entry: 'src/main.js',
+            template: 'public/index.html',
+            filename: 'index.html',
+        }
+    },
     devServer: {
         disableHostCheck: true
     }

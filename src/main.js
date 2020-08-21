@@ -9,6 +9,17 @@
   (c) 2020 SuperSonic. (https://github.com/supersonictw)
 */
 
+// Redirect for XIA - Demo
+if (window.location.hostname == "xia-demo.netlify.app") {
+  window.location.href = "https://xia.randychen.tk";
+}
+
+// Open external browser while user using LINE IAB
+if (/Line/.test(navigator.userAgent)) {
+  const url = window.location.href.split("#")[0];
+  location.href = url + "?openExternalBrowser=1";
+}
+
 // Vue
 import Vue from "vue";
 

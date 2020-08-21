@@ -10,26 +10,10 @@
 
 <template>
   <div class="container">
-    <h2>Internal Error</h2>
-    <p>Reason: {{ getErrorReason }}</p>
-    <router-link to="/">Go to Index</router-link>
+    <h2>Unavailable</h2>
+    <p>The option is unavailable that it isn't finished.</p>
   </div>
 </template>
-
-<script>
-export default {
-  name: "Error",
-  props: ["reason"],
-  computed: {
-    getErrorReason() {
-      if (this.reason) {
-        return this.reason;
-      }
-      return "Unknown";
-    },
-  },
-};
-</script>
 
 <style scoped>
 .container {

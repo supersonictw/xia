@@ -43,11 +43,9 @@
           -->
         </div>
       </div>
-      <!-- 
       <router-link title="Settings" class="contact-button" to="/settings">
         <img alt="Settings" class="icon" src="@/assets/icons/settings.svg" />
       </router-link>
-      -->
     </div>
   </div>
 </template>

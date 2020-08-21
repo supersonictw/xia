@@ -14,6 +14,8 @@ import VueRouter from "vue-router";
 
 import Constant from "@/data/const.js";
 
+import SettingsRouter from "@/data/settings-router.js";
+
 import Introducing from "@/views/Introducing.vue";
 import Login from "@/views/Login.vue";
 import Dashboard from "@/views/Dashboard.vue";
@@ -21,7 +23,7 @@ import Profile from "@/views/Profile.vue";
 import Contact from "@/views/Contact.vue";
 import Chat from "@/views/Chat.vue";
 import Create from "@/views/Create.vue";
-import Settings from "@/views/Settings.vue";
+import SettingsDisplay from "@/views/SettingsDisplay.vue";
 import About from "@/views/About.vue";
 import Redirect from "@/views/Redirect.vue";
 import ErrorPage from "@/views/Error.vue";
@@ -70,8 +72,8 @@ const routes = [
   },
   {
     path: "/settings",
-    name: Constant.ROUTER_TAG_SETTINGS,
-    component: Settings,
+    component: SettingsDisplay,
+    children: SettingsRouter,
   },
   {
     path: "/about",

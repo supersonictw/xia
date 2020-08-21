@@ -194,18 +194,25 @@ export default {
         setTimeout(this.fetchDisplayMessage, Constant.RETRY_TIMEOUT);
       let cursor = await this.$store.state.idbUser
         .transaction(Constant.IDB_USER_MESSAGE_BOX)
-        .store.openCursor();
+        .store.openCursor(null, "prev");
       while (cursor) {
         if (cursor.value.target == this.targetId) {
-          if (this.messages.length > Constant.CHAT_DISPLAY_ROW_LITMIT)
+          if (this.messages.length > Constant.CHAT_DISPLAY_ROW_LITMIT) {
+            this.initial = true;
             this.messages.shift();
-          if (
-            !this.messageIdLastSeen ||
-            parseInt(this.messageIdLastSeen) < parseInt(cursor.value.id)
-          ) {
+          }
+          if (!this.initial) {
+            if (this.initial === null) {
+              this.messageIdLastSeen = cursor.value.id;
+              this.initial = false;
+            }
+            this.messages.splice(0, 0, cursor.value);
+            this.moveToBottom(true);
+          } else if (cursor.value.id > this.messageIdLastSeen) {
             this.messages.push(cursor.value);
             this.messageIdLastSeen = cursor.value.id;
-            this.sendReadTag(cursor.value.id);
+            this.moveToBottom(true);
+            this.sendReadTag();
           }
         }
         cursor = await cursor.continue();
@@ -373,22 +380,24 @@ export default {
       }
     },
     sendReadTag(messageId) {
-      const element = document.getElementById("msg-container");
-      if (
-        element &&
-        element.scrollTop + element.clientHeight == element.scrollHeight
-      ) {
-        setTimeout(this.moveToBottom, Constant.WAIT_TIMEOUT);
-      }
       this.client.sendChatChecked(
         Constant.THRIFT_DEFAULT_SEQ,
         this.targetId,
         messageId
       );
     },
-    moveToBottom() {
+    moveToBottom(autoScroll = false) {
       const element = document.getElementById("msg-container");
-      if (element) element.scroll(0, element.scrollHeight);
+      if (element) {
+        if (
+          autoScroll &&
+          element.scrollTop + element.clientHeight == element.scrollHeight
+        ) {
+          setTimeout(this.moveToBottom, Constant.WAIT_TIMEOUT);
+        } else {
+          element.scroll(0, element.scrollHeight);
+        }
+      }
     },
     escapeHtml(text) {
       let map = {
@@ -453,6 +462,7 @@ export default {
   props: ["targetIdHashed"],
   data() {
     return {
+      initial: null,
       chatRoomTitle: "Unknown",
       chatRoomPicture: null,
       chatRoomType: 0,

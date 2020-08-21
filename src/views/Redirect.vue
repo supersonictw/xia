@@ -10,7 +10,7 @@
 
 <template>
   <div class="container">
-    <h2 class="pt-3">Redirecting...</h2>
+    <h2>Redirecting...</h2>
     <p>The page will lead you to the page that you hoped.</p>
   </div>
 </template>
@@ -35,6 +35,7 @@ export default {
   },
   mounted() {
     if (this.next) this.waitForGoToNextPage();
+    else this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
   },
 };
 </script>

@@ -89,9 +89,12 @@ export default {
         .transaction(Constant.IDB_USER_CONTACT)
         .store.openCursor();
       while (cursor) {
-        cursor.value.id = hash.sha256(cursor.value.mid);
-        delete cursor.value.mid;
-        this.contactUser.push(cursor.value);
+        this.contactUser.push({
+          id: hash.sha256(cursor.value.mid),
+          displayName: cursor.value.displayName,
+          statusMessage: cursor.value.statusMessage,
+          pictureStatus: cursor.value.pictureStatus,
+        });
         cursor = await cursor.continue();
       }
       this.sortDataByName(this.contactUser);
@@ -110,11 +113,12 @@ export default {
         .transaction(Constant.IDB_USER_GROUP_JOINED)
         .store.openCursor();
       while (cursor) {
-        cursor.value.id = hash.sha256(cursor.value.id);
-        cursor.value.displayName = cursor.value.name;
-        delete cursor.value.name;
-        cursor.value.statusMessage = this.layoutGroupStatus(cursor.value);
-        this.contactGroupJoined.push(cursor.value);
+        this.contactGroupJoined.push({
+          id: hash.sha256(cursor.value.id),
+          displayName: cursor.value.name,
+          statusMessage: this.layoutGroupStatus(cursor.value),
+          pictureStatus: cursor.value.pictureStatus,
+        });
         cursor = await cursor.continue();
       }
       this.sortDataByName(this.contactGroupJoined);
@@ -124,11 +128,12 @@ export default {
         .transaction(Constant.IDB_USER_GROUP_INVITED)
         .store.openCursor();
       while (cursor) {
-        cursor.value.id = hash.sha256(cursor.value.id);
-        cursor.value.displayName = cursor.value.name;
-        delete cursor.value.name;
-        cursor.value.statusMessage = this.layoutGroupStatus(cursor.value, true);
-        this.contactGroupInvited.push(cursor.value);
+        this.contactGroupInvited.push({
+          id: hash.sha256(cursor.value.id),
+          displayName: cursor.value.name,
+          statusMessage: this.layoutGroupStatus(cursor.value),
+          pictureStatus: cursor.value.pictureStatus,
+        });
         cursor = await cursor.continue();
       }
       this.sortDataByName(this.contactGroupInvited);

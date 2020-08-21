@@ -263,12 +263,16 @@ export default {
       }
       return new File([u8arr], filename, { type: mime });
     },
+    async mobileUIhandler(e) {
+      this.mobileUI = e.target.innerWidth < Constant.MOBILE_UI_WIDTH;
+    },
   },
   computed: {
     displayList() {
-      return this.contacts.filter((obj) =>
-        obj.displayName.includes(this.filterName)
-      );
+      return this.contacts.filter((obj) => {
+        const item = obj.displayName.toLowerCase();
+        return item.includes(this.filterName.toLowerCase());
+      });
     },
     setPictureAbled() {
       return this.createType == lineType.MIDType.GROUP;
@@ -292,7 +296,11 @@ export default {
       filterName: "",
       displayContactValue: false,
       mediaURL: Constant.LINE_MEDIA_URL,
+      mobileUI: window.innerWidth < Constant.MOBILE_UI_WIDTH,
     };
+  },
+  created() {
+    window.addEventListener("resize", this.mobileUIhandler);
   },
   mounted() {
     if (this.type) {
@@ -309,6 +317,9 @@ export default {
       return;
     }
     this.waitForFetchData();
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.mobileUIhandler);
   },
 };
 </script>
