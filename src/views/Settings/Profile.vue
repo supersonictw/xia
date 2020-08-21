@@ -94,7 +94,7 @@ export default {
       profile.displayName = this.displayName;
       profile.statusMessage = this.statusMessage;
       await client.updateProfile(Constant.THRIFT_DEFAULT_SEQ, profile);
-      this.$router.push({ name: Constant.ROUTER_TAG_SETTINGS_OVERVIEW });
+      this.$router.replace({ name: Constant.ROUTER_TAG_SETTINGS_OVERVIEW });
     },
   },
   computed: {
