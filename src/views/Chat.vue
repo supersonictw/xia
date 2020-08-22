@@ -211,7 +211,7 @@ export default {
             this.messages.push(cursor.value);
             this.messageIdLastSeen = cursor.value.id;
             this.moveToBottom(true);
-            this.sendReadTag();
+            this.sendReadTag(cursor.value.id);
           }
         }
         cursor = await cursor.continue();

@@ -23,7 +23,7 @@
         <p id="statusMessage" v-html="statusMessageWithLinesAndEscaped"></p>
       </div>
     </div>
-    <div v-if="groupInviting" id="contact-buttons">
+    <div v-if="groupInviting" class="contact-buttons">
       <a title="Accept" href="#" @click.prevent="replyGroupInvitation(true)">
         <div class="contact-button">
           <img class="icon" src="@/assets/icons/accept.svg" />
@@ -35,7 +35,7 @@
         </div>
       </a>
     </div>
-    <div v-else id="contact-buttons">
+    <div v-else class="contact-buttons">
       <a title="Chat" href="#" @click.prevent="enterChat">
         <div class="contact-button">
           <img class="icon" src="@/assets/icons/chat.svg" />
@@ -211,7 +211,7 @@ export default {
   overflow: scroll;
 }
 
-#contact-buttons {
+.contact-buttons {
   display: flex;
   justify-content: center;
   width: 60%;

@@ -172,7 +172,6 @@ export default {
           );
           const accessKey = certificateResponse.data;
           const verifyClient = lineClient(Constant.LINE_LOGIN_PATH);
-          verifyClient.setHeader;
           const verifyRequest = new lineType.LoginRequest({
             type: lineType.LoginType.QRCODE,
             identityProvider: lineType.IdentityProvider.LINE,
