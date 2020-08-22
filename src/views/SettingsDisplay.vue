@@ -42,7 +42,7 @@ a {
   text-align: left;
   justify-content: center;
   width: 800px;
-  margin: 0 auto;
+  margin: 10px auto;
 }
 
 .card {
@@ -52,5 +52,15 @@ a {
   padding: 25px;
   border: 1px solid;
   border-radius: 10px;
+}
+
+@media screen and (max-width: 780px) {
+  #settings {
+    width: auto;
+  }
+
+  .card {
+    width: 70%;
+  }
 }
 </style>

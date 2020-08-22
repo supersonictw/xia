@@ -75,7 +75,7 @@ export default {
     },
     async setupDatabaseForXIA() {
       const resetFunction = this.revoke;
-      const upgradeFunction = function(db, oldVersion) {
+      const upgradeFunction = function (db, oldVersion) {
         // Remove the old data structure
         if (oldVersion != 0 && oldVersion < 3) {
           resetFunction(true, oldVersion);
@@ -147,7 +147,7 @@ export default {
           this.$store.state.idbUser.put(dataName, metadata)
         );
 
-      const syncContact = async function() {
+      const syncContact = async function () {
         const contactIds = await queryHandler.getAllContactIds();
         if (contactIds) {
           const contactData = await queryHandler.getContacts(contactIds);
@@ -155,7 +155,7 @@ export default {
         }
       };
 
-      const syncGroupJoined = async function() {
+      const syncGroupJoined = async function () {
         const groupIdsJoined = await queryHandler.getGroupIdsJoined();
         if (groupIdsJoined) {
           const groupDataJoined = await queryHandler.getGroups(groupIdsJoined);
@@ -163,7 +163,7 @@ export default {
         }
       };
 
-      const syncGroupInvited = async function() {
+      const syncGroupInvited = async function () {
         const groupIdsInvited = await queryHandler.getGroupIdsInvited();
         if (groupIdsInvited) {
           const groupDataInvited = await queryHandler.getGroups(
@@ -173,7 +173,7 @@ export default {
         }
       };
 
-      if (status.value === true) return;
+      if (status && status.value === true) return;
       await Promise.all([syncContact(), syncGroupJoined(), syncGroupInvited()]);
       await this.$store.state.idbUser.put(Constant.IDB_USER_SETTINGS, {
         id: Constant.IDB_USER_KEY_SETTINGS_SYNC_STATUS,
@@ -301,7 +301,7 @@ export default {
           case lineType.OpType.SEND_MESSAGE:
           case lineType.OpType.RECEIVE_MESSAGE:
             // Add Target for index
-            operation.message.target = (function(obj, profileId) {
+            operation.message.target = (function (obj, profileId) {
               switch (obj.toType) {
                 case lineType.MIDType.USER:
                   if (obj.from_ == profileId) {

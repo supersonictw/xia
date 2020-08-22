@@ -12,7 +12,10 @@
   <div class="view">
     <Back />
     <div id="create">
-      <div class="card">
+      <div
+        v-show="!mobileUI || (mobileUI && !displayContactValue)"
+        class="card"
+      >
         <div id="header">
           <div v-if="setPictureAbled">
             <img
@@ -111,6 +114,11 @@
               </div>
             </a>
           </div>
+        </div>
+        <div v-if="mobileUI" id="contact-list-footer">
+          <a href="#" @click.prevent="displayContact">
+            <img class="picture-icon" src="@/assets/icons/append.svg" />
+          </a>
         </div>
       </div>
     </div>
@@ -338,7 +346,7 @@ a {
   text-align: left;
   justify-content: center;
   width: 800px;
-  margin: 0 auto;
+  margin: 10px auto;
 }
 
 .card {
@@ -518,7 +526,19 @@ a {
   text-overflow: ellipsis;
 }
 
+#contact-list-footer {
+  text-align: center;
+}
+
 @media screen and (max-width: 780px) {
+  #create {
+    width: auto;
+  }
+
+  .card {
+    width: 70%;
+  }
+
   .row-box {
     width: 70%;
     height: auto;
