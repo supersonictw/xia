@@ -173,7 +173,7 @@ export default {
         }
       };
 
-      if (status === true) return;
+      if (status.value === true) return;
       await Promise.all([syncContact(), syncGroupJoined(), syncGroupInvited()]);
       await this.$store.state.idbUser.put(Constant.IDB_USER_SETTINGS, {
         id: Constant.IDB_USER_KEY_SETTINGS_SYNC_STATUS,

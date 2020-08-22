@@ -203,6 +203,7 @@ export default {
           if (!this.initial) {
             if (this.initial === null) {
               this.messageIdLastSeen = cursor.value.id;
+              this.sendReadTag(cursor.value.id);
               this.initial = false;
             }
             this.messages.splice(0, 0, cursor.value);
@@ -408,7 +409,7 @@ export default {
         "'": "&#039;",
       };
 
-      return text.replace(/[&<>"']/g, function (m) {
+      return text.replace(/[&<>"']/g, function(m) {
         return map[m];
       });
     },
