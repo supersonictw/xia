@@ -198,7 +198,6 @@ export default {
       while (cursor) {
         if (cursor.value.target == this.targetId) {
           if (this.messages.length > Constant.CHAT_DISPLAY_ROW_LITMIT) {
-            this.initial = true;
             this.messages.shift();
           }
           if (!this.initial) {
@@ -217,6 +216,7 @@ export default {
         }
         cursor = await cursor.continue();
       }
+      this.initial = true;
       await this.fetchDisplayMessage();
     },
     async downloadImage(imageSource) {
@@ -408,7 +408,7 @@ export default {
         "'": "&#039;",
       };
 
-      return text.replace(/[&<>"']/g, function(m) {
+      return text.replace(/[&<>"']/g, function (m) {
         return map[m];
       });
     },
