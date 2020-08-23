@@ -11,7 +11,7 @@
 
 // Redirect for XIA - Demo
 if (window.location.hostname == "xia-demo.netlify.app") {
-  window.location.href = "https://xia.randychen.tk";
+  window.location.replace("https://xia.randychen.tk");
 }
 
 // Open external browser while user using LINE IAB

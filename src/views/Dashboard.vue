@@ -150,7 +150,7 @@ export default {
 }
 
 .row-box {
-  width: auto;
+  width: 135px;
   height: 30px;
 }
 

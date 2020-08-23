@@ -70,7 +70,7 @@ import hash from "js-sha256";
 import crypto from "node-bignumber";
 
 import lineClient from "@/computes/line.js";
-import lineType from "@/computes/line_types.js";
+import lineType from "@/computes/protocol/line_types.js";
 
 export default {
   name: "Login",

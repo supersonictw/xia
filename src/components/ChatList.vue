@@ -39,7 +39,7 @@ import Constant from "@/data/const.js";
 import hash from "js-sha256";
 import int64 from "node-int64";
 
-import lineType from "@/computes/line_types.js";
+import lineType from "@/computes/protocol/line_types.js";
 
 export default {
   name: "ChatList",

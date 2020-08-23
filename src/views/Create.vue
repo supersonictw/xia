@@ -135,7 +135,7 @@ import hash from "js-sha256";
 import imageUpload from "vue-image-crop-upload";
 
 import lineClient from "@/computes/line.js";
-import lineType from "@/computes/line_types.js";
+import lineType from "@/computes/protocol/line_types.js";
 
 export default {
   name: "Create",
