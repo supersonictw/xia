@@ -75,7 +75,7 @@ export default {
     },
     async setupDatabaseForXIA() {
       const resetFunction = this.revoke;
-      const upgradeFunction = function (db, oldVersion) {
+      const upgradeFunction = function(db, oldVersion) {
         // Remove the old data structure
         if (oldVersion != 0 && oldVersion < 3) {
           resetFunction(true, oldVersion);
@@ -94,20 +94,36 @@ export default {
     },
     async setupDatabaseForUser() {
       const dbName = `${Constant.NAME}_${this.$store.state.profile.userIdHashed}`;
+      const localName =
+        navigator.language ||
+        navigator.userLanguage ||
+        navigator.browserLanguage;
       return openDB(dbName, Constant.IDB_USER_VERSION, {
-        upgrade(db) {
+        upgrade(db, oldVersion, _, transaction) {
+          if (oldVersion === 1) {
+            transaction
+              .objectStore(Constant.IDB_USER_CONTACT)
+              .createIndex("displayName", "displayName", { locale: localName });
+            transaction
+              .objectStore(Constant.IDB_USER_GROUP_JOINED)
+              .createIndex("displayName", "name", { locale: localName });
+            transaction
+              .objectStore(Constant.IDB_USER_GROUP_INVITED)
+              .createIndex("displayName", "name", { locale: localName });
+            return;
+          }
           // Contact
           db.createObjectStore(Constant.IDB_USER_CONTACT, {
             keyPath: "mid",
-          });
+          }).createIndex("displayName", "displayName", { locale: localName });
           // Group Joined
           db.createObjectStore(Constant.IDB_USER_GROUP_JOINED, {
             keyPath: "id",
-          });
+          }).createIndex("displayName", "name", { locale: localName });
           // Group Invited
           db.createObjectStore(Constant.IDB_USER_GROUP_INVITED, {
             keyPath: "id",
-          });
+          }).createIndex("displayName", "name", { locale: localName });
           // Preview Message Box
           db.createObjectStore(Constant.IDB_USER_PREVIEW_MESSAGE_BOX, {
             keyPath: "target",
@@ -147,7 +163,7 @@ export default {
           this.$store.state.idbUser.put(dataName, metadata)
         );
 
-      const syncContact = async function () {
+      const syncContact = async function() {
         const contactIds = await queryHandler.getAllContactIds();
         if (contactIds) {
           const contactData = await queryHandler.getContacts(contactIds);
@@ -155,7 +171,7 @@ export default {
         }
       };
 
-      const syncGroupJoined = async function () {
+      const syncGroupJoined = async function() {
         const groupIdsJoined = await queryHandler.getGroupIdsJoined();
         if (groupIdsJoined) {
           const groupDataJoined = await queryHandler.getGroups(groupIdsJoined);
@@ -163,7 +179,7 @@ export default {
         }
       };
 
-      const syncGroupInvited = async function () {
+      const syncGroupInvited = async function() {
         const groupIdsInvited = await queryHandler.getGroupIdsInvited();
         if (groupIdsInvited) {
           const groupDataInvited = await queryHandler.getGroups(
@@ -301,7 +317,7 @@ export default {
           case lineType.OpType.SEND_MESSAGE:
           case lineType.OpType.RECEIVE_MESSAGE:
             // Add Target for index
-            operation.message.target = (function (obj, profileId) {
+            operation.message.target = (function(obj, profileId) {
               switch (obj.toType) {
                 case lineType.MIDType.USER:
                   if (obj.from_ == profileId) {

@@ -62,17 +62,6 @@ export default {
         params: { targetIdHashed: chatId },
       });
     },
-    sortDataByName(data) {
-      data.sort(function(a, b) {
-        if (a.displayName < b.displayName) {
-          return -1;
-        }
-        if (a.displayName > b.displayName) {
-          return 1;
-        }
-        return 0;
-      });
-    },
     async waitForFetchData() {
       setTimeout(() => {
         if (this.$store.state.ready) {
@@ -87,7 +76,8 @@ export default {
     async fetchContacts() {
       let cursor = await this.$store.state.idbUser
         .transaction(Constant.IDB_USER_CONTACT)
-        .store.openCursor();
+        .store.index("displayName")
+        .openCursor();
       while (cursor) {
         this.contactUser.push({
           id: hash.sha256(cursor.value.mid),
@@ -97,7 +87,6 @@ export default {
         });
         cursor = await cursor.continue();
       }
-      this.sortDataByName(this.contactUser);
     },
     layoutGroupStatus(groupData, invited = false) {
       let layout = [];
@@ -111,7 +100,8 @@ export default {
     async fetchGroupsJoined() {
       let cursor = await this.$store.state.idbUser
         .transaction(Constant.IDB_USER_GROUP_JOINED)
-        .store.openCursor();
+        .store.index("displayName")
+        .openCursor();
       while (cursor) {
         this.contactGroupJoined.push({
           id: hash.sha256(cursor.value.id),
@@ -121,12 +111,12 @@ export default {
         });
         cursor = await cursor.continue();
       }
-      this.sortDataByName(this.contactGroupJoined);
     },
     async fetchGroupsInvited() {
       let cursor = await this.$store.state.idbUser
         .transaction(Constant.IDB_USER_GROUP_INVITED)
-        .store.openCursor();
+        .store.index("displayName")
+        .openCursor();
       while (cursor) {
         this.contactGroupInvited.push({
           id: hash.sha256(cursor.value.id),
@@ -136,7 +126,6 @@ export default {
         });
         cursor = await cursor.continue();
       }
-      this.sortDataByName(this.contactGroupInvited);
     },
     getTabData() {
       if (!this.$store.state.ready) return;

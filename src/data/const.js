@@ -79,7 +79,7 @@ export default {
   },
   IDB_XIA_VERSION: 5,
   IDB_XIA_DB_LIST: "dbList",
-  IDB_USER_VERSION: 1,
+  IDB_USER_VERSION: 2,
   IDB_USER_CONTACT: "contact",
   IDB_USER_GROUP_JOINED: "groupJoined",
   IDB_USER_GROUP_INVITED: "groupInvited",

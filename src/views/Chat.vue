@@ -194,30 +194,29 @@ export default {
         setTimeout(this.fetchDisplayMessage, Constant.RETRY_TIMEOUT);
       let cursor = await this.$store.state.idbUser
         .transaction(Constant.IDB_USER_MESSAGE_BOX)
-        .store.openCursor(null, "prev");
+        .store.index("target")
+        .openCursor(IDBKeyRange.only(this.targetId), "prev");
       while (cursor) {
-        if (cursor.value.target == this.targetId) {
-          if (this.messages.length > Constant.CHAT_DISPLAY_ROW_LITMIT) {
-            this.messages.shift();
-          }
-          if (!this.initial) {
-            if (this.initial === null) {
-              this.messageIdLastSeen = cursor.value.id;
-              this.sendReadTag(cursor.value.id);
-              this.initial = false;
-            }
-            this.messages.splice(0, 0, cursor.value);
-            this.moveToBottom(true);
-          } else if (cursor.value.id > this.messageIdLastSeen) {
-            this.messages.push(cursor.value);
+        if (this.messages.length > Constant.CHAT_DISPLAY_ROW_LITMIT) {
+          this.messages.shift();
+        }
+        if (!this.initialized) {
+          if (this.initialized === null) {
             this.messageIdLastSeen = cursor.value.id;
-            this.moveToBottom(true);
             this.sendReadTag(cursor.value.id);
+            this.initialized = false;
           }
+          this.messages.splice(0, 0, cursor.value);
+          this.moveToBottom(true);
+        } else if (cursor.value.id > this.messageIdLastSeen) {
+          this.messages.push(cursor.value);
+          this.messageIdLastSeen = cursor.value.id;
+          this.sendReadTag(cursor.value.id);
+          this.moveToBottom(true);
         }
         cursor = await cursor.continue();
       }
-      this.initial = true;
+      this.initialized = true;
       await this.fetchDisplayMessage();
     },
     async downloadImage(imageSource) {
@@ -463,7 +462,7 @@ export default {
   props: ["targetIdHashed"],
   data() {
     return {
-      initial: null,
+      initialized: null,
       chatRoomTitle: "Unknown",
       chatRoomPicture: null,
       chatRoomType: 0,
