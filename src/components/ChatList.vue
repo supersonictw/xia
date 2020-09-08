@@ -140,7 +140,7 @@ export default {
     timeToReadable(timeValue) {
       const nowValue = +new Date();
       const dateTime = moment(timeValue);
-      if (timeValue - nowValue < 86400) return dateTime.format("hh:mm");
+      if (timeValue - nowValue > 86400) return dateTime.format("hh:mm");
       return dateTime.format("YYYY/MM/DD");
     },
   },
@@ -188,6 +188,7 @@ a {
 
 .contact {
   display: flex;
+  justify-content: space-between;
   width: auto;
   height: 50px;
   color: rgba(0, 0, 0, 0.7);
@@ -199,11 +200,13 @@ a {
   height: 50px;
   border-radius: 50px;
   margin-right: 10px;
+  flex-shrink: 1;
 }
 
 .row-box {
-  width: 90%;
+  width: 80%;
   height: auto;
+  flex-grow: 1;
 }
 
 .info-box {
@@ -241,7 +244,7 @@ a {
   }
 
   .row-box {
-    width: 60%;
+    width: 50%;
     height: auto;
   }
 }
