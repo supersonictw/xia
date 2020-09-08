@@ -22,6 +22,7 @@ import Dashboard from "@/views/Dashboard.vue";
 import Profile from "@/views/Profile.vue";
 import Contact from "@/views/Contact.vue";
 import Chat from "@/views/Chat.vue";
+import PictureViewer from "@/views/PictureViewer.vue";
 import Create from "@/views/Create.vue";
 import SettingsDisplay from "@/views/SettingsDisplay.vue";
 import About from "@/views/About.vue";
@@ -62,6 +63,12 @@ const routes = [
     path: "/chat/:targetIdHashed",
     name: Constant.ROUTER_TAG_CHAT,
     component: Chat,
+    props: true,
+  },
+  {
+    path: "/chat/image",
+    name: Constant.ROUTER_TAG_PICTURE_PREVIEW,
+    component: PictureViewer,
     props: true,
   },
   {

@@ -42,6 +42,15 @@
           </div>
           <div :class="`${configureMsgBox(2, item)} content`">
             <p v-if="item.type == 1">
+              <a
+                title="View full image"
+                href="#"
+                @click.prevent="viewFullImage(item.id)"
+              >
+                <img :src="mediaObjects[item.id]" />
+              </a>
+            </p>
+            <p v-else-if="item.type == 7">
               <img :src="mediaObjects[item.id]" />
             </p>
             <p v-else v-html="item.content"></p>
@@ -252,7 +261,7 @@ export default {
           Constant.RETRY_TIMEOUT
         );
       }
-      const imageURL = `${this.mediaURL}/os/m/${messageId}`;
+      const imageURL = `${this.mediaURL}/os/m/${messageId}/preview`;
       const imageXHR = await this.downloadImage(imageURL);
       const imageB64 =
         "data:image/jpeg;base64," +
@@ -421,6 +430,12 @@ export default {
       if (timeValue - nowValue < 86400) return dateTime.format("hh:mm");
       return dateTime.format("YYYY/MM/DD");
     },
+    viewFullImage(messageId) {
+      this.$router.push({
+        name: Constant.ROUTER_TAG_PICTURE_PREVIEW,
+        params: { messageId },
+      });
+    },
   },
   computed: {
     targetId() {
@@ -444,7 +459,7 @@ export default {
             break;
           case lineType.ContentType.STICKER:
             this.getStickerImageResource(message.id, message.contentMetadata);
-            layoutType = lineType.ContentType.IMAGE;
+            layoutType = lineType.ContentType.STICKER;
             break;
           default:
             layoutMessage = message.text
@@ -553,6 +568,7 @@ export default {
 }
 
 .msg-box {
+  max-width: 50%;
   margin-bottom: 25px;
 }
 
@@ -580,7 +596,7 @@ export default {
 }
 
 .content img {
-  max-width: 300px;
+  max-width: 30%;
   max-height: 300px;
   overflow: hidden;
 }

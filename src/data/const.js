@@ -25,6 +25,7 @@ export default {
   ROUTER_TAG_PROFILE: "Profile",
   ROUTER_TAG_CONTACT: "Contact",
   ROUTER_TAG_CHAT: "Chat",
+  ROUTER_TAG_PICTURE_PREVIEW: "PicturePreview",
   ROUTER_TAG_CREATE: "Create",
   ROUTER_TAG_SETTINGS_OVERVIEW: "Settings - Overview",
   ROUTER_TAG_SETTINGS_PROFILE: "Settings - Profile",
