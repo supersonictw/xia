@@ -538,15 +538,24 @@ export default {
   border-radius: 5px;
   margin: 10px auto;
   padding: 10px;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 #msg-container .self {
   text-align: right;
 }
 
+#msg-container .self .content {
+  padding-left: 20%;
+}
+
 #msg-container .another {
   text-align: left;
+}
+
+#msg-container .another .content {
+  padding-right: 20%;
 }
 
 .row-box {
@@ -568,7 +577,6 @@ export default {
 }
 
 .msg-box {
-  max-width: 50%;
   margin-bottom: 25px;
 }
 
@@ -593,6 +601,7 @@ export default {
 
 .content p {
   margin: 5px;
+  overflow-wrap: anywhere;
 }
 
 .content img {
