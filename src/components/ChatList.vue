@@ -171,9 +171,10 @@ a {
 }
 
 #chat-list {
-  margin: 10px 10px 10px 10px;
+  margin: 10px;
   width: 75%;
   height: 510px;
+  padding: 5px 0;
   display: block;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -182,7 +183,7 @@ a {
 
 .chat-item {
   text-align: left;
-  padding: 15px 20px;
+  padding: 10px 20px;
 }
 
 .contact {
@@ -231,11 +232,16 @@ a {
 
 @media screen and (max-width: 780px) {
   #chat-list {
+    width: 95%;
     height: 370px;
   }
 
+  .chat-item {
+    padding: 10px 10px;
+  }
+
   .row-box {
-    width: 70%;
+    width: 60%;
     height: auto;
   }
 }
