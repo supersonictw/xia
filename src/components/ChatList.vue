@@ -15,20 +15,21 @@
       v-for="(item, itemId) in getDisplayMessages"
       :key="itemId"
     >
-      <a href="#" @click.prevent="enterChat(item.id)">
-        <div class="contact">
-          <img
-            class="picture-icon"
-            v-if="item.pictureStatus"
-            :src="`${mediaURL}/${item.pictureStatus}`"
-          />
-          <img class="picture-icon" v-else src="@/assets/logo.svg" />
-          <div class="row-box">
-            <h3 class="text-box">{{ item.displayName }}</h3>
-            <p class="text-box">{{ item.lastMessage }}</p>
-          </div>
+      <div class="contact" @click.prevent="enterChat(item.id)">
+        <img
+          class="picture-icon"
+          v-if="item.pictureStatus"
+          :src="`${mediaURL}/${item.pictureStatus}`"
+        />
+        <img class="picture-icon" v-else src="@/assets/logo.svg" />
+        <div class="row-box">
+          <h3 class="text-box">{{ item.displayName }}</h3>
+          <p class="text-box">{{ item.lastMessage }}</p>
         </div>
-      </a>
+        <div class="info-box">
+          <p>{{ timeToReadable(item.time) }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -37,7 +38,7 @@
 import Constant from "@/data/const.js";
 
 import hash from "js-sha256";
-import int64 from "node-int64";
+import moment from "moment";
 
 import lineType from "@/computes/protocol/line_types.js";
 
@@ -122,28 +123,32 @@ export default {
             return obj.text;
         }
       })(message);
-      message.createdTime = new int64(message.createdTime);
       if (
         message.target in this.previewMessageBox &&
-        this.previewMessageBox[message.target].time.compare(
-          message.createdTime
-        ) > 0
+        parseInt(message.createdTime) <
+          parseInt(this.previewMessageBox[message.target].time)
       )
         return;
       this.$set(this.previewMessageBox, message.target, {
         id: targetIdHashed,
-        time: message.createdTime,
+        time: parseInt(message.createdTime),
         displayName,
         pictureStatus,
         lastMessage,
       });
+    },
+    timeToReadable(timeValue) {
+      const nowValue = +new Date();
+      const dateTime = moment(timeValue);
+      if (timeValue - nowValue < 86400) return dateTime.format("hh:mm");
+      return dateTime.format("YYYY/MM/DD");
     },
   },
   computed: {
     getDisplayMessages() {
       const data = Object.values(this.previewMessageBox);
       data.sort(function(a, b) {
-        return b.time.compare(a.time);
+        return b.time > a.time;
       });
       return data;
     },
@@ -167,18 +172,17 @@ a {
 
 #chat-list {
   margin: 10px 10px 10px 10px;
-  width: 500px;
-  height: 350px;
+  width: 75%;
+  height: 510px;
   display: block;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  padding: 10px 20px 10px 20px;
   overflow: scroll;
 }
 
 .chat-item {
   text-align: left;
-  margin: 10px 0 10px 0;
+  padding: 15px 20px;
 }
 
 .contact {
@@ -186,6 +190,7 @@ a {
   width: auto;
   height: 50px;
   color: rgba(0, 0, 0, 0.7);
+  cursor: pointer;
 }
 
 .contact .picture-icon {
@@ -196,8 +201,12 @@ a {
 }
 
 .row-box {
-  width: 420px;
+  width: 90%;
   height: auto;
+}
+
+.info-box {
+  text-align: right;
 }
 
 .text-box {
@@ -221,6 +230,10 @@ a {
 }
 
 @media screen and (max-width: 780px) {
+  #chat-list {
+    height: 370px;
+  }
+
   .row-box {
     width: 70%;
     height: auto;

@@ -45,6 +45,7 @@
               <img :src="mediaObjects[item.id]" />
             </p>
             <p v-else v-html="item.content"></p>
+            <p class="date">{{ timeToReadable(item.time) }}</p>
           </div>
         </div>
       </div>
@@ -125,6 +126,7 @@ import Constant from "@/data/const.js";
 import Back from "@/components/Back.vue";
 
 import axios from "axios";
+import moment from "moment";
 import VEmojiPicker from "v-emoji-picker";
 
 import lineClient from "@/computes/line.js";
@@ -412,6 +414,13 @@ export default {
         return map[m];
       });
     },
+    timeToReadable(uint8arrayTime) {
+      const timeValue = parseInt(uint8arrayTime.toString());
+      const nowValue = +new Date();
+      const dateTime = moment(timeValue);
+      if (timeValue - nowValue < 86400) return dateTime.format("hh:mm");
+      return dateTime.format("YYYY/MM/DD");
+    },
   },
   computed: {
     targetId() {
@@ -447,6 +456,7 @@ export default {
           type: layoutType,
           origin: message.from_,
           content: this.escapeHtml(layoutMessage).replace(/\n/g, "<br />"),
+          time: message.createdTime,
         });
       });
       return layout;
@@ -573,6 +583,10 @@ export default {
   max-width: 300px;
   max-height: 300px;
   overflow: hidden;
+}
+
+.date {
+  font-size: 12px;
 }
 
 #msg-input-box {

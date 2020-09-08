@@ -114,7 +114,7 @@ export default {
       }
     },
     enterChat() {
-      this.$router.push({
+      this.$router.replace({
         name: Constant.ROUTER_TAG_CHAT,
         params: { targetIdHashed: this.targetIdHashed },
       });

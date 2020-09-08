@@ -187,7 +187,7 @@ a {
 #contact-list {
   margin: 10px 10px 10px 10px;
   width: 250px;
-  height: 350px;
+  height: 500px;
   display: block;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -263,6 +263,10 @@ a {
 }
 
 @media screen and (max-width: 780px) {
+  #contact-list {
+    height: 350px;
+  }
+
   .row-box {
     width: 70%;
     height: auto;
