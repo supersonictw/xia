@@ -140,7 +140,7 @@ export default {
     timeToReadable(timeValue) {
       const nowValue = +new Date();
       const dateTime = moment(timeValue);
-      if (timeValue - nowValue > 86400) return dateTime.format("hh:mm");
+      if (timeValue - nowValue < 86400) return dateTime.format("hh:mm");
       return dateTime.format("YYYY/MM/DD");
     },
   },
