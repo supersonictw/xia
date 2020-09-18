@@ -49,8 +49,8 @@
 import Constant from "@/data/const.js";
 
 import Logout from "@/components/Logout.vue";
-import ContactList from "@/components/ContactList.vue";
-import ChatList from "@/components/ChatList.vue";
+import ContactList from "@/components/Dashboard/ContactList.vue";
+import ChatList from "@/components/Dashboard/ChatList.vue";
 
 import lineClient from "@/computes/line.js";
 

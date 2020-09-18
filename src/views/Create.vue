@@ -144,17 +144,6 @@ export default {
     imageUpload,
   },
   methods: {
-    sortDataByName(data) {
-      data.sort(function(a, b) {
-        if (a.displayName < b.displayName) {
-          return -1;
-        }
-        if (a.displayName > b.displayName) {
-          return 1;
-        }
-        return 0;
-      });
-    },
     async waitForFetchData() {
       setTimeout(() => {
         if (this.$store.state.ready) {
@@ -167,12 +156,12 @@ export default {
     async fetchContacts() {
       let cursor = await this.$store.state.idbUser
         .transaction(Constant.IDB_USER_CONTACT)
-        .store.openCursor();
+        .store.index("displayName")
+        .openCursor();
       while (cursor) {
         this.contacts.push(cursor.value);
         cursor = await cursor.continue();
       }
-      this.sortDataByName(this.contacts);
     },
     displayUploadAndCorpImage() {
       this.uploading = !this.uploading;

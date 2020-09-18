@@ -55,7 +55,6 @@ const Store = new Vuex.Store({
       state.profile.statusMessage = profileData.statusMessage;
     },
   },
-  actions: {},
 });
 
 export default Store;
