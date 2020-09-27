@@ -32,14 +32,14 @@
       </div>
     </div>
     <div>
-      <div id="tab-switcher" v-if="mobileUI">
+      <div id="tab-switcher" v-show="mobileUI">
         <a @click.prevent="tabSwitcher" href="#"
           >Display {{ tabSwitcherName }}</a
         >
       </div>
       <div id="lists">
-        <ContactList v-if="!mobileUI || tabName == 'Contacts'" />
-        <ChatList v-if="!mobileUI || tabName == 'Chats'" />
+        <ContactList v-show="!mobileUI || tabName == 'Contacts'" />
+        <ChatList v-show="!mobileUI || tabName == 'Chats'" />
       </div>
     </div>
   </div>
