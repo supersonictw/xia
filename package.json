@@ -19,8 +19,8 @@
     "utf8": "^3.0.0",
     "v-emoji-picker": "^2.3.0",
     "vue": "^2.6.12",
-    "vue-analytics": "^5.22.1",
     "vue-cookies": "^1.7.3",
+    "vue-gtag": "^1.9.1",
     "vue-image-crop-upload": "^2.5.0",
     "vue-router": "^3.4.3",
     "vuex": "^3.5.1"
