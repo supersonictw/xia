@@ -34,6 +34,19 @@ import Router from "./data/router.js";
 import VueCookies from "vue-cookies";
 Vue.use(VueCookies);
 
+// The snippet is only used for XIA - Demo to analyze the customers with Google Analytics
+if (window.location.hostname == "xia.randychen.tk") {
+  import("vue-analytics").then((VueAnalytics) =>
+    Vue.use(VueAnalytics, {
+      id: "UA-179251349-1",
+      Router,
+      autoTracking: {
+        pageviewOnLoad: false,
+      },
+    })
+  );
+}
+
 // Vue Settings
 Vue.$cookies.config("30d");
 Vue.config.productionTip = false;
