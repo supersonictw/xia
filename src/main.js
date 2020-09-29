@@ -35,10 +35,8 @@ import VueCookies from "vue-cookies";
 Vue.use(VueCookies);
 
 // The snippet is only used for XIA - Demo to analyze the customers with Google Analytics
-//if (window.location.hostname == "xia.randychen.tk") {
 import VueGtag from "vue-gtag";
 Vue.use(VueGtag, { config: { id: "UA-179251349-1" } }, Router);
-//}
 
 // Vue Settings
 Vue.$cookies.config("30d");
