@@ -28,21 +28,7 @@ The software is licensed under [Mozilla Public License v.2.0](LICENSE).
 
 ## Online Service
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/43e26ace-1f8b-4b5e-8bb0-4a0c136f1114/deploy-status)](https://app.netlify.com/sites/xia-demo/deploys)
-
-There is an online client available, which maintains by me, for anyone can use LINE though XIA on any browser.
-
-The Service URL: [https://tinyurl.com/line-online](https://tinyurl.com/line-online)
-
-The service is hosted by
-[![Netlify](netlify.svg)](https://www.netlify.com).
-
-## CORS Proxy
-
-`https://js-cors.starinc.xyz` is the proxy service that to resolve the [CORS Problem](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) while connecting to the LINE Server.
-
-The service provider is
-[![Star Inc.](starinc.jpg)](https://www.starinc.xyz)
+[2020/10/10] LINE Corporation requested, due to  the issue of account security, the service is unavailable temporary.
 
 ## Build on yourself
 
