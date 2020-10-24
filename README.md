@@ -39,7 +39,7 @@ This is an opensource software, you can build and deploy this project on your ow
 The project is created by [Vue-CLI](https://cli.vuejs.org).
 So [Node.js](https://nodejs.org) (>= v8.10.0) is required on the platform you want to compile on.
 
-If [Node.js](https://nodejs.org) with [npm](https://www.npmjs.com)(A node.js packages manager) have been installed, please type the command.
+If [Node.js](https://nodejs.org) with [npm](https://www.npmjs.com)(a node.js packages manager) have been installed, please type the command.
 
 ```shell
 npm install
@@ -57,9 +57,9 @@ You have 2 ways to execute [XIA](https://github.com/supersonictw/xia).
 npm run serve
 ```
 
-The method is usually used by the developers hope to find out some bug or design the new features.
+The method is usually to be used by the developers hope to find out some bug or design the new features.
 
-Please not to use the way as the production because the files by hot-reload and the temporary server is not suitable for this environment.
+Please not to use the way as the production because the files by hot-reload, and the temporary server is not suitable for this environment.
 
 #### Compiles and minifies for production
 
