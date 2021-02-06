@@ -10,6 +10,8 @@
 
 <template>
   <div id="app" class="ui">
+    <StatusBar></StatusBar>
+    <Notification></Notification>
     <transition name="slide">
       <router-view class="child-view" />
     </transition>
@@ -25,6 +27,9 @@
 <script>
 import Constant from "./data/const.js";
 
+import StatusBar from "@/components/StatusBar.vue";
+import Notification from "@/components/Notification.vue";
+
 import lineClient from "@/computes/line.js";
 import lineType from "@/computes/protocol/line_types.js";
 
@@ -33,14 +38,18 @@ import hash from "js-sha256";
 
 export default {
   name: Constant.NAME,
+  components:{
+    StatusBar,
+    Notification
+  },
   methods: {
     async verifyAccess() {
-      if (this.$route.name == Constant.ROUTER_TAG_ABOUT) {
+      if (this.$route.name === Constant.ROUTER_TAG_ABOUT) {
         return null;
       }
       if (this.client && this.$store.state.authToken) {
         if (this.$route.name === Constant.ROUTER_TAG_LOGIN) {
-          this.$router.push({ name: Constant.ROUTER_TAG_DASHBOARD });
+          await this.$router.push({name: Constant.ROUTER_TAG_DASHBOARD});
         }
         if (this.$store.state.ready || (await this.getProfile())) {
           return true;
@@ -50,7 +59,7 @@ export default {
         this.$route.name !== Constant.ROUTER_TAG_INTRODUCING &&
         this.$route.name !== Constant.ROUTER_TAG_LOGIN
       ) {
-        this.$router.push({ name: Constant.ROUTER_TAG_INTRODUCING });
+        await this.$router.push({name: Constant.ROUTER_TAG_INTRODUCING});
       }
       return false;
     },
@@ -61,7 +70,7 @@ export default {
         return true;
       } catch (e) {
         console.error(e);
-        if (e.name == "TalkException") this.revoke();
+        if (e.name === "TalkException") await this.revoke();
         return false;
       }
     },
@@ -77,7 +86,7 @@ export default {
       const resetFunction = this.revoke;
       const upgradeFunction = function(db, oldVersion) {
         // Remove the old data structure
-        if (oldVersion != 0 && oldVersion < 3) {
+        if (oldVersion !== 0 && oldVersion < 3) {
           resetFunction(true, oldVersion);
           return;
         }
@@ -227,7 +236,7 @@ export default {
         await this.updateRevision(operations);
       } catch (e) {
         console.error(e);
-        if (e.name == "TalkException") return this.revoke();
+        if (e.name === "TalkException") return this.revoke();
       }
       this.longPoll(opClient);
     },
@@ -271,7 +280,7 @@ export default {
                 .split("\x1e")
                 .find((id) => id === this.$store.state.profile.userId);
             }
-            if (operation.param3 == this.$store.state.profile.userId) {
+            if (operation.param3 === this.$store.state.profile.userId) {
               this.$store.commit(
                 "unregisterChatIdHashed",
                 hash.sha256(operation.param1)
@@ -289,8 +298,8 @@ export default {
                 .split("\x1e")
                 .find((id) => id === this.$store.state.profile.userId);
             }
-            if (operation.param3 == this.$store.state.profile.userId) {
-              this.clearMessageBox(operation.param1);
+            if (operation.param3 === this.$store.state.profile.userId) {
+              await this.clearMessageBox(operation.param1);
               this.$store.commit(
                 "unregisterChatIdHashed",
                 hash.sha256(operation.param1)
@@ -300,7 +309,7 @@ export default {
                 operation.param1
               );
             } else {
-              this.updateGroupInfo(operation.param1);
+              await this.updateGroupInfo(operation.param1);
             }
             break;
           case lineType.OpType.NOTIFIED_UPDATE_GROUP:
@@ -312,7 +321,7 @@ export default {
           case lineType.OpType.CANCEL_INVITATION_GROUP:
           case lineType.OpType.INVITE_INTO_GROUP:
           case lineType.OpType.KICKOUT_FROM_GROUP:
-            this.updateGroupInfo(operation.param1);
+            await this.updateGroupInfo(operation.param1);
             break;
           case lineType.OpType.SEND_MESSAGE:
           case lineType.OpType.RECEIVE_MESSAGE:
@@ -320,7 +329,7 @@ export default {
             operation.message.target = (function(obj, profileId) {
               switch (obj.toType) {
                 case lineType.MIDType.USER:
-                  if (obj.from_ == profileId) {
+                  if (obj.from_ === profileId) {
                     return obj.to;
                   } else {
                     return obj.from_;
@@ -380,7 +389,7 @@ export default {
         .transaction(Constant.IDB_USER_MESSAGE_BOX, "readwrite")
         .store.openCursor();
       while (cursor) {
-        if (cursor.value.target == targetId) {
+        if (cursor.value.target === targetId) {
           cursor.delete();
         }
         cursor = await cursor.continue();
@@ -392,7 +401,7 @@ export default {
       window.sessionStorage.clear();
       if (reset) {
         let idbNames = [];
-        if (idbOldVersion >= 3 || idbOldVersion == -1) {
+        if (idbOldVersion >= 3 || idbOldVersion === -1) {
           const idbXia = this.$store.state.idbXia
             ? this.$store.state.idbXia
             : await this.setupDatabaseForXIA();
@@ -401,7 +410,7 @@ export default {
             idbNames = allIdbUsers.map((name) => `${Constant.NAME}_${name}`);
             await idbXia.clear(Constant.IDB_XIA_DB_LIST);
           }
-        } else if (idbOldVersion != 0) {
+        } else if (idbOldVersion !== 0) {
           await deleteDB(Constant.NAME);
         }
         await Promise.all(idbNames.map((name) => deleteDB(name)));
