@@ -5,7 +5,7 @@
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  (c) 2020 SuperSonic. (https://github.com/supersonictw)
+  (c) 2021 SuperSonic. (https://github.com/supersonictw)
 -->
 
 <template>
@@ -46,16 +46,16 @@
 </template>
 
 <script>
-import Constant from "@/data/const.js";
+import Constant from '@/data/const.js';
 
-import Logout from "@/components/Logout.vue";
-import ContactList from "@/components/Dashboard/ContactList.vue";
-import ChatList from "@/components/Dashboard/ChatList.vue";
+import Logout from '@/components/Logout.vue';
+import ContactList from '@/components/Dashboard/ContactList.vue';
+import ChatList from '@/components/Dashboard/ChatList.vue';
 
-import lineClient from "@/computes/line.js";
+import lineClient from '@/computes/line.js';
 
 export default {
-  name: "Dashboard",
+  name: 'Dashboard',
   components: {
     Logout,
     ContactList,
@@ -88,22 +88,22 @@ export default {
   },
   data() {
     return {
-      tabName: "Contacts",
-      tabSwitcherName: "Chats",
+      tabName: 'Contacts',
+      tabSwitcherName: 'Chats',
       mobileUI: window.innerWidth < Constant.MOBILE_UI_WIDTH,
       client: lineClient(Constant.LINE_QUERY_PATH, this.$store.state.authToken),
-      profileDisplayName: "Loading...",
-      profileStatusMessage: "Loading...",
+      profileDisplayName: 'Loading...',
+      profileStatusMessage: 'Loading...',
       profilePicturePath: null,
       mediaURL: Constant.LINE_MEDIA_URL,
     };
   },
   created() {
-    window.addEventListener("resize", this.mobileUIhandler);
+    window.addEventListener('resize', this.mobileUIhandler);
     this.waitForFetchProfile();
   },
   destroyed() {
-    window.removeEventListener("resize", this.mobileUIhandler);
+    window.removeEventListener('resize', this.mobileUIhandler);
   },
 };
 </script>

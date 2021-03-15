@@ -5,7 +5,7 @@
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  (c) 2020 SuperSonic. (https://github.com/supersonictw)
+  (c) 2021 SuperSonic. (https://github.com/supersonictw)
 -->
 
 <template>
@@ -54,10 +54,10 @@
 </template>
 
 <script>
-import Constant from "@/data/const.js";
+import Constant from '@/data/const.js';
 
 export default {
-  name: "Indroducing",
+  name: 'Indroducing',
   methods: {
     async checkAccess() {
       if (!this.$cookies.isKey(Constant.COOKIE_ACCESS_KEY)) return this.ready--;
@@ -69,7 +69,7 @@ export default {
     },
   },
   data() {
-    return { ready: 0 };
+    return {ready: 0};
   },
   mounted() {
     this.checkAccess();

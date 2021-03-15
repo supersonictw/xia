@@ -1,4 +1,4 @@
-/*jshint esversion: 8 */
+/* jshint esversion: 8 */
 /*
     XIA - LINE Web Client
     ---
@@ -6,101 +6,101 @@
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  (c) 2020 SuperSonic. (https://github.com/supersonictw)
+  (c) 2021 SuperSonic. (https://github.com/supersonictw)
 */
 
-import Vue from "vue";
-import VueRouter from "vue-router";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-import Constant from "@/data/const.js";
+import Constant from '@/data/const.js';
 
-import SettingsRouter from "@/data/settings-router.js";
+import SettingsRouter from '@/data/settings-router.js';
 
-import Introducing from "@/views/Introducing.vue";
-import Login from "@/views/Login.vue";
-import Dashboard from "@/views/Dashboard.vue";
-import Profile from "@/views/Profile.vue";
-import Contact from "@/views/Contact.vue";
-import Chat from "@/views/Chat.vue";
-import PictureViewer from "@/views/PictureViewer.vue";
-import Create from "@/views/Create.vue";
-import SettingsDisplay from "@/views/SettingsDisplay.vue";
-import About from "@/views/About.vue";
-import Redirect from "@/views/Redirect.vue";
-import ErrorPage from "@/views/Error.vue";
-import NotFound from "@/views/NotFound.vue";
+import Introducing from '@/views/Introducing.vue';
+import Login from '@/views/Login.vue';
+import Dashboard from '@/views/Dashboard.vue';
+import Profile from '@/views/Profile.vue';
+import Contact from '@/views/Contact.vue';
+import Chat from '@/views/Chat.vue';
+import PictureViewer from '@/views/PictureViewer.vue';
+import Create from '@/views/Create.vue';
+import SettingsDisplay from '@/views/SettingsDisplay.vue';
+import About from '@/views/About.vue';
+import Redirect from '@/views/Redirect.vue';
+import ErrorPage from '@/views/Error.vue';
+import NotFound from '@/views/NotFound.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
+    path: '/',
     name: Constant.ROUTER_TAG_INTRODUCING,
     component: Introducing,
   },
   {
-    path: "/login",
+    path: '/login',
     name: Constant.ROUTER_TAG_LOGIN,
     component: Login,
   },
   {
-    path: "/dashboard",
+    path: '/dashboard',
     name: Constant.ROUTER_TAG_DASHBOARD,
     component: Dashboard,
   },
   {
-    path: "/profile",
+    path: '/profile',
     name: Constant.ROUTER_TAG_PROFILE,
     component: Profile,
   },
   {
-    path: "/contact/:targetIdHashed",
+    path: '/contact/:targetIdHashed',
     name: Constant.ROUTER_TAG_CONTACT,
     component: Contact,
     props: true,
   },
   {
-    path: "/chat/:targetIdHashed",
+    path: '/chat/:targetIdHashed',
     name: Constant.ROUTER_TAG_CHAT,
     component: Chat,
     props: true,
   },
   {
-    path: "/chat/image",
+    path: '/chat/image',
     name: Constant.ROUTER_TAG_PICTURE_PREVIEW,
     component: PictureViewer,
     props: true,
   },
   {
-    path: "/create/:type",
+    path: '/create/:type',
     name: Constant.ROUTER_TAG_CREATE,
     component: Create,
     props: true,
   },
   {
-    path: "/settings",
+    path: '/settings',
     component: SettingsDisplay,
     children: SettingsRouter,
   },
   {
-    path: "/about",
+    path: '/about',
     name: Constant.ROUTER_TAG_ABOUT,
     component: About,
   },
   {
-    path: "/redirect",
+    path: '/redirect',
     name: Constant.ROUTER_TAG_REDIRECT,
     component: Redirect,
     props: true,
   },
   {
-    path: "/error",
+    path: '/error',
     name: Constant.ROUTER_TAG_ERROR,
     component: ErrorPage,
     props: true,
   },
   {
-    path: "*",
+    path: '*',
     name: Constant.ROUTER_TAG_NOT_FOUND,
     component: NotFound,
   },

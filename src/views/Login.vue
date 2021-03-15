@@ -5,7 +5,7 @@
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  (c) 2020 SuperSonic. (https://github.com/supersonictw)
+  (c) 2021 SuperSonic. (https://github.com/supersonictw)
 -->
 
 <template>
@@ -60,30 +60,30 @@
 </template>
 
 <script>
-import Constant from "@/data/const.js";
+import Constant from '@/data/const.js';
 
-import Back from "@/components/Back.vue";
+import Back from '@/components/Back.vue';
 
-import utf8 from "utf8";
-import axios from "axios";
-import hash from "js-sha256";
-import crypto from "node-bignumber";
+import utf8 from 'utf8';
+import axios from 'axios';
+import hash from 'js-sha256';
+import crypto from 'node-bignumber';
 
-import lineClient from "@/computes/line.js";
-import lineType from "@/computes/protocol/line_types.js";
+import lineClient from '@/computes/line.js';
+import lineType from '@/computes/protocol/line_types.js';
 
 export default {
-  name: "Login",
-  components: { Back },
+  name: 'Login',
+  components: {Back},
   data() {
     return {
       user: {
-        ip_addr: "Unknown",
-        identity: "",
-        password: "",
+        ip_addr: 'Unknown',
+        identity: '',
+        password: '',
       },
       loginWaiting: false,
-      loginStatus: "",
+      loginStatus: '',
     };
   },
   methods: {
@@ -99,21 +99,21 @@ export default {
     },
     async login() {
       if (this.user.identity.length < 1 || this.user.password.length < 1) {
-        this.loginStatus = "Empty identity or password";
+        this.loginStatus = 'Empty identity or password';
         return;
       }
       const loginClient = lineClient(Constant.LINE_LOGIN_PATH);
       const loginRequest = await this.getCredential();
       const loginResponse = await loginClient
-        .loginZ(loginRequest)
-        .catch((error) => (this.loginStatus = error.reason));
+          .loginZ(loginRequest)
+          .catch((error) => (this.loginStatus = error.reason));
       if (loginResponse !== this.loginStatus) {
         try {
           const status = await this.verifyPinCode(loginResponse);
           if (status === true) {
             window.location.reload();
           } else {
-            this.loginStatus = "Login failed";
+            this.loginStatus = 'Login failed';
           }
         } catch (e) {
           console.error(e);
@@ -123,52 +123,53 @@ export default {
     async getCredential() {
       const authClient = lineClient(Constant.LINE_AUTH_PATH);
       const rsaKey = await authClient.getRSAKeyInfo(
-        lineType.IdentityProvider.LINE
+          lineType.IdentityProvider.LINE,
       );
       const message = utf8.encode(
-        String.fromCharCode(rsaKey.sessionKey.length) +
+          String.fromCharCode(rsaKey.sessionKey.length) +
           rsaKey.sessionKey +
           String.fromCharCode(this.user.identity.length) +
           this.user.identity +
           String.fromCharCode(this.user.password.length) +
-          this.user.password
+          this.user.password,
       );
       const rsa = new crypto.Key();
       rsa.setPublic(rsaKey.nvalue, rsaKey.evalue);
-      const encrypted_msg = rsa.encrypt(message).toString("hex");
+      const encryptedMessage = rsa.encrypt(message).toString('hex');
       return new lineType.LoginRequest({
         type: lineType.LoginType.ID_CREDENTIAL,
         identityProvider: lineType.IdentityProvider.LINE,
         identifier: rsaKey.keynm,
-        password: encrypted_msg,
+        password: encryptedMessage,
         keepLoggedIn: true,
         accessLocation: this.user.ip_addr,
         systemName: Constant.NAME,
         certificate: this.$cookies.get(
-          `${Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX}_${hash.sha256(
-            this.user.identity
-          )}`
+            `${Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX}_${hash.sha256(
+                this.user.identity,
+            )}`,
         ),
         e2eeVersion: 0,
       });
     },
     async verifyPinCode(loginResult) {
-      this.loginStatus = `Confirm your PinCode with ${loginResult.pinCode} in 2 minutes.`;
+      this.loginStatus =
+          `Confirm your PinCode with ${loginResult.pinCode} in 2 minutes.`;
       switch (loginResult.type) {
         case lineType.LoginResultType.REQUIRE_DEVICE_CONFIRM: {
           const certificateResponse = await axios(
-            `${Constant.LINE_USE_HTTPS ? "https" : "http"}://${
-              Constant.LINE_SERVER_HOST_FOR_XHR
-            }${Constant.LINE_CERTIFICATE_PATH}`,
-            {
-              method: "GET",
-              headers: {
-                Accept: "application/json",
-                "Cache-Control": "no-cache",
-                "X-Line-Access": loginResult.verifier,
-                "X-Line-Application": Constant.LINE_APPLICATION_IDENTITY,
+              `${Constant.LINE_USE_HTTPS ? 'https' : 'http'}://${
+                Constant.LINE_SERVER_HOST_FOR_XHR
+              }${Constant.LINE_CERTIFICATE_PATH}`,
+              {
+                method: 'GET',
+                headers: {
+                  'Accept': 'application/json',
+                  'Cache-Control': 'no-cache',
+                  'X-Line-Access': loginResult.verifier,
+                  'X-Line-Application': Constant.LINE_APPLICATION_IDENTITY,
+                },
               },
-            }
           );
           const accessKey = certificateResponse.data;
           const verifyClient = lineClient(Constant.LINE_LOGIN_PATH);
@@ -183,25 +184,25 @@ export default {
           });
           const verifyResult = await verifyClient.loginZ(verifyRequest);
           if (verifyResult.type == lineType.LoginResultType.SUCCESS) {
-            this.loginStatus = "Successful";
+            this.loginStatus = 'Successful';
             this.setAuthToken(verifyResult.authToken);
             this.setAccessCertificate(verifyResult.certificate);
             return true;
           }
-          this.loginStatus = "Unknown Error";
+          this.loginStatus = 'Unknown Error';
           return false;
         }
         case lineType.LoginResultType.REQUIRE_QRCODE:
-          this.loginStatus = "QR Code Login Required. But nothing to do.";
+          this.loginStatus = 'QR Code Login Required. But nothing to do.';
           return false;
         case lineType.LoginResultType.SUCCESS:
-          this.loginStatus = "Successful";
+          this.loginStatus = 'Successful';
           this.setAuthToken(loginResult.authToken);
           return true;
       }
     },
     async getUserIP() {
-      const response = await axios("https://restapi.starinc.xyz/basic/ip");
+      const response = await axios('https://restapi.starinc.xyz/basic/ip');
       const result = response.data;
       return result.data.ip_addr;
     },
@@ -212,7 +213,7 @@ export default {
       const cookieName = `${
         Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX
       }_${hash.sha256(this.user.identity)}`;
-      this.$cookies.set(cookieName, certificate, "1y");
+      this.$cookies.set(cookieName, certificate, '1y');
     },
   },
   async created() {

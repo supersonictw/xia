@@ -5,7 +5,7 @@
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  (c) 2020 SuperSonic. (https://github.com/supersonictw)
+  (c) 2021 SuperSonic. (https://github.com/supersonictw)
 -->
 
 <template>
@@ -46,15 +46,15 @@
 </template>
 
 <script>
-import Constant from "@/data/const.js";
+import Constant from '@/data/const.js';
 
-import Back from "@/components/Back.vue";
+import Back from '@/components/Back.vue';
 
-import lineClient from "@/computes/line.js";
-import lineType from "@/computes/protocol/line_types.js";
+import lineClient from '@/computes/line.js';
+import lineType from '@/computes/protocol/line_types.js';
 
 export default {
-  name: "Contact",
+  name: 'Contact',
   components: {
     Back,
   },
@@ -66,80 +66,80 @@ export default {
             name: Constant.ROUTER_TAG_REDIRECT,
             params: {
               next: Constant.ROUTER_TAG_CONTACT,
-              data: { targetIdHashed: this.targetIdHashed },
+              data: {targetIdHashed: this.targetIdHashed},
             },
           });
           return false;
         }
       }
-      if (this.targetId.startsWith("u")) {
+      if (this.targetId.startsWith('u')) {
         const userInfo = await this.$store.state.idbUser.get(
-          Constant.IDB_USER_CONTACT,
-          this.targetId
+            Constant.IDB_USER_CONTACT,
+            this.targetId,
         );
         this.displayName = userInfo.displayName;
         this.statusMessage = userInfo.statusMessage;
         this.pictureStatus = userInfo.pictureStatus;
         this.contactType = lineType.MIDType.USER;
-      } else if (this.targetId.startsWith("c")) {
-        let statusMessageArray = [];
+      } else if (this.targetId.startsWith('c')) {
+        const statusMessageArray = [];
         let groupInfo = await this.$store.state.idbUser.get(
-          Constant.IDB_USER_GROUP_JOINED,
-          this.targetId
+            Constant.IDB_USER_GROUP_JOINED,
+            this.targetId,
         );
         if (!groupInfo) {
           groupInfo = await this.$store.state.idbUser.get(
-            Constant.IDB_USER_GROUP_INVITED,
-            this.targetId
+              Constant.IDB_USER_GROUP_INVITED,
+              this.targetId,
           );
           this.groupInviting = true;
           statusMessageArray.push(
-            `${Constant.GROUP_INVITING_ICON} This is a Group Invitation.\n`
+              `${Constant.GROUP_INVITING_ICON} This is a Group Invitation.\n`,
           );
         }
         const membersCount = groupInfo.members ? groupInfo.members.length : 0;
         const invitesCount = groupInfo.invitee ? groupInfo.invitee.length : 0;
         statusMessageArray.push(
-          `Members: ${membersCount}\nInvites: ${invitesCount}`
+            `Members: ${membersCount}\nInvites: ${invitesCount}`,
         );
         this.displayName = groupInfo.name;
-        this.statusMessage = statusMessageArray.join("\n");
+        this.statusMessage = statusMessageArray.join('\n');
         this.pictureStatus = groupInfo.pictureStatus;
         this.contactType = lineType.MIDType.GROUP;
       } else {
         this.$router.replace({
           name: Constant.ROUTER_TAG_ERROR,
-          params: { reason: "Unknown Contact type." },
+          params: {reason: 'Unknown Contact type.'},
         });
       }
     },
     enterChat() {
       this.$router.replace({
         name: Constant.ROUTER_TAG_CHAT,
-        params: { targetIdHashed: this.targetIdHashed },
+        params: {targetIdHashed: this.targetIdHashed},
       });
     },
     replyGroupInvitation(status) {
       if (status) {
         this.client.acceptGroupInvitation(
-          Constant.THRIFT_DEFAULT_SEQ,
-          this.targetId
+            Constant.THRIFT_DEFAULT_SEQ,
+            this.targetId,
         );
         this.enterChat();
       } else {
         this.client.rejectGroupInvitation(
-          Constant.THRIFT_DEFAULT_SEQ,
-          this.targetId
+            Constant.THRIFT_DEFAULT_SEQ,
+            this.targetId,
         );
       }
     },
     escapeHtml(text) {
-      let map = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;",
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        '\'': '&#039;',
       };
 
       return text.replace(/[&<>"']/g, function(m) {
@@ -152,22 +152,23 @@ export default {
       if (!this.$store.state.ready) {
         return -1;
       }
-      if (this.$store.state.chatIdsHashed.has(this.targetIdHashed))
+      if (this.$store.state.chatIdsHashed.has(this.targetIdHashed)) {
         return this.$store.state.chatIdsHashed.get(this.targetIdHashed);
-      this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
-      return "";
+      }
+      this.$router.replace({name: Constant.ROUTER_TAG_NOT_FOUND});
+      return '';
     },
     statusMessageWithLinesAndEscaped() {
-      return this.escapeHtml(this.statusMessage).replace(/\n/g, "<br />");
+      return this.escapeHtml(this.statusMessage).replace(/\n/g, '<br />');
     },
   },
-  props: ["targetIdHashed"],
+  props: ['targetIdHashed'],
   data() {
     return {
       contactType: 0,
       groupInviting: false,
-      displayName: "Loading...",
-      statusMessage: "Loading...",
+      displayName: 'Loading...',
+      statusMessage: 'Loading...',
       pictureStatus: null,
       mediaURL: Constant.LINE_MEDIA_URL,
       client: lineClient(Constant.LINE_QUERY_PATH, this.$store.state.authToken),

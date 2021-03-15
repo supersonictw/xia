@@ -5,7 +5,7 @@
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  (c) 2020 SuperSonic. (https://github.com/supersonictw)
+  (c) 2021 SuperSonic. (https://github.com/supersonictw)
 -->
 
 <template>
@@ -49,17 +49,17 @@
 </template>
 
 <script>
-import Constant from "@/data/const.js";
+import Constant from '@/data/const.js';
 
-import hash from "js-sha256";
+import hash from 'js-sha256';
 
 export default {
-  name: "ContactList",
+  name: 'ContactList',
   methods: {
     enterContact(chatId) {
       this.$router.push({
         name: Constant.ROUTER_TAG_CONTACT,
-        params: { targetIdHashed: chatId },
+        params: {targetIdHashed: chatId},
       });
     },
     async waitForFetchData() {
@@ -75,9 +75,9 @@ export default {
     },
     async fetchContacts() {
       let cursor = await this.$store.state.idbUser
-        .transaction(Constant.IDB_USER_CONTACT)
-        .store.index("displayName")
-        .openCursor();
+          .transaction(Constant.IDB_USER_CONTACT)
+          .store.index('displayName')
+          .openCursor();
       while (cursor) {
         this.contactUser.push({
           id: hash.sha256(cursor.value.mid),
@@ -89,19 +89,19 @@ export default {
       }
     },
     layoutGroupStatus(groupData, invited = false) {
-      let layout = [];
+      const layout = [];
       // Invited Icon
       if (invited) layout.push(`${Constant.GROUP_INVITING_ICON}`);
       // Members Count
       const membersCount = groupData.members ? groupData.members.length : 0;
       layout.push(`Members: ${membersCount}`);
-      return layout.join(" ");
+      return layout.join(' ');
     },
     async fetchGroupsJoined() {
       let cursor = await this.$store.state.idbUser
-        .transaction(Constant.IDB_USER_GROUP_JOINED)
-        .store.index("displayName")
-        .openCursor();
+          .transaction(Constant.IDB_USER_GROUP_JOINED)
+          .store.index('displayName')
+          .openCursor();
       while (cursor) {
         this.contactGroupJoined.push({
           id: hash.sha256(cursor.value.id),
@@ -114,9 +114,9 @@ export default {
     },
     async fetchGroupsInvited() {
       let cursor = await this.$store.state.idbUser
-        .transaction(Constant.IDB_USER_GROUP_INVITED)
-        .store.index("displayName")
-        .openCursor();
+          .transaction(Constant.IDB_USER_GROUP_INVITED)
+          .store.index('displayName')
+          .openCursor();
       while (cursor) {
         this.contactGroupInvited.push({
           id: hash.sha256(cursor.value.id),
@@ -135,25 +135,25 @@ export default {
         case 1:
           return this.contactGroup;
         default:
-          this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
+          this.$router.replace({name: Constant.ROUTER_TAG_NOT_FOUND});
       }
     },
     getTabColor(e) {
-      return this.tabId == e ? "actived" : "";
+      return this.tabId == e ? 'actived' : '';
     },
     switchTab(e) {
       const tabId = parseInt(e.target.id);
       const data = [this.contactUser, this.contactGroup];
       if (tabId >= data.length || tabId < 0) {
-        this.$router.replace({ name: Constant.ROUTER_TAG_NOT_FOUND });
+        this.$router.replace({name: Constant.ROUTER_TAG_NOT_FOUND});
       }
       this.tabId = tabId;
     },
     getItemTitle(item) {
       if (this.tabId == 1) {
-        return item.statusMessage.includes(Constant.GROUP_INVITING_ICON)
-          ? `[Inviting] ${item.displayName}`
-          : `${item.displayName}`;
+        return item.statusMessage.includes(Constant.GROUP_INVITING_ICON) ?
+          `[Inviting] ${item.displayName}` :
+          `${item.displayName}`;
       }
       return item.displayName;
     },
@@ -166,7 +166,7 @@ export default {
   data() {
     return {
       tabId: 0,
-      contactType: ["Contact", "Group"],
+      contactType: ['Contact', 'Group'],
       mediaURL: Constant.LINE_MEDIA_URL,
       contactUser: [],
       contactGroupJoined: [],

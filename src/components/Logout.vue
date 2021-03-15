@@ -5,7 +5,7 @@
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  (c) 2020 SuperSonic. (https://github.com/supersonictw)
+  (c) 2021 SuperSonic. (https://github.com/supersonictw)
 -->
 
 <template>
@@ -20,17 +20,17 @@
 </template>
 
 <script>
-import Constant from "@/data/const.js";
+import Constant from '@/data/const.js';
 
-import lineClient from "@/computes/line.js";
+import lineClient from '@/computes/line.js';
 
 export default {
-  name: "Logout",
+  name: 'Logout',
   methods: {
     logout() {
       lineClient(
-        Constant.LINE_QUERY_PATH,
-        this.$store.state.authToken
+          Constant.LINE_QUERY_PATH,
+          this.$store.state.authToken,
       ).logout();
       Constant.ALL_COOKIES.forEach((name) => this.$cookies.remove(name));
       window.localStorage.clear();

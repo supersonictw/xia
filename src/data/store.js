@@ -1,4 +1,4 @@
-/*jshint esversion: 8 */
+/* jshint esversion: 8 */
 /*
     XIA - LINE Web Client
     ---
@@ -6,19 +6,19 @@
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  (c) 2020 SuperSonic. (https://github.com/supersonictw)
+  (c) 2021 SuperSonic. (https://github.com/supersonictw)
 */
 
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-import hash from "js-sha256";
+import hash from 'js-sha256';
 
 Vue.use(Vuex);
 
 const Store = new Vuex.Store({
   state: {
-    authToken: "",
+    authToken: '',
     ready: 0,
     loaded: 0,
     profile: {},
@@ -26,6 +26,8 @@ const Store = new Vuex.Store({
     idbUser: null,
     lastMessages: new Map(),
     chatIdsHashed: new Map(),
+    statusMessage: null,
+    notifications: [],
   },
   mutations: {
     registerIndexedDB(state, handler) {
@@ -35,7 +37,7 @@ const Store = new Vuex.Store({
     registerAuthToken(state, authToken) {
       state.authToken = authToken;
     },
-    registerChatIdHashed(state, { targetId, idHashed }) {
+    registerChatIdHashed(state, {targetId, idHashed}) {
       state.chatIdsHashed.set(idHashed, targetId);
     },
     unregisterChatIdHashed(state, idHashed) {
@@ -53,6 +55,10 @@ const Store = new Vuex.Store({
       state.profile.displayName = profileData.displayName;
       state.profile.picturePath = profileData.picturePath;
       state.profile.statusMessage = profileData.statusMessage;
+    },
+    notify(state, {title, description}) {
+      state.notifications.push({title, description});
+      setTimeout(state.notifications.pop(), 3000);
     },
   },
 });

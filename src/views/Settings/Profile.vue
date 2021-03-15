@@ -5,7 +5,7 @@
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  (c) 2020 SuperSonic. (https://github.com/supersonictw)
+  (c) 2021 SuperSonic. (https://github.com/supersonictw)
 -->
 
 <template>
@@ -48,12 +48,12 @@
 </template>
 
 <script>
-import Constant from "@/data/const.js";
+import Constant from '@/data/const.js';
 
-import lineClient from "@/computes/line.js";
+import lineClient from '@/computes/line.js';
 
 export default {
-  name: "Settings_Profile",
+  name: 'Settings_Profile',
   methods: {
     async waitForFetchProfile() {
       setTimeout(() => {
@@ -71,12 +71,12 @@ export default {
       this.disableInput = false;
     },
     escapeHtml(text) {
-      let map = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;",
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        '\'': '&#039;',
       };
 
       return text.replace(/[&<>"']/g, function(m) {
@@ -87,25 +87,25 @@ export default {
       if (this.displayName.length < 1) return;
       this.disableInput = true;
       const client = lineClient(
-        Constant.LINE_QUERY_PATH,
-        this.$store.state.authToken
+          Constant.LINE_QUERY_PATH,
+          this.$store.state.authToken,
       );
-      let profile = await client.getProfile();
+      const profile = await client.getProfile();
       profile.displayName = this.displayName;
       profile.statusMessage = this.statusMessage;
       await client.updateProfile(Constant.THRIFT_DEFAULT_SEQ, profile);
-      this.$router.replace({ name: Constant.ROUTER_TAG_SETTINGS_OVERVIEW });
+      this.$router.replace({name: Constant.ROUTER_TAG_SETTINGS_OVERVIEW});
     },
   },
   computed: {
     statusMessageWithLinesAndEscaped() {
-      return this.escapeHtml(this.statusMessage).replace(/\n/g, "<br />");
+      return this.escapeHtml(this.statusMessage).replace(/\n/g, '<br />');
     },
   },
   data() {
     return {
-      displayName: "Loading...",
-      statusMessage: "Loading...",
+      displayName: 'Loading...',
+      statusMessage: 'Loading...',
       disableInput: true,
       picturePath: null,
       mediaURL: Constant.LINE_MEDIA_URL,
