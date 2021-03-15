@@ -50,8 +50,6 @@
 <script>
 import Constant from '@/data/const.js';
 
-import lineClient from '@/computes/line.js';
-
 export default {
   name: 'Settings_Profile',
   methods: {
@@ -86,15 +84,12 @@ export default {
     async updateProfile() {
       if (this.displayName.length < 1) return;
       this.disableInput = true;
-      const client = lineClient(
-          Constant.LINE_QUERY_PATH,
-          this.$store.state.authToken,
-      );
+      const client = this.$store.state.client;
       const profile = await client.getProfile();
       profile.displayName = this.displayName;
       profile.statusMessage = this.statusMessage;
       await client.updateProfile(Constant.THRIFT_DEFAULT_SEQ, profile);
-      this.$router.replace({name: Constant.ROUTER_TAG_SETTINGS_OVERVIEW});
+      await this.$router.replace({name: Constant.ROUTER_TAG_SETTINGS_OVERVIEW});
     },
   },
   computed: {

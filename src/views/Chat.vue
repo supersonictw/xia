@@ -138,7 +138,6 @@ import axios from 'axios';
 import moment from 'moment';
 import VEmojiPicker from 'v-emoji-picker';
 
-import lineClient from '@/computes/line.js';
 import lineType from '@/computes/protocol/line_types.js';
 
 export default {
@@ -151,7 +150,7 @@ export default {
     async fetchChatRoomInformation() {
       if (this.targetId === -1) {
         if (!this.$store.state.ready) {
-          this.$router.replace({
+          await this.$router.replace({
             name: Constant.ROUTER_TAG_REDIRECT,
             params: {
               next: Constant.ROUTER_TAG_CHAT,
@@ -180,7 +179,7 @@ export default {
         this.chatRoomType = lineType.MIDType.GROUP;
         return true;
       }
-      this.$router.replace({
+      await this.$router.replace({
         name: Constant.ROUTER_TAG_ERROR,
         params: {reason: 'Unknown Chat Room type.'},
       });
@@ -191,8 +190,8 @@ export default {
           return message.origin === this.getMyUserId ? 'self' : 'another';
         case 1:
           return (
-            message.origin != this.getMyUserId &&
-            this.chatRoomType != lineType.MIDType.USER
+            message.origin !== this.getMyUserId &&
+            this.chatRoomType !== lineType.MIDType.USER
           );
         case 2:
           return this.chatRoomType === lineType.MIDType.USER ?
@@ -231,8 +230,8 @@ export default {
       this.initialized = true;
       await this.fetchDisplayMessage();
     },
-    async downloadImage(imageSource) {
-      return await axios(imageSource, {
+    downloadImage(imageSource) {
+      return axios(imageSource, {
         method: 'GET',
         responseType: 'arraybuffer',
         headers: {
@@ -261,7 +260,7 @@ export default {
     },
     async getImageResource(messageId, messageOrigin) {
       if (!messageId || messageId in this.mediaObjects) return;
-      if (this.getMyUserId == messageOrigin && this.checkUploadBox) {
+      if (this.getMyUserId === messageOrigin && this.checkUploadBox) {
         return setTimeout(
             (messageId, messageOrigin) =>
               this.getImageResource(messageId, messageOrigin),
@@ -293,15 +292,15 @@ export default {
     },
     sendMessage() {
       this.moveToBottom();
-      if (this.inputType == 0 && this.inputText.length < 1) return;
-      this.sendMessageProccess(
+      if (this.inputType === 0 && this.inputText.length < 1) return;
+      this.sendMessageProcess(
           this.inputType,
           this.inputText,
           this.$refs.file.files,
       );
       setTimeout(() => (this.inputText = ''), Constant.WAIT_TIMEOUT);
     },
-    async sendMessageProccess(inputType, inputText, fileList) {
+    async sendMessageProcess(inputType, inputText, fileList) {
       let message;
       switch (inputType) {
         case 0:
@@ -313,7 +312,7 @@ export default {
           break;
         case 1:
           if (
-            fileList.length != 1 ||
+            fileList.length !== 1 ||
             this.checkFileTypeForSendMessage(fileList[0].type) === -1
           ) {
             break;
@@ -331,20 +330,20 @@ export default {
           break;
       }
       if (!message) {
-        this.$router.replace({
+        await this.$router.replace({
           name: Constant.ROUTER_TAG_ERROR,
           params: {reason: 'Something was wrong while send a message'},
         });
         return;
       }
-      const response = await this.client.sendMessage(
+      const response = await this.$store.state.client.sendMessage(
           Constant.THRIFT_DEFAULT_SEQ,
           message,
       );
-      if (inputType == 1) this.uploadMessageAttached(response.id, fileList);
+      if (inputType === 1) this.uploadMessageAttached(response.id, fileList);
     },
     async uploadMessageAttached(messageId, fileList) {
-      if (fileList.length != 1) return;
+      if (fileList.length !== 1) return;
       const data = new FormData();
       data.append(
           'params',
@@ -356,7 +355,7 @@ export default {
             type: Object.keys(lineType.ContentType)
                 .find(
                     (key) =>
-                      lineType.ContentType[key] ==
+                      lineType.ContentType[key] ===
                 this.checkFileTypeForSendMessage(fileList[0].type),
                 )
                 .toLowerCase(),
@@ -399,7 +398,7 @@ export default {
       }
     },
     sendReadTag(messageId) {
-      this.client.sendChatChecked(
+      this.$store.state.client.sendChatChecked(
           Constant.THRIFT_DEFAULT_SEQ,
           this.targetId,
           messageId,
@@ -410,7 +409,7 @@ export default {
       if (element) {
         if (
           autoScroll &&
-          element.scrollTop + element.clientHeight == element.scrollHeight
+          element.scrollTop + element.clientHeight === element.scrollHeight
         ) {
           setTimeout(this.moveToBottom, Constant.WAIT_TIMEOUT);
         } else {
@@ -489,8 +488,8 @@ export default {
       return this.$store.state.profile.userId;
     },
     checkUploadBox() {
-      if (this.$refs.file == undefined) return;
-      return this.$refs.file.value ? true : false;
+      if (this.$refs.file === undefined) return;
+      return !!this.$refs.file.value;
     },
   },
   props: ['targetIdHashed'],
@@ -508,7 +507,6 @@ export default {
       messageIdLastSeen: null,
       showEmojiBoxCheckpoint: false,
       mediaURL: Constant.LINE_MEDIA_URL,
-      client: lineClient(Constant.LINE_QUERY_PATH, this.$store.state.authToken),
     };
   },
   async mounted() {

@@ -134,7 +134,6 @@ import axios from 'axios';
 import hash from 'js-sha256';
 import imageUpload from 'vue-image-crop-upload';
 
-import lineClient from '@/computes/line.js';
 import lineType from '@/computes/protocol/line_types.js';
 
 export default {
@@ -191,10 +190,7 @@ export default {
     async create() {
       if (this.createType > 0 && this.createName.length > 0) {
         this.created = true;
-        const client = lineClient(
-            Constant.LINE_QUERY_PATH,
-            this.$store.state.authToken,
-        );
+        const client = this.$store.state.client;
         switch (this.createType) {
           case lineType.MIDType.GROUP: {
             const group = await client.createGroup(
@@ -260,7 +256,7 @@ export default {
       }
       return new File([u8arr], filename, {type: mime});
     },
-    async mobileUIhandler(e) {
+    async mobileDetector(e) {
       this.mobileUI = e.target.innerWidth < Constant.MOBILE_UI_WIDTH;
     },
   },
@@ -297,7 +293,7 @@ export default {
     };
   },
   created() {
-    window.addEventListener('resize', this.mobileUIhandler);
+    window.addEventListener('resize', this.mobileDetector);
   },
   mounted() {
     if (this.type) {
@@ -316,7 +312,7 @@ export default {
     this.waitForFetchData();
   },
   destroyed() {
-    window.removeEventListener('resize', this.mobileUIhandler);
+    window.removeEventListener('resize', this.mobileDetector);
   },
 };
 </script>

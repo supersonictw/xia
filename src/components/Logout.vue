@@ -22,16 +22,11 @@
 <script>
 import Constant from '@/data/const.js';
 
-import lineClient from '@/computes/line.js';
-
 export default {
   name: 'Logout',
   methods: {
     logout() {
-      lineClient(
-          Constant.LINE_QUERY_PATH,
-          this.$store.state.authToken,
-      ).logout();
+      this.$store.state.client.logout();
       Constant.ALL_COOKIES.forEach((name) => this.$cookies.remove(name));
       window.localStorage.clear();
       window.sessionStorage.clear();

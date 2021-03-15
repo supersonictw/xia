@@ -183,7 +183,7 @@ export default {
             e2eeVersion: 0,
           });
           const verifyResult = await verifyClient.loginZ(verifyRequest);
-          if (verifyResult.type == lineType.LoginResultType.SUCCESS) {
+          if (verifyResult.type === lineType.LoginResultType.SUCCESS) {
             this.loginStatus = 'Successful';
             this.setAuthToken(verifyResult.authToken);
             this.setAccessCertificate(verifyResult.certificate);

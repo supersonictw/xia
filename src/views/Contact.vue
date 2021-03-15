@@ -50,7 +50,6 @@ import Constant from '@/data/const.js';
 
 import Back from '@/components/Back.vue';
 
-import lineClient from '@/computes/line.js';
 import lineType from '@/computes/protocol/line_types.js';
 
 export default {
@@ -62,7 +61,7 @@ export default {
     async fetchContactProfile() {
       if (this.targetId === -1) {
         if (!this.$store.state.ready) {
-          this.$router.replace({
+          await this.$router.replace({
             name: Constant.ROUTER_TAG_REDIRECT,
             params: {
               next: Constant.ROUTER_TAG_CONTACT,
@@ -120,14 +119,15 @@ export default {
       });
     },
     replyGroupInvitation(status) {
+      const client = this.$store.state.client;
       if (status) {
-        this.client.acceptGroupInvitation(
+        client.acceptGroupInvitation(
             Constant.THRIFT_DEFAULT_SEQ,
             this.targetId,
         );
         this.enterChat();
       } else {
-        this.client.rejectGroupInvitation(
+        client.rejectGroupInvitation(
             Constant.THRIFT_DEFAULT_SEQ,
             this.targetId,
         );
@@ -171,7 +171,6 @@ export default {
       statusMessage: 'Loading...',
       pictureStatus: null,
       mediaURL: Constant.LINE_MEDIA_URL,
-      client: lineClient(Constant.LINE_QUERY_PATH, this.$store.state.authToken),
     };
   },
   created() {

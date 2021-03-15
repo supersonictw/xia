@@ -38,8 +38,8 @@
         >
       </div>
       <div id="lists">
-        <ContactList v-show="!mobileUI || tabName == 'Contacts'" />
-        <ChatList v-show="!mobileUI || tabName == 'Chats'" />
+        <ContactList v-show="!mobileUI || tabName === 'Contacts'" />
+        <ChatList v-show="!mobileUI || tabName === 'Chats'" />
       </div>
     </div>
   </div>
@@ -51,8 +51,6 @@ import Constant from '@/data/const.js';
 import Logout from '@/components/Logout.vue';
 import ContactList from '@/components/Dashboard/ContactList.vue';
 import ChatList from '@/components/Dashboard/ChatList.vue';
-
-import lineClient from '@/computes/line.js';
 
 export default {
   name: 'Dashboard',
@@ -78,11 +76,11 @@ export default {
     },
     tabSwitcher() {
       const tabs = [this.tabName, this.tabSwitcherName];
-      this.tabName = this.tabName == tabs[0] ? tabs[1] : tabs[0];
+      this.tabName = this.tabName === tabs[0] ? tabs[1] : tabs[0];
       this.tabSwitcherName =
-        this.tabSwitcherName == tabs[0] ? tabs[1] : tabs[0];
+        this.tabSwitcherName === tabs[0] ? tabs[1] : tabs[0];
     },
-    async mobileUIhandler(e) {
+    async mobileDetector(e) {
       this.mobileUI = e.target.innerWidth < Constant.MOBILE_UI_WIDTH;
     },
   },
@@ -91,7 +89,6 @@ export default {
       tabName: 'Contacts',
       tabSwitcherName: 'Chats',
       mobileUI: window.innerWidth < Constant.MOBILE_UI_WIDTH,
-      client: lineClient(Constant.LINE_QUERY_PATH, this.$store.state.authToken),
       profileDisplayName: 'Loading...',
       profileStatusMessage: 'Loading...',
       profilePicturePath: null,
@@ -99,11 +96,11 @@ export default {
     };
   },
   created() {
-    window.addEventListener('resize', this.mobileUIhandler);
+    window.addEventListener('resize', this.mobileDetector);
     this.waitForFetchProfile();
   },
   destroyed() {
-    window.removeEventListener('resize', this.mobileUIhandler);
+    window.removeEventListener('resize', this.mobileDetector);
   },
 };
 </script>
