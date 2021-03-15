@@ -14,6 +14,9 @@ import Vuex from 'vuex';
 
 import hash from 'js-sha256';
 
+import Constant from '@/data/const';
+import lineClient from '@/computes/line.js';
+
 Vue.use(Vuex);
 
 const Store = new Vuex.Store({
@@ -59,6 +62,12 @@ const Store = new Vuex.Store({
     notify(state, {title, description}) {
       state.notifications.push({title, description});
       setTimeout(state.notifications.pop(), 3000);
+    },
+  },
+  actions: {
+    init({commit}, authToken) {
+      this.client = lineClient(Constant.LINE_QUERY_PATH, authToken);
+      commit('setLoaded');
     },
   },
 });
