@@ -151,9 +151,9 @@ export default {
       if (this.targetId === -1) {
         if (!this.$store.state.ready) {
           await this.$router.replace({
-            name: Constant.ROUTER_TAG_REDIRECT,
+            name: Constant.ROUTER_TAG.REDIRECT,
             params: {
-              next: Constant.ROUTER_TAG_CHAT,
+              next: Constant.ROUTER_TAG.CHAT,
               data: {targetIdHashed: this.targetIdHashed},
             },
           });
@@ -162,7 +162,7 @@ export default {
       }
       if (this.targetId.startsWith('u')) {
         this.chatRoomInfo = await this.$store.state.idbUser.get(
-            Constant.IDB_USER_CONTACT,
+            Constant.IDB.USER.CONTACT,
             this.targetId,
         );
         this.chatRoomTitle = this.chatRoomInfo.displayName;
@@ -171,7 +171,7 @@ export default {
         return true;
       } else if (this.targetId.startsWith('c')) {
         this.chatRoomInfo = await this.$store.state.idbUser.get(
-            Constant.IDB_USER_GROUP_JOINED,
+            Constant.IDB.USER.GROUP.JOINED,
             this.targetId,
         );
         this.chatRoomTitle = this.chatRoomInfo.name;
@@ -180,7 +180,7 @@ export default {
         return true;
       }
       await this.$router.replace({
-        name: Constant.ROUTER_TAG_ERROR,
+        name: Constant.ROUTER_TAG.ERROR,
         params: {reason: 'Unknown Chat Room type.'},
       });
     },
@@ -204,7 +204,7 @@ export default {
         setTimeout(this.fetchDisplayMessage, Constant.RETRY_TIMEOUT);
       }
       let cursor = await this.$store.state.idbUser
-          .transaction(Constant.IDB_USER_MESSAGE_BOX)
+          .transaction(Constant.IDB.USER.MESSAGE_BOX)
           .store.index('target')
           .openCursor(IDBKeyRange.only(this.targetId), 'prev');
       while (cursor) {
@@ -237,7 +237,7 @@ export default {
         headers: {
           'Accept': 'image/jpeg',
           'X-Line-Access': this.$store.state.authToken,
-          'X-Line-Application': Constant.LINE_APPLICATION_IDENTITY,
+          'X-Line-Application': Constant.LINE.APPLICATION_IDENTITY,
         },
       });
     },
@@ -331,7 +331,7 @@ export default {
       }
       if (!message) {
         await this.$router.replace({
-          name: Constant.ROUTER_TAG_ERROR,
+          name: Constant.ROUTER_TAG.ERROR,
           params: {reason: 'Something was wrong while send a message'},
         });
         return;
@@ -367,7 +367,7 @@ export default {
         headers: {
           'Content-Type': 'multipart/form-data',
           'X-Line-Access': this.$store.state.authToken,
-          'X-Line-Application': Constant.LINE_APPLICATION_IDENTITY,
+          'X-Line-Application': Constant.LINE.APPLICATION_IDENTITY,
         },
         data,
       });
@@ -392,7 +392,7 @@ export default {
           return this.chatRoomInfo.members.find((user) => user.mid == userId);
         default:
           this.$router.replace({
-            name: Constant.ROUTER_TAG_ERROR,
+            name: Constant.ROUTER_TAG.ERROR,
             params: {reason: 'Contact Metadata not synchronized completely.'},
           });
       }
@@ -439,7 +439,7 @@ export default {
     },
     viewFullImage(messageId) {
       this.$router.push({
-        name: Constant.ROUTER_TAG_PICTURE_PREVIEW,
+        name: Constant.ROUTER_TAG.PICTURE_PREVIEW,
         params: {messageId},
       });
     },
@@ -452,7 +452,7 @@ export default {
       if (this.$store.state.chatIdsHashed.has(this.targetIdHashed)) {
         return this.$store.state.chatIdsHashed.get(this.targetIdHashed);
       }
-      this.$router.replace({name: Constant.ROUTER_TAG_NOT_FOUND});
+      this.$router.replace({name: Constant.ROUTER_TAG.NOT_FOUND});
       return '';
     },
     getMessages() {

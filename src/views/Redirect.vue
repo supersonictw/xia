@@ -35,7 +35,7 @@ export default {
   },
   mounted() {
     if (this.next) this.waitForGoToNextPage();
-    else this.$router.replace({name: Constant.ROUTER_TAG_NOT_FOUND});
+    else this.$router.replace({name: Constant.ROUTER_TAG.NOT_FOUND});
   },
 };
 </script>

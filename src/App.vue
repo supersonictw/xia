@@ -43,22 +43,22 @@ export default {
   },
   methods: {
     async verifyAccess() {
-      if (this.$route.name === Constant.ROUTER_TAG_ABOUT) {
+      if (this.$route.name === Constant.ROUTER_TAG.ABOUT) {
         return null;
       }
       if (this.client && this.$store.state.authToken) {
-        if (this.$route.name === Constant.ROUTER_TAG_LOGIN) {
-          await this.$router.push({name: Constant.ROUTER_TAG_DASHBOARD});
+        if (this.$route.name === Constant.ROUTER_TAG.LOGIN) {
+          await this.$router.push({name: Constant.ROUTER_TAG.DASHBOARD});
         }
         if (this.$store.state.ready || (await this.getProfile())) {
           return true;
         }
       }
       if (
-        this.$route.name !== Constant.ROUTER_TAG_INTRODUCING &&
-        this.$route.name !== Constant.ROUTER_TAG_LOGIN
+        this.$route.name !== Constant.ROUTER_TAG.INTRODUCING &&
+        this.$route.name !== Constant.ROUTER_TAG.LOGIN
       ) {
-        await this.$router.push({name: Constant.ROUTER_TAG_INTRODUCING});
+        await this.$router.push({name: Constant.ROUTER_TAG.INTRODUCING});
       }
       return false;
     },
@@ -68,15 +68,15 @@ export default {
       this.verifyAccess();
     },
     revision() {
-      this.$store.state.idbUser.put(Constant.IDB_USER_SETTINGS, {
-        id: Constant.IDB_USER_KEY_SETTINGS_REVISION,
+      this.$store.state.idbUser.put(Constant.IDB.USER.SETTINGS, {
+        id: Constant.IDB.USER.KEY_SETTINGS_REVISION,
         value: this.revision.toString(),
       });
     },
   },
   async created() {
-    if (this.$cookies.isKey(Constant.COOKIE_ACCESS_KEY)) {
-      const authToken = this.$cookies.get(Constant.COOKIE_ACCESS_KEY);
+    if (this.$cookies.isKey(Constant.COOKIE.ACCESS_KEY)) {
+      const authToken = this.$cookies.get(Constant.COOKIE.ACCESS_KEY);
       this.$store.commit('registerAuthToken', authToken);
     }
     this.$store.commit('setLoaded');

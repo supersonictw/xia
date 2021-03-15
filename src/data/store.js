@@ -66,7 +66,7 @@ const Store = new Vuex.Store({
   },
   actions: {
     init({commit}, authToken) {
-      this.client = lineClient(Constant.LINE_QUERY_PATH, authToken);
+      this.client = lineClient(Constant.LINE.PATH.QUERY, authToken);
       commit('setLoaded');
     },
   },

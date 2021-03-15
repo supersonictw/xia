@@ -47,7 +47,7 @@ export default {
   methods: {
     enterChat(chatId) {
       this.$router.push({
-        name: Constant.ROUTER_TAG_CHAT,
+        name: Constant.ROUTER_TAG.CHAT,
         params: {targetIdHashed: chatId},
       });
     },
@@ -60,7 +60,7 @@ export default {
               message.to :
               message.from_;
           let contactData = await this.$store.state.idbUser.get(
-              Constant.IDB_USER_CONTACT,
+              Constant.IDB.USER.CONTACT,
               targetId,
           );
           if (!contactData) {
@@ -71,7 +71,7 @@ export default {
         }
         case lineType.MIDType.GROUP: {
           let groupData = await this.$store.state.idbUser.get(
-              Constant.IDB_USER_GROUP_JOINED,
+              Constant.IDB.USER.GROUP.JOINED,
               message.to,
           );
           if (!groupData) {
@@ -100,7 +100,7 @@ export default {
     },
     async fetchDisplayMessage() {
       let cursor = await this.$store.state.idbUser
-          .transaction(Constant.IDB_USER_PREVIEW_MESSAGE_BOX)
+          .transaction(Constant.IDB.USER.PREVIEW_MESSAGE_BOX)
           .store.openCursor();
       while (cursor) {
         this.updateDisplayMessage(cursor.value);

@@ -35,45 +35,45 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: Constant.ROUTER_TAG_INTRODUCING,
+    name: Constant.ROUTER_TAG.INTRODUCING,
     component: Introducing,
   },
   {
     path: '/login',
-    name: Constant.ROUTER_TAG_LOGIN,
+    name: Constant.ROUTER_TAG.LOGIN,
     component: Login,
   },
   {
     path: '/dashboard',
-    name: Constant.ROUTER_TAG_DASHBOARD,
+    name: Constant.ROUTER_TAG.DASHBOARD,
     component: Dashboard,
   },
   {
     path: '/profile',
-    name: Constant.ROUTER_TAG_PROFILE,
+    name: Constant.ROUTER_TAG.PROFILE,
     component: Profile,
   },
   {
     path: '/contact/:targetIdHashed',
-    name: Constant.ROUTER_TAG_CONTACT,
+    name: Constant.ROUTER_TAG.CONTACT,
     component: Contact,
     props: true,
   },
   {
     path: '/chat/:targetIdHashed',
-    name: Constant.ROUTER_TAG_CHAT,
+    name: Constant.ROUTER_TAG.CHAT,
     component: Chat,
     props: true,
   },
   {
     path: '/chat/image',
-    name: Constant.ROUTER_TAG_PICTURE_PREVIEW,
+    name: Constant.ROUTER_TAG.PICTURE_PREVIEW,
     component: PictureViewer,
     props: true,
   },
   {
     path: '/create/:type',
-    name: Constant.ROUTER_TAG_CREATE,
+    name: Constant.ROUTER_TAG.CREATE,
     component: Create,
     props: true,
   },
@@ -84,24 +84,24 @@ const routes = [
   },
   {
     path: '/about',
-    name: Constant.ROUTER_TAG_ABOUT,
+    name: Constant.ROUTER_TAG.ABOUT,
     component: About,
   },
   {
     path: '/redirect',
-    name: Constant.ROUTER_TAG_REDIRECT,
+    name: Constant.ROUTER_TAG.REDIRECT,
     component: Redirect,
     props: true,
   },
   {
     path: '/error',
-    name: Constant.ROUTER_TAG_ERROR,
+    name: Constant.ROUTER_TAG.ERROR,
     component: ErrorPage,
     props: true,
   },
   {
     path: '*',
-    name: Constant.ROUTER_TAG_NOT_FOUND,
+    name: Constant.ROUTER_TAG.NOT_FOUND,
     component: NotFound,
   },
 ];

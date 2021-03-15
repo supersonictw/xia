@@ -39,7 +39,7 @@ export default {
         headers: {
           'Accept': 'image/jpeg',
           'X-Line-Access': this.$store.state.authToken,
-          'X-Line-Application': Constant.LINE_APPLICATION_IDENTITY,
+          'X-Line-Application': Constant.LINE.APPLICATION_IDENTITY,
         },
       });
     },

@@ -102,7 +102,7 @@ export default {
         this.loginStatus = 'Empty identity or password';
         return;
       }
-      const loginClient = lineClient(Constant.LINE_LOGIN_PATH);
+      const loginClient = lineClient(Constant.LINE.PATH.LOGIN);
       const loginRequest = await this.getCredential();
       const loginResponse = await loginClient
           .loginZ(loginRequest)
@@ -121,7 +121,7 @@ export default {
       }
     },
     async getCredential() {
-      const authClient = lineClient(Constant.LINE_AUTH_PATH);
+      const authClient = lineClient(Constant.LINE.PATH.AUTH);
       const rsaKey = await authClient.getRSAKeyInfo(
           lineType.IdentityProvider.LINE,
       );
@@ -145,7 +145,7 @@ export default {
         accessLocation: this.user.ip_addr,
         systemName: Constant.NAME,
         certificate: this.$cookies.get(
-            `${Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX}_${hash.sha256(
+            `${Constant.COOKIE.ACCESS_CERTIFICATE_PREFIX}_${hash.sha256(
                 this.user.identity,
             )}`,
         ),
@@ -158,21 +158,21 @@ export default {
       switch (loginResult.type) {
         case lineType.LoginResultType.REQUIRE_DEVICE_CONFIRM: {
           const certificateResponse = await axios(
-              `${Constant.LINE_USE_HTTPS ? 'https' : 'http'}://${
-                Constant.LINE_SERVER_HOST_FOR_XHR
-              }${Constant.LINE_CERTIFICATE_PATH}`,
+              `${Constant.USE_HTTPS ? 'https' : 'http'}://${
+                Constant.LINE.SERVER.HOST_FOR_XHR
+              }${Constant.LINE.PATH.CERTIFICATE}`,
               {
                 method: 'GET',
                 headers: {
                   'Accept': 'application/json',
                   'Cache-Control': 'no-cache',
                   'X-Line-Access': loginResult.verifier,
-                  'X-Line-Application': Constant.LINE_APPLICATION_IDENTITY,
+                  'X-Line-Application': Constant.LINE.APPLICATION_IDENTITY,
                 },
               },
           );
           const accessKey = certificateResponse.data;
-          const verifyClient = lineClient(Constant.LINE_LOGIN_PATH);
+          const verifyClient = lineClient(Constant.LINE.PATH.LOGIN);
           const verifyRequest = new lineType.LoginRequest({
             type: lineType.LoginType.QRCODE,
             identityProvider: lineType.IdentityProvider.LINE,
@@ -207,11 +207,11 @@ export default {
       return result.data.ip_addr;
     },
     setAuthToken(authToken) {
-      this.$cookies.set(Constant.COOKIE_ACCESS_KEY, authToken);
+      this.$cookies.set(Constant.COOKIE.ACCESS_KEY, authToken);
     },
     setAccessCertificate(certificate) {
       const cookieName = `${
-        Constant.COOKIE_ACCESS_CERTIFICATE_PREFIX
+        Constant.COOKIE.ACCESS_CERTIFICATE_PREFIX
       }_${hash.sha256(this.user.identity)}`;
       this.$cookies.set(cookieName, certificate, '1y');
     },
@@ -252,8 +252,7 @@ export default {
   margin: 10px auto;
   font-size: 15px;
   padding: 5px;
-  border: 1px solid;
-  border-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 5px;
 }
 

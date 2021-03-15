@@ -77,7 +77,7 @@ export default {
     },
     enterCreate(e) {
       this.$router.push({
-        name: Constant.ROUTER_TAG_CREATE,
+        name: Constant.ROUTER_TAG.CREATE,
         params: {type: e.target.id},
       });
     },

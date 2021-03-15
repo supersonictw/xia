@@ -154,7 +154,7 @@ export default {
     },
     async fetchContacts() {
       let cursor = await this.$store.state.idbUser
-          .transaction(Constant.IDB_USER_CONTACT)
+          .transaction(Constant.IDB.USER.CONTACT)
           .store.index('displayName')
           .openCursor();
       while (cursor) {
@@ -203,14 +203,14 @@ export default {
               setTimeout(
                   () =>
                     this.$router.push({
-                      name: Constant.ROUTER_TAG_CHAT,
+                      name: Constant.ROUTER_TAG.CHAT,
                       params: {targetIdHashed: hash.sha256(group.id)},
                     }),
                   Constant.WAIT_TIMEOUT,
               );
             } else {
               this.$router.replace({
-                name: Constant.ROUTER_TAG_ERROR,
+                name: Constant.ROUTER_TAG.ERROR,
                 params: {reason: 'Error occurred while creating a group.'},
               });
             }
@@ -239,7 +239,7 @@ export default {
         headers: {
           'Content-Type': 'multipart/form-data',
           'X-Line-Access': this.$store.state.authToken,
-          'X-Line-Application': Constant.LINE_APPLICATION_IDENTITY,
+          'X-Line-Application': Constant.LINE.APPLICATION_IDENTITY,
         },
         data,
       });
@@ -304,7 +304,7 @@ export default {
       }
     } else {
       this.$router.replace({
-        name: Constant.ROUTER_TAG_ERROR,
+        name: Constant.ROUTER_TAG.ERROR,
         params: {reason: 'Unknown CreateType.'},
       });
       return;

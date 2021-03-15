@@ -32,14 +32,14 @@ export default class {
       if (oldVersion === 0) {
         // Databases List
         db.createObjectStore(
-            Constant.IDB_XIA_DB_LIST,
+            Constant.IDB.XIA.DB_LIST,
             {keyPath: 'id'},
         );
       }
     };
     return openDB(
         Constant.NAME,
-        Constant.IDB_XIA_VERSION,
+        Constant.IDB.XIA.VERSION,
         {upgrade: upgradeFunction},
     );
   }
@@ -51,26 +51,26 @@ export default class {
             navigator.language ||
             navigator.userLanguage ||
             navigator.browserLanguage;
-    return openDB(dbName, Constant.IDB_USER_VERSION, {
+    return openDB(dbName, Constant.IDB.USER.VERSION, {
       upgrade(db, oldVersion, _, transaction) {
         const idbLocalOptions = {locale: localName};
         if (oldVersion === 1) {
           transaction
-              .objectStore(Constant.IDB_USER_CONTACT)
+              .objectStore(Constant.IDB.USER.CONTACT)
               .createIndex(
                   'displayName',
                   'displayName',
                   idbLocalOptions,
               );
           transaction
-              .objectStore(Constant.IDB_USER_GROUP_JOINED)
+              .objectStore(Constant.IDB.USER.GROUP.JOINED)
               .createIndex(
                   'displayName',
                   'name',
                   idbLocalOptions,
               );
           transaction
-              .objectStore(Constant.IDB_USER_GROUP_INVITED)
+              .objectStore(Constant.IDB.USER.GROUP.INVITED)
               .createIndex(
                   'displayName',
                   'name',
@@ -80,7 +80,7 @@ export default class {
         }
         // Contact
         db.createObjectStore(
-            Constant.IDB_USER_CONTACT,
+            Constant.IDB.USER.CONTACT,
             {keyPath: 'mid'},
         ).createIndex(
             'displayName',
@@ -89,7 +89,7 @@ export default class {
         );
         // Group Joined
         db.createObjectStore(
-            Constant.IDB_USER_GROUP_JOINED,
+            Constant.IDB.USER.GROUP.JOINED,
             {keyPath: 'id'},
         ).createIndex(
             'displayName',
@@ -98,7 +98,7 @@ export default class {
         );
         // Group Invited
         db.createObjectStore(
-            Constant.IDB_USER_GROUP_INVITED,
+            Constant.IDB.USER.GROUP.INVITED,
             {keyPath: 'id'},
         ).createIndex(
             'displayName',
@@ -107,12 +107,12 @@ export default class {
         );
         // Preview Message Box
         db.createObjectStore(
-            Constant.IDB_USER_PREVIEW_MESSAGE_BOX,
+            Constant.IDB.USER.PREVIEW_MESSAGE_BOX,
             {keyPath: 'target'},
         );
         // Message Box
         db.createObjectStore(
-            Constant.IDB_USER_MESSAGE_BOX,
+            Constant.IDB.USER.MESSAGE_BOX,
             {keyPath: 'id'},
         ).createIndex(
             'target',
@@ -120,7 +120,7 @@ export default class {
         );
         // Settings
         db.createObjectStore(
-            Constant.IDB_USER_SETTINGS,
+            Constant.IDB.USER.SETTINGS,
             {keyPath: 'id'},
         );
       },
@@ -141,13 +141,13 @@ export default class {
     if (
       accepted ||
         (await this.$store.state.idbUser.get(
-            Constant.IDB_USER_GROUP_JOINED,
+            Constant.IDB.USER.GROUP.JOINED,
             data.id,
         ))
     ) {
-      this.$store.state.idbUser.put(Constant.IDB_USER_GROUP_JOINED, data);
+      this.$store.state.idbUser.put(Constant.IDB.USER.GROUP.JOINED, data);
     } else {
-      this.$store.state.idbUser.put(Constant.IDB_USER_GROUP_INVITED, data);
+      this.$store.state.idbUser.put(Constant.IDB.USER.GROUP.INVITED, data);
       this.$store.commit('registerChatIdHashed', {
         targetId: groupId,
         idHashed: hash.sha256(groupId),
@@ -157,11 +157,11 @@ export default class {
 
   async clearMessageBox(targetId) {
     this.$store.state.idbUser.delete(
-        Constant.IDB_USER_PREVIEW_MESSAGE_BOX,
+        Constant.IDB.USER.PREVIEW_MESSAGE_BOX,
         targetId,
     );
     let cursor = await this.$store.state.idbUser
-        .transaction(Constant.IDB_USER_MESSAGE_BOX, 'readwrite')
+        .transaction(Constant.IDB.USER.MESSAGE_BOX, 'readwrite')
         .store.openCursor();
     while (cursor) {
       if (cursor.value.target === targetId) {
@@ -181,10 +181,10 @@ export default class {
         const idbXia = this.$store.state.idbXia ?
             this.$store.state.idbXia :
             await this.setupXIA();
-        const allIdbUsers = await idbXia.getAllKeys(Constant.IDB_XIA_DB_LIST);
+        const allIdbUsers = await idbXia.getAllKeys(Constant.IDB.XIA.DB_LIST);
         if (allIdbUsers.length > 0) {
           idbNames = allIdbUsers.map((name) => `${Constant.NAME}_${name}`);
-          await idbXia.clear(Constant.IDB_XIA_DB_LIST);
+          await idbXia.clear(Constant.IDB.XIA.DB_LIST);
         }
       } else if (idbOldVersion !== 0) {
         await deleteDB(Constant.NAME);

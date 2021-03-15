@@ -62,9 +62,9 @@ export default {
       if (this.targetId === -1) {
         if (!this.$store.state.ready) {
           await this.$router.replace({
-            name: Constant.ROUTER_TAG_REDIRECT,
+            name: Constant.ROUTER_TAG.REDIRECT,
             params: {
-              next: Constant.ROUTER_TAG_CONTACT,
+              next: Constant.ROUTER_TAG.CONTACT,
               data: {targetIdHashed: this.targetIdHashed},
             },
           });
@@ -73,7 +73,7 @@ export default {
       }
       if (this.targetId.startsWith('u')) {
         const userInfo = await this.$store.state.idbUser.get(
-            Constant.IDB_USER_CONTACT,
+            Constant.IDB.USER.CONTACT,
             this.targetId,
         );
         this.displayName = userInfo.displayName;
@@ -83,12 +83,12 @@ export default {
       } else if (this.targetId.startsWith('c')) {
         const statusMessageArray = [];
         let groupInfo = await this.$store.state.idbUser.get(
-            Constant.IDB_USER_GROUP_JOINED,
+            Constant.IDB.USER.GROUP.JOINED,
             this.targetId,
         );
         if (!groupInfo) {
           groupInfo = await this.$store.state.idbUser.get(
-              Constant.IDB_USER_GROUP_INVITED,
+              Constant.IDB.USER.GROUP.INVITED,
               this.targetId,
           );
           this.groupInviting = true;
@@ -107,14 +107,14 @@ export default {
         this.contactType = lineType.MIDType.GROUP;
       } else {
         this.$router.replace({
-          name: Constant.ROUTER_TAG_ERROR,
+          name: Constant.ROUTER_TAG.ERROR,
           params: {reason: 'Unknown Contact type.'},
         });
       }
     },
     enterChat() {
       this.$router.replace({
-        name: Constant.ROUTER_TAG_CHAT,
+        name: Constant.ROUTER_TAG.CHAT,
         params: {targetIdHashed: this.targetIdHashed},
       });
     },
@@ -155,7 +155,7 @@ export default {
       if (this.$store.state.chatIdsHashed.has(this.targetIdHashed)) {
         return this.$store.state.chatIdsHashed.get(this.targetIdHashed);
       }
-      this.$router.replace({name: Constant.ROUTER_TAG_NOT_FOUND});
+      this.$router.replace({name: Constant.ROUTER_TAG.NOT_FOUND});
       return '';
     },
     statusMessageWithLinesAndEscaped() {

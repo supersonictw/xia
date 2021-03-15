@@ -43,7 +43,7 @@ export default class {
     const contactIds = await this.client.getAllContactIds();
     if (contactIds) {
       const contactData = await this.client.getContacts(contactIds);
-      this.updateData(contactData, Constant.IDB_USER_CONTACT);
+      this.updateData(contactData, Constant.IDB.USER.CONTACT);
     }
   }
 
@@ -51,7 +51,7 @@ export default class {
     const groupIdsJoined = await this.client.getGroupIdsJoined();
     if (groupIdsJoined) {
       const groupDataJoined = await this.client.getGroups(groupIdsJoined);
-      this.updateData(groupDataJoined, Constant.IDB_USER_GROUP_JOINED);
+      this.updateData(groupDataJoined, Constant.IDB.USER.GROUP.JOINED);
     }
   }
 
@@ -59,7 +59,7 @@ export default class {
     const groupIdsInvited = await this.client.getGroupIdsInvited();
     if (groupIdsInvited) {
       const groupDataInvited = await this.client.getGroups(groupIdsInvited);
-      this.updateData(groupDataInvited, Constant.IDB_USER_GROUP_INVITED);
+      this.updateData(groupDataInvited, Constant.IDB.USER.GROUP.INVITED);
     }
   }
 
@@ -71,8 +71,8 @@ export default class {
 
   async syncRevision() {
     const data = await this.$store.state.idbUser.get(
-        Constant.IDB_USER_SETTINGS,
-        Constant.IDB_USER_KEY_SETTINGS_REVISION,
+        Constant.IDB.USER.SETTINGS,
+        Constant.IDB.USER.KEY_SETTINGS_REVISION,
     );
     if (data) {
       this.revision = parseInt(data.value);
@@ -83,8 +83,8 @@ export default class {
 
   async syncData() {
     const status = await this.$store.state.idbUser.get(
-        Constant.IDB_USER_SETTINGS,
-        Constant.IDB_USER_KEY_SETTINGS_SYNC_STATUS,
+        Constant.IDB.USER.SETTINGS,
+        Constant.IDB.USER.KEY_SETTINGS_SYNC_STATUS,
     );
     if (status && status.value === true) return;
     await Promise.all([
@@ -92,8 +92,8 @@ export default class {
       this.syncGroupJoined(),
       this.syncGroupInvited(),
     ]);
-    await this.$store.state.idbUser.put(Constant.IDB_USER_SETTINGS, {
-      id: Constant.IDB_USER_KEY_SETTINGS_SYNC_STATUS,
+    await this.$store.state.idbUser.put(Constant.IDB.USER.SETTINGS, {
+      id: Constant.IDB.USER.KEY_SETTINGS_SYNC_STATUS,
       value: true,
     });
   }

@@ -58,7 +58,7 @@ export default {
   methods: {
     enterContact(chatId) {
       this.$router.push({
-        name: Constant.ROUTER_TAG_CONTACT,
+        name: Constant.ROUTER_TAG.CONTACT,
         params: {targetIdHashed: chatId},
       });
     },
@@ -75,7 +75,7 @@ export default {
     },
     async fetchContacts() {
       let cursor = await this.$store.state.idbUser
-          .transaction(Constant.IDB_USER_CONTACT)
+          .transaction(Constant.IDB.USER.CONTACT)
           .store.index('displayName')
           .openCursor();
       while (cursor) {
@@ -99,7 +99,7 @@ export default {
     },
     async fetchGroupsJoined() {
       let cursor = await this.$store.state.idbUser
-          .transaction(Constant.IDB_USER_GROUP_JOINED)
+          .transaction(Constant.IDB.USER.GROUP.JOINED)
           .store.index('displayName')
           .openCursor();
       while (cursor) {
@@ -114,7 +114,7 @@ export default {
     },
     async fetchGroupsInvited() {
       let cursor = await this.$store.state.idbUser
-          .transaction(Constant.IDB_USER_GROUP_INVITED)
+          .transaction(Constant.IDB.USER.GROUP.INVITED)
           .store.index('displayName')
           .openCursor();
       while (cursor) {
@@ -135,7 +135,7 @@ export default {
         case 1:
           return this.contactGroup;
         default:
-          this.$router.replace({name: Constant.ROUTER_TAG_NOT_FOUND});
+          this.$router.replace({name: Constant.ROUTER_TAG.NOT_FOUND});
       }
     },
     getTabColor(e) {
@@ -145,7 +145,7 @@ export default {
       const tabId = parseInt(e.target.id);
       const data = [this.contactUser, this.contactGroup];
       if (tabId >= data.length || tabId < 0) {
-        this.$router.replace({name: Constant.ROUTER_TAG_NOT_FOUND});
+        this.$router.replace({name: Constant.ROUTER_TAG.NOT_FOUND});
       }
       this.tabId = tabId;
     },

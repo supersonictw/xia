@@ -50,12 +50,12 @@ export default class {
         case lineType.OpType.ADD_CONTACT:
         case lineType.OpType.UPDATE_CONTACT: {
           const data = await this.client.getContact(operation.param1);
-          this.$store.state.idbUser.put(Constant.IDB_USER_CONTACT, data);
+          this.$store.state.idbUser.put(Constant.IDB.USER.CONTACT, data);
           break;
         }
         case lineType.OpType.ACCEPT_GROUP_INVITATION: {
           this.$store.state.idbUser.delete(
-              Constant.IDB_USER_GROUP_INVITED,
+              Constant.IDB.USER.GROUP.INVITED,
               operation.param1,
           );
           this.updateGroupInfo(operation.param1, true);
@@ -68,7 +68,7 @@ export default class {
               hash.sha256(operation.param1),
           );
           this.$store.state.idbUser.delete(
-              Constant.IDB_USER_GROUP_JOINED,
+              Constant.IDB.USER.GROUP.JOINED,
               operation.param1,
           );
           break;
@@ -85,7 +85,7 @@ export default class {
                 hash.sha256(operation.param1),
             );
             this.$store.state.idbUser.delete(
-                Constant.IDB_USER_GROUP_INVITED,
+                Constant.IDB.USER.GROUP.INVITED,
                 operation.param1,
             );
           }
@@ -104,7 +104,7 @@ export default class {
                 hash.sha256(operation.param1),
             );
             this.$store.state.idbUser.delete(
-                Constant.IDB_USER_GROUP_JOINED,
+                Constant.IDB.USER.GROUP.JOINED,
                 operation.param1,
             );
           } else {
@@ -144,11 +144,11 @@ export default class {
           operation.message.deliveredTime =
                         operation.message.deliveredTime.toString();
           this.$store.state.idbUser.put(
-              Constant.IDB_USER_PREVIEW_MESSAGE_BOX,
+              Constant.IDB.USER.PREVIEW_MESSAGE_BOX,
               operation.message,
           );
           this.$store.state.idbUser.put(
-              Constant.IDB_USER_MESSAGE_BOX,
+              Constant.IDB.USER.MESSAGE_BOX,
               operation.message,
           );
           break;

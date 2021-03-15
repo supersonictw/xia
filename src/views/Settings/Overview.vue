@@ -77,7 +77,7 @@ export default {
           description: 'Customize your LINE Profile.',
           icon: require('@/assets/icons/profile.svg'),
           router: {
-            name: Constant.ROUTER_TAG_SETTINGS_PROFILE,
+            name: Constant.ROUTER_TAG.SETTINGS.PROFILE,
           },
         },
         {
@@ -85,7 +85,7 @@ export default {
           description: 'Set up how XIA notice you while news coming.',
           icon: require('@/assets/icons/notification.svg'),
           router: {
-            name: Constant.ROUTER_TAG_SETTINGS_NOTIFICATION,
+            name: Constant.ROUTER_TAG.SETTINGS.NOTIFICATION,
           },
         },
         {
@@ -93,7 +93,7 @@ export default {
           description: 'Enable/Disable the features that aren\'t complete.',
           icon: require('@/assets/icons/preview_features.svg'),
           router: {
-            name: Constant.ROUTER_TAG_SETTINGS_PREVIEW,
+            name: Constant.ROUTER_TAG.SETTINGS.PREVIEW,
           },
         },
         {
@@ -101,7 +101,7 @@ export default {
           description: 'The information of XIA.',
           icon: require('@/assets/icons/about.svg'),
           router: {
-            name: Constant.ROUTER_TAG_ABOUT,
+            name: Constant.ROUTER_TAG.ABOUT,
           },
         },
       ],

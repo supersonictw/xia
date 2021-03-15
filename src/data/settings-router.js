@@ -19,22 +19,22 @@ import Preview from '@/views/Settings/Preview.vue';
 export default [
   {
     path: '',
-    name: Constant.ROUTER_TAG_SETTINGS_OVERVIEW,
+    name: Constant.ROUTER_TAG.SETTINGS.OVERVIEW,
     component: Overview,
   },
   {
     path: 'profile',
-    name: Constant.ROUTER_TAG_SETTINGS_PROFILE,
+    name: Constant.ROUTER_TAG.SETTINGS.PROFILE,
     component: Profile,
   },
   {
     path: 'notification',
-    name: Constant.ROUTER_TAG_SETTINGS_NOTIFICATION,
+    name: Constant.ROUTER_TAG.SETTINGS.NOTIFICATION,
     component: Notification,
   },
   {
     path: 'preview',
-    name: Constant.ROUTER_TAG_SETTINGS_PREVIEW,
+    name: Constant.ROUTER_TAG.SETTINGS.PREVIEW,
     component: Preview,
   },
 ];
