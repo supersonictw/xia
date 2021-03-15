@@ -48,7 +48,7 @@ export default {
       this.VERSION,
       this.LINE_PLATFORM_NAME,
       this.LINE_PLATFORM_VERSION,
-    ].join('\n');
+    ].join('\t');
   },
   LINE_SERVER_HOST: 'gf.line.naver.jp',
   get LINE_SERVER_HOST_FOR_THRIFT() {
