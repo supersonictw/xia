@@ -56,10 +56,10 @@ export default {
       switch (message.toType) {
         case lineType.MIDType.USER: {
           const targetId =
-            message.from_ == this.$store.state.profile.userId ?
+            message.from_ === this.$store.state.profile.userId ?
               message.to :
               message.from_;
-          let contactData = await this.$store.state.idbUser.get(
+          let contactData = await this.$store.state.syncHandler.idb.user.get(
               Constant.IDB.USER.CONTACT,
               targetId,
           );
@@ -70,7 +70,7 @@ export default {
           return contactData;
         }
         case lineType.MIDType.GROUP: {
-          let groupData = await this.$store.state.idbUser.get(
+          let groupData = await this.$store.state.syncHandler.idb.user.get(
               Constant.IDB.USER.GROUP.JOINED,
               message.to,
           );
@@ -99,7 +99,7 @@ export default {
       }, Constant.TIMEOUT.RETRY);
     },
     async fetchDisplayMessage() {
-      let cursor = await this.$store.state.idbUser
+      let cursor = await this.$store.state.syncHandler.idb.user
           .transaction(Constant.IDB.USER.PREVIEW_MESSAGE_BOX)
           .store.openCursor();
       while (cursor) {
@@ -148,9 +148,7 @@ export default {
   computed: {
     getDisplayMessages() {
       const data = Object.values(this.previewMessageBox);
-      data.sort(function(a, b) {
-        return b.time > a.time;
-      });
+      data.sort((a, b) => b.time > a.time);
       return data;
     },
   },

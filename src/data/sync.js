@@ -1,5 +1,3 @@
-import Constant from '@/data/const';
-import hash from 'js-sha256';
 /* jshint esversion: 8 */
 /*
     XIA - LINE Web Client
@@ -11,26 +9,30 @@ import hash from 'js-sha256';
   (c) 2021 SuperSonic. (https://github.com/supersonictw)
 */
 
+import Constant from '@/data/const';
+import IDB from '@/data/idb';
+import hash from 'js-sha256';
+
 export default class {
-  constructor(talkServiceClient) {
+  constructor(vuexInstance, talkServiceClient) {
+    this.vuex = vuexInstance;
     this.client = talkServiceClient;
+    this.idb = new IDB(vuexInstance);
   }
 
   async init() {
-    if (await this.verifyAccess()) {
-      await this.setupDatabases();
+    if (this.vuex.state.accessToken) {
+      await this.getProfile();
       await this.syncData();
       await this.fetchChatIdsHashed();
       await this.syncRevision();
-      this.opListener();
-      this.$store.commit('setReady');
     }
   }
 
   async getProfile() {
     try {
       const profile = await this.client.getProfile();
-      this.$store.commit('updateProfile', profile);
+      this.vuex.commit('updateProfile', profile);
       return true;
     } catch (e) {
       console.error(e);
@@ -65,12 +67,12 @@ export default class {
 
   updateData(data, dataName) {
     data.forEach((metadata) =>
-      this.$store.state.idbUser.put(dataName, metadata),
+      this.idb.user.put(dataName, metadata),
     );
   }
 
   async syncRevision() {
-    const data = await this.$store.state.idbUser.get(
+    const data = await this.idb.user.get(
         Constant.IDB.USER.SETTINGS,
         Constant.IDB.USER.KEY.SETTINGS_REVISION,
     );
@@ -82,7 +84,7 @@ export default class {
   }
 
   async syncData() {
-    const status = await this.$store.state.idbUser.get(
+    const status = await this.idb.user.get(
         Constant.IDB.USER.SETTINGS,
         Constant.IDB.USER.KEY.SETTINGS_SYNC_STATUS,
     );
@@ -92,7 +94,7 @@ export default class {
       this.syncGroupJoined(),
       this.syncGroupInvited(),
     ]);
-    await this.$store.state.idbUser.put(Constant.IDB.USER.SETTINGS, {
+    await this.idb.user.put(Constant.IDB.USER.SETTINGS, {
       id: Constant.IDB.USER.KEY.SETTINGS_SYNC_STATUS,
       value: true,
     });
@@ -100,11 +102,11 @@ export default class {
 
   async fetchChatIdsHashed() {
     for (const typeName of Constant.ALL_CONTACT_TYPES) {
-      let cursor = await this.$store.state.idbUser
+      let cursor = await this.idb.user
           .transaction(typeName)
           .store.openCursor();
       while (cursor) {
-        this.$store.commit('registerChatIdHashed', {
+        this.vuex.commit('registerChatIdHashed', {
           targetId: cursor.key,
           idHashed: hash.sha256(cursor.key),
         });

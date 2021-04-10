@@ -31,9 +31,11 @@
 
 <script>
 import Constant from './data/const.js';
+import Sync from './data/sync.js';
 
 import StatusBar from '@/components/StatusBar.vue';
 import Notification from '@/components/Notification.vue';
+import lineClient from '@/computes/line';
 
 export default {
   name: Constant.NAME,
@@ -44,15 +46,13 @@ export default {
   methods: {
     async verifyAccess() {
       if (this.$route.name === Constant.ROUTER_TAG.ABOUT) {
-        return null;
+        return;
       }
-      if (this.client && this.$store.state.authToken) {
+      if (this.$store.state.authToken) {
         if (this.$route.name === Constant.ROUTER_TAG.LOGIN) {
           await this.$router.push({name: Constant.ROUTER_TAG.DASHBOARD});
         }
-        if (this.$store.state.ready || (await this.getProfile())) {
-          return true;
-        }
+        return;
       }
       if (
         this.$route.name !== Constant.ROUTER_TAG.INTRODUCING &&
@@ -60,7 +60,6 @@ export default {
       ) {
         await this.$router.push({name: Constant.ROUTER_TAG.INTRODUCING});
       }
-      return false;
     },
   },
   watch: {
@@ -68,7 +67,7 @@ export default {
       this.verifyAccess();
     },
     revision() {
-      this.$store.state.idbUser.put(Constant.IDB.USER.SETTINGS, {
+      this.$store.state.syncHandler.idb.user.put(Constant.IDB.USER.SETTINGS, {
         id: Constant.IDB.USER.KEY.SETTINGS_REVISION,
         value: this.revision.toString(),
       });
@@ -77,7 +76,13 @@ export default {
   async created() {
     if (this.$cookies.isKey(Constant.COOKIE.ACCESS_KEY)) {
       const authToken = this.$cookies.get(Constant.COOKIE.ACCESS_KEY);
+      const queryClient = lineClient(Constant.LINE.PATH.QUERY, authToken);
       this.$store.commit('registerAuthToken', authToken);
+      const syncHandler = new Sync(this.$store, queryClient);
+      await syncHandler.init();
+      this.$store.commit('registerQueryClient', queryClient);
+      this.$store.commit('registerSyncHandler', syncHandler);
+      this.$store.commit('setReady');
     }
     this.$store.commit('setLoaded');
   },

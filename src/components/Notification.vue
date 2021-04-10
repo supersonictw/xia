@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'Notifaction',
+  name: 'Notification',
   props: {
     title: String,
     description: String,

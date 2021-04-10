@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="intro-box with-seprate-line">
+    <div class="intro-box with-separate-line">
       <h2>What is XIA</h2>
       <p>
         XIA is a
@@ -57,7 +57,7 @@
 import Constant from '@/data/const.js';
 
 export default {
-  name: 'Indroducing',
+  name: 'Introducing',
   methods: {
     async checkAccess() {
       if (!this.$cookies.isKey(Constant.COOKIE.ACCESS_KEY)) return this.ready--;
@@ -102,7 +102,7 @@ h3 {
   background: #fff;
 }
 
-.with-seprate-line {
+.with-separate-line {
   margin-bottom: 10px;
   border-radius: 0 !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);

@@ -153,7 +153,7 @@ export default {
       }, Constant.TIMEOUT.RETRY);
     },
     async fetchContacts() {
-      let cursor = await this.$store.state.idbUser
+      let cursor = await this.$store.state.syncHandler.idb.user
           .transaction(Constant.IDB.USER.CONTACT)
           .store.index('displayName')
           .openCursor();

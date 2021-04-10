@@ -14,11 +14,12 @@ import {deleteDB, openDB} from 'idb';
 import hash from 'js-sha256';
 
 export default class {
-  constructor() {
+  constructor(vuexInstance) {
+    this.vuex = vuexInstance;
     this.xia = null;
     this.user = null;
     this.setupXIA().then((db) => (this.xia = db));
-    this.setupUser.then((db) => (this.user = db));
+    this.setupUser().then((db) => (this.user = db));
   }
 
   async setupXIA() {
@@ -45,7 +46,7 @@ export default class {
   }
 
   async setupUser() {
-    const target = this.$store.state.profile.userIdHashed;
+    const target = this.vuex.state.profile.userIdHashed;
     const dbName = `${Constant.NAME}_${target}`;
     const localName =
             navigator.language ||
@@ -140,15 +141,15 @@ export default class {
     const data = await this.client.getGroup(groupId);
     if (
       accepted ||
-        (await this.$store.state.idbUser.get(
+        (await this.vuex.state.idbUser.get(
             Constant.IDB.USER.GROUP.JOINED,
             data.id,
         ))
     ) {
-      this.$store.state.idbUser.put(Constant.IDB.USER.GROUP.JOINED, data);
+      this.vuex.state.idbUser.put(Constant.IDB.USER.GROUP.JOINED, data);
     } else {
-      this.$store.state.idbUser.put(Constant.IDB.USER.GROUP.INVITED, data);
-      this.$store.commit('registerChatIdHashed', {
+      this.vuex.state.idbUser.put(Constant.IDB.USER.GROUP.INVITED, data);
+      this.vuex.commit('registerChatIdHashed', {
         targetId: groupId,
         idHashed: hash.sha256(groupId),
       });
@@ -156,11 +157,11 @@ export default class {
   }
 
   async clearMessageBox(targetId) {
-    this.$store.state.idbUser.delete(
+    this.vuex.state.idbUser.delete(
         Constant.IDB.USER.PREVIEW_MESSAGE_BOX,
         targetId,
     );
-    let cursor = await this.$store.state.idbUser
+    let cursor = await this.vuex.state.idbUser
         .transaction(Constant.IDB.USER.MESSAGE_BOX, 'readwrite')
         .store.openCursor();
     while (cursor) {
@@ -178,8 +179,8 @@ export default class {
     if (reset) {
       let idbNames = [];
       if (idbOldVersion >= 3 || idbOldVersion === -1) {
-        const idbXia = this.$store.state.idbXia ?
-            this.$store.state.idbXia :
+        const idbXia = this.vuex.state.idbXia ?
+            this.vuex.state.idbXia :
             await this.setupXIA();
         const allIdbUsers = await idbXia.getAllKeys(Constant.IDB.XIA.DB_LIST);
         if (allIdbUsers.length > 0) {

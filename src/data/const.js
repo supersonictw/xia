@@ -11,8 +11,16 @@
 
 const Constants = function() {
   const XIA_VERSION = '1.0.0';
-  const httpUrlWrapper = function(domain, path) {
-    return domain + path;
+  const USE_HTTPS = true;
+  const httpUrlWrapper = function(domain, path, thrift) {
+    if (thrift) {
+      return domain;
+    }
+    const schema = USE_HTTPS ? 'https' : 'http';
+    if (domain && !path) {
+      return `${schema}://${domain}`;
+    }
+    return `${schema}://${domain}/${path}`;
   };
   return {
     NAME: 'XIA',
@@ -22,7 +30,7 @@ const Constants = function() {
     THRIFT_DEFAULT_SEQ: 0,
     GROUP_INVITING_ICON: 'ⓘ',
     CHAT_DISPLAY_ROW_LIMIT: 50,
-    USE_HTTPS: true,
+    USE_HTTPS,
     ROUTER_TAG: {
       INTRODUCING: 'Introducing',
       LOGIN: 'Login',

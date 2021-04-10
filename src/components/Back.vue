@@ -38,7 +38,7 @@ export default {
   margin-left: 30px;
   background: rgba(0, 0, 0, 0);
   border-radius: 50px;
-  border: #42b983 1.5px solid;
+  border: #42b983 2px solid;
 }
 
 #back:hover {

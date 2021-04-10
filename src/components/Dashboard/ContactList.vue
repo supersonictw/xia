@@ -74,7 +74,7 @@ export default {
       }, Constant.TIMEOUT.RETRY);
     },
     async fetchContacts() {
-      let cursor = await this.$store.state.idbUser
+      let cursor = await this.$store.state.syncHandler.idb.user
           .transaction(Constant.IDB.USER.CONTACT)
           .store.index('displayName')
           .openCursor();
@@ -98,7 +98,7 @@ export default {
       return layout.join(' ');
     },
     async fetchGroupsJoined() {
-      let cursor = await this.$store.state.idbUser
+      let cursor = await this.$store.state.syncHandler.idb.user
           .transaction(Constant.IDB.USER.GROUP.JOINED)
           .store.index('displayName')
           .openCursor();
@@ -113,7 +113,7 @@ export default {
       }
     },
     async fetchGroupsInvited() {
-      let cursor = await this.$store.state.idbUser
+      let cursor = await this.$store.state.syncHandler.idb.user
           .transaction(Constant.IDB.USER.GROUP.INVITED)
           .store.index('displayName')
           .openCursor();
@@ -139,7 +139,7 @@ export default {
       }
     },
     getTabColor(e) {
-      return this.tabId == e ? 'actived' : '';
+      return this.tabId === e ? 'actived' : '';
     },
     switchTab(e) {
       const tabId = parseInt(e.target.id);
@@ -150,7 +150,7 @@ export default {
       this.tabId = tabId;
     },
     getItemTitle(item) {
-      if (this.tabId == 1) {
+      if (this.tabId === 1) {
         return item.statusMessage.includes(Constant.GROUP_INVITING_ICON) ?
           `[Inviting] ${item.displayName}` :
           `${item.displayName}`;

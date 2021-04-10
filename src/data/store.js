@@ -22,23 +22,25 @@ Vue.use(Vuex);
 const Store = new Vuex.Store({
   state: {
     authToken: '',
+    queryClient: null,
+    syncHandler: null,
     ready: 0,
     loaded: 0,
     profile: {},
-    idbXia: null,
-    idbUser: null,
     lastMessages: new Map(),
     chatIdsHashed: new Map(),
     statusMessage: null,
     notifications: [],
   },
   mutations: {
-    registerIndexedDB(state, handler) {
-      state.idbXia = handler.xia;
-      state.idbUser = handler.user;
-    },
     registerAuthToken(state, authToken) {
       state.authToken = authToken;
+    },
+    registerQueryClient(state, queryClient) {
+      state.queryClient = queryClient;
+    },
+    registerSyncHandler(state, syncHandler) {
+      state.syncHandler = syncHandler;
     },
     registerChatIdHashed(state, {targetId, idHashed}) {
       state.chatIdsHashed.set(idHashed, targetId);

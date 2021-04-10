@@ -161,7 +161,7 @@ export default {
         }
       }
       if (this.targetId.startsWith('u')) {
-        this.chatRoomInfo = await this.$store.state.idbUser.get(
+        this.chatRoomInfo = await this.$store.state.syncHandler.idb.user.get(
             Constant.IDB.USER.CONTACT,
             this.targetId,
         );
@@ -170,7 +170,7 @@ export default {
         this.chatRoomType = lineType.MIDType.USER;
         return true;
       } else if (this.targetId.startsWith('c')) {
-        this.chatRoomInfo = await this.$store.state.idbUser.get(
+        this.chatRoomInfo = await this.$store.state.syncHandler.idb.user.get(
             Constant.IDB.USER.GROUP.JOINED,
             this.targetId,
         );
@@ -203,12 +203,12 @@ export default {
       if (!this.$store.state.ready) {
         setTimeout(this.fetchDisplayMessage, Constant.TIMEOUT.RETRY);
       }
-      let cursor = await this.$store.state.idbUser
+      let cursor = await this.$store.state.syncHandler.idb.user
           .transaction(Constant.IDB.USER.MESSAGE_BOX)
           .store.index('target')
           .openCursor(IDBKeyRange.only(this.targetId), 'prev');
       while (cursor) {
-        if (this.messages.length > Constant.CHAT_DISPLAY_ROW_LITMIT) {
+        if (this.messages.length > Constant.CHAT_DISPLAY_ROW_LIMIT) {
           this.messages.shift();
         }
         if (!this.initialized) {
@@ -249,10 +249,10 @@ export default {
         Math.floor(contentMetadata.STKVER / 1000) +
         '/' +
         (contentMetadata.STKVER % 1000);
-      const platform = Constant.LINE_STICKER_PLATFORM.toString();
+      const platform = Constant.LINE.STICKER.PLATFORM;
       const packageId = contentMetadata.STKPKGID.toString();
       const stickerId = contentMetadata.STKID.toString();
-      const domain = Constant.LINE_STICKER_URL.toString();
+      const domain = Constant.LINE.STICKER.HOST;
       const path = `/products/${version}/${packageId}/${platform}/stickers/`;
       const stickerFileName = `${stickerId}.png`;
       const stickerURL = `${domain}${path}${stickerFileName}`;
@@ -340,7 +340,9 @@ export default {
           Constant.THRIFT_DEFAULT_SEQ,
           message,
       );
-      if (inputType === 1) this.uploadMessageAttached(response.id, fileList);
+      if (inputType === 1) {
+        await this.uploadMessageAttached(response.id, fileList);
+      }
     },
     async uploadMessageAttached(messageId, fileList) {
       if (fileList.length !== 1) return;
@@ -389,7 +391,7 @@ export default {
         case lineType.MIDType.USER:
           return this.chatRoomInfo;
         case lineType.MIDType.GROUP:
-          return this.chatRoomInfo.members.find((user) => user.mid == userId);
+          return this.chatRoomInfo.members.find((user) => user.mid === userId);
         default:
           this.$router.replace({
             name: Constant.ROUTER_TAG.ERROR,
@@ -510,7 +512,9 @@ export default {
     };
   },
   async mounted() {
-    if (await this.fetchChatRoomInformation()) this.fetchDisplayMessage();
+    if (await this.fetchChatRoomInformation()) {
+      await this.fetchDisplayMessage();
+    }
   },
 };
 </script>

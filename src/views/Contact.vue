@@ -16,8 +16,9 @@
         class="icon"
         v-if="pictureStatus"
         :src="`${mediaURL}/${pictureStatus}`"
+        :alt="displayName"
       />
-      <img class="icon" v-else src="@/assets/logo.svg" />
+      <img class="icon" v-else src="@/assets/logo.svg" :alt="displayName" />
       <h1 id="displayName">{{ displayName }}</h1>
       <div id="statusMessage-box">
         <p id="statusMessage" v-html="statusMessageWithLinesAndEscaped"></p>
@@ -26,19 +27,19 @@
     <div v-if="groupInviting" class="contact-buttons">
       <a title="Accept" href="#" @click.prevent="replyGroupInvitation(true)">
         <div class="contact-button">
-          <img class="icon" src="@/assets/icons/accept.svg" />
+          <img class="icon" src="@/assets/icons/accept.svg"  alt="Accept"/>
         </div>
       </a>
       <a title="Reject" href="#" @click.prevent="replyGroupInvitation(false)">
         <div class="contact-button">
-          <img class="icon" src="@/assets/icons/reject.svg" />
+          <img class="icon" src="@/assets/icons/reject.svg"  alt="Reject"/>
         </div>
       </a>
     </div>
     <div v-else class="contact-buttons">
       <a title="Chat" href="#" @click.prevent="enterChat">
         <div class="contact-button">
-          <img class="icon" src="@/assets/icons/chat.svg" />
+          <img class="icon" src="@/assets/icons/chat.svg"  alt="Chat"/>
         </div>
       </a>
     </div>
@@ -72,7 +73,7 @@ export default {
         }
       }
       if (this.targetId.startsWith('u')) {
-        const userInfo = await this.$store.state.idbUser.get(
+        const userInfo = await this.$store.state.syncHandler.idb.user.get(
             Constant.IDB.USER.CONTACT,
             this.targetId,
         );
@@ -82,12 +83,12 @@ export default {
         this.contactType = lineType.MIDType.USER;
       } else if (this.targetId.startsWith('c')) {
         const statusMessageArray = [];
-        let groupInfo = await this.$store.state.idbUser.get(
+        let groupInfo = await this.$store.state.syncHandler.idb.user.get(
             Constant.IDB.USER.GROUP.JOINED,
             this.targetId,
         );
         if (!groupInfo) {
-          groupInfo = await this.$store.state.idbUser.get(
+          groupInfo = await this.$store.state.syncHandler.idb.user.get(
               Constant.IDB.USER.GROUP.INVITED,
               this.targetId,
           );
@@ -106,7 +107,7 @@ export default {
         this.pictureStatus = groupInfo.pictureStatus;
         this.contactType = lineType.MIDType.GROUP;
       } else {
-        this.$router.replace({
+        await this.$router.replace({
           name: Constant.ROUTER_TAG.ERROR,
           params: {reason: 'Unknown Contact type.'},
         });

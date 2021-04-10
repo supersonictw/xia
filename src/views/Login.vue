@@ -88,7 +88,6 @@ export default {
   },
   methods: {
     async loginSubmit() {
-      console.log(Constant.LINE.APPLICATION_IDENTITY);
       if (this.loginWaiting) return;
       this.loginWaiting = true;
       try {
