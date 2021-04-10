@@ -29,7 +29,7 @@ export default {
           params: this.data,
         });
       } else {
-        setTimeout(this.waitForGoToNextPage, Constant.RETRY_TIMEOUT);
+        setTimeout(this.waitForGoToNextPage, Constant.TIMEOUT.RETRY);
       }
     },
   },

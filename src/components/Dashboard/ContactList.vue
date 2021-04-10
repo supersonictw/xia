@@ -71,7 +71,7 @@ export default {
         } else {
           this.waitForFetchData();
         }
-      }, Constant.RETRY_TIMEOUT);
+      }, Constant.TIMEOUT.RETRY);
     },
     async fetchContacts() {
       let cursor = await this.$store.state.idbUser
@@ -167,7 +167,7 @@ export default {
     return {
       tabId: 0,
       contactType: ['Contact', 'Group'],
-      mediaURL: Constant.LINE_MEDIA_URL,
+      mediaURL: Constant.LINE.MEDIA.HOST,
       contactUser: [],
       contactGroupJoined: [],
       contactGroupInvited: [],

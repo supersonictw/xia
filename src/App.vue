@@ -69,7 +69,7 @@ export default {
     },
     revision() {
       this.$store.state.idbUser.put(Constant.IDB.USER.SETTINGS, {
-        id: Constant.IDB.USER.KEY_SETTINGS_REVISION,
+        id: Constant.IDB.USER.KEY.SETTINGS_REVISION,
         value: this.revision.toString(),
       });
     },

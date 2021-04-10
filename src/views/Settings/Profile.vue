@@ -60,7 +60,7 @@ export default {
         } else {
           this.waitForFetchProfile();
         }
-      }, Constant.RETRY_TIMEOUT);
+      }, Constant.TIMEOUT.RETRY);
     },
     fetchProfile() {
       this.displayName = this.$store.state.profile.displayName;
@@ -103,7 +103,7 @@ export default {
       statusMessage: 'Loading...',
       disableInput: true,
       picturePath: null,
-      mediaURL: Constant.LINE_MEDIA_URL,
+      mediaURL: Constant.LINE.MEDIA.HOST,
     };
   },
   created() {

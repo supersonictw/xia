@@ -72,7 +72,7 @@ export default class {
   async syncRevision() {
     const data = await this.$store.state.idbUser.get(
         Constant.IDB.USER.SETTINGS,
-        Constant.IDB.USER.KEY_SETTINGS_REVISION,
+        Constant.IDB.USER.KEY.SETTINGS_REVISION,
     );
     if (data) {
       this.revision = parseInt(data.value);
@@ -84,7 +84,7 @@ export default class {
   async syncData() {
     const status = await this.$store.state.idbUser.get(
         Constant.IDB.USER.SETTINGS,
-        Constant.IDB.USER.KEY_SETTINGS_SYNC_STATUS,
+        Constant.IDB.USER.KEY.SETTINGS_SYNC_STATUS,
     );
     if (status && status.value === true) return;
     await Promise.all([
@@ -93,7 +93,7 @@ export default class {
       this.syncGroupInvited(),
     ]);
     await this.$store.state.idbUser.put(Constant.IDB.USER.SETTINGS, {
-      id: Constant.IDB.USER.KEY_SETTINGS_SYNC_STATUS,
+      id: Constant.IDB.USER.KEY.SETTINGS_SYNC_STATUS,
       value: true,
     });
   }

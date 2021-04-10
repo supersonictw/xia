@@ -150,7 +150,7 @@ export default {
         } else {
           this.waitForFetchData();
         }
-      }, Constant.RETRY_TIMEOUT);
+      }, Constant.TIMEOUT.RETRY);
     },
     async fetchContacts() {
       let cursor = await this.$store.state.idbUser
@@ -206,7 +206,7 @@ export default {
                       name: Constant.ROUTER_TAG.CHAT,
                       params: {targetIdHashed: hash.sha256(group.id)},
                     }),
-                  Constant.WAIT_TIMEOUT,
+                  Constant.TIMEOUT.WAIT,
               );
             } else {
               this.$router.replace({
@@ -288,7 +288,7 @@ export default {
       selected: [],
       filterName: '',
       displayContactValue: false,
-      mediaURL: Constant.LINE_MEDIA_URL,
+      mediaURL: Constant.LINE.MEDIA.HOST,
       mobileUI: window.innerWidth < Constant.MOBILE_UI_WIDTH,
     };
   },

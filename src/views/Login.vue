@@ -88,6 +88,7 @@ export default {
   },
   methods: {
     async loginSubmit() {
+      console.log(Constant.LINE.APPLICATION_IDENTITY);
       if (this.loginWaiting) return;
       this.loginWaiting = true;
       try {
@@ -135,7 +136,7 @@ export default {
       );
       const rsa = new crypto.Key();
       rsa.setPublic(rsaKey.nvalue, rsaKey.evalue);
-      const encryptedMessage = rsa.encrypt(message).toString('hex');
+      const encryptedMessage = rsa.encrypt(message).toString();
       return new lineType.LoginRequest({
         type: lineType.LoginType.ID_CREDENTIAL,
         identityProvider: lineType.IdentityProvider.LINE,
@@ -158,9 +159,10 @@ export default {
       switch (loginResult.type) {
         case lineType.LoginResultType.REQUIRE_DEVICE_CONFIRM: {
           const certificateResponse = await axios(
-              `${Constant.USE_HTTPS ? 'https' : 'http'}://${
-                Constant.LINE.SERVER.HOST_FOR_XHR
-              }${Constant.LINE.PATH.CERTIFICATE}`,
+              Constant.httpUrlWrapper(
+                  Constant.LINE.HOST,
+                  Constant.LINE.PATH.CERTIFICATE,
+              ),
               {
                 method: 'GET',
                 headers: {
@@ -262,7 +264,7 @@ export default {
   cursor: pointer;
   font-size: 15px;
   margin: 30px auto;
-  border: #42b983 1.5px solid;
+  border: #42b983 2px solid;
   border-radius: 5px;
   background: rgb(255, 255, 255);
 }

@@ -65,7 +65,7 @@ export default {
         if (this.$store.state.ready) return this.ready++;
         else return this.ready--;
       }
-      setTimeout(this.checkAccess, Constant.RETRY_TIMEOUT);
+      setTimeout(this.checkAccess, Constant.TIMEOUT.RETRY);
     },
   },
   data() {

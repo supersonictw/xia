@@ -67,7 +67,7 @@ export default {
         } else {
           this.waitForFetchProfile();
         }
-      }, Constant.RETRY_TIMEOUT);
+      }, Constant.TIMEOUT.RETRY);
     },
     fetchProfile() {
       this.profileDisplayName = this.$store.state.profile.displayName;
@@ -92,7 +92,7 @@ export default {
       profileDisplayName: 'Loading...',
       profileStatusMessage: 'Loading...',
       profilePicturePath: null,
-      mediaURL: Constant.LINE_MEDIA_URL,
+      mediaURL: Constant.LINE.MEDIA.HOST,
     };
   },
   created() {

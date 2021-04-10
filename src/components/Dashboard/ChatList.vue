@@ -96,14 +96,14 @@ export default {
         } else {
           this.waitForFetchDisplayMessage();
         }
-      }, Constant.RETRY_TIMEOUT);
+      }, Constant.TIMEOUT.RETRY);
     },
     async fetchDisplayMessage() {
       let cursor = await this.$store.state.idbUser
           .transaction(Constant.IDB.USER.PREVIEW_MESSAGE_BOX)
           .store.openCursor();
       while (cursor) {
-        this.updateDisplayMessage(cursor.value);
+        await this.updateDisplayMessage(cursor.value);
         cursor = await cursor.continue();
       }
       await this.fetchDisplayMessage();
@@ -157,7 +157,7 @@ export default {
   data() {
     return {
       previewMessageBox: {},
-      mediaURL: Constant.LINE_MEDIA_URL,
+      mediaURL: Constant.LINE.MEDIA.HOST,
     };
   },
   mounted() {

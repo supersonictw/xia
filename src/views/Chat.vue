@@ -36,7 +36,7 @@
               :src="`${mediaURL}/${getUserInfo(item.origin).pictureStatus}`"
             />
             <img class="picture-icon" v-else src="@/assets/logo.svg" />
-            <h3 v-if="item.origin != getMyUserId" class="name">
+            <h3 v-if="item.origin !== getMyUserId" class="name">
               {{ getUserInfo(item.origin).displayName }}
             </h3>
           </div>
@@ -101,13 +101,13 @@
           </div>
         </div>
         <textarea
-          v-show="inputType == 0"
+          v-show="inputType === 0"
           class="msg-input msg-input-text"
           v-model="inputText"
           @keydown.enter.exact="sendMessage"
         />
         <input
-          v-show="inputType == 1"
+          v-show="inputType === 1"
           ref="file"
           type="file"
           id="file-upload"
@@ -201,7 +201,7 @@ export default {
     },
     async fetchDisplayMessage() {
       if (!this.$store.state.ready) {
-        setTimeout(this.fetchDisplayMessage, Constant.RETRY_TIMEOUT);
+        setTimeout(this.fetchDisplayMessage, Constant.TIMEOUT.RETRY);
       }
       let cursor = await this.$store.state.idbUser
           .transaction(Constant.IDB.USER.MESSAGE_BOX)
@@ -264,7 +264,7 @@ export default {
         return setTimeout(
             (messageId, messageOrigin) =>
               this.getImageResource(messageId, messageOrigin),
-            Constant.RETRY_TIMEOUT,
+            Constant.TIMEOUT.RETRY,
         );
       }
       const imageURL = `${this.mediaURL}/os/m/${messageId}/preview`;
@@ -298,7 +298,7 @@ export default {
           this.inputText,
           this.$refs.file.files,
       );
-      setTimeout(() => (this.inputText = ''), Constant.WAIT_TIMEOUT);
+      setTimeout(() => (this.inputText = ''), Constant.TIMEOUT.WAIT);
     },
     async sendMessageProcess(inputType, inputText, fileList) {
       let message;
@@ -411,7 +411,7 @@ export default {
           autoScroll &&
           element.scrollTop + element.clientHeight === element.scrollHeight
         ) {
-          setTimeout(this.moveToBottom, Constant.WAIT_TIMEOUT);
+          setTimeout(this.moveToBottom, Constant.TIMEOUT.WAIT);
         } else {
           element.scroll(0, element.scrollHeight);
         }
@@ -506,7 +506,7 @@ export default {
       mediaObjects: {},
       messageIdLastSeen: null,
       showEmojiBoxCheckpoint: false,
-      mediaURL: Constant.LINE_MEDIA_URL,
+      mediaURL: Constant.LINE.MEDIA.HOST,
     };
   },
   async mounted() {
