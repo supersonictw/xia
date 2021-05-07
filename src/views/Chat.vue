@@ -154,7 +154,7 @@ export default {
             name: Constant.ROUTER_TAG.REDIRECT,
             params: {
               next: Constant.ROUTER_TAG.CHAT,
-              data: {targetIdHashed: this.targetIdHashed},
+              data: {targetIdHash: this.targetIdHash},
             },
           });
           return false;
@@ -451,8 +451,8 @@ export default {
       if (!this.$store.state.ready) {
         return -1;
       }
-      if (this.$store.state.chatIdsHashed.has(this.targetIdHashed)) {
-        return this.$store.state.chatIdsHashed.get(this.targetIdHashed);
+      if (this.$store.state.chatIdsHash.has(this.targetIdHash)) {
+        return this.$store.state.chatIdsHash.get(this.targetIdHash);
       }
       this.$router.replace({name: Constant.ROUTER_TAG.NOT_FOUND});
       return '';
@@ -494,7 +494,7 @@ export default {
       return !!this.$refs.file.value;
     },
   },
-  props: ['targetIdHashed'],
+  props: ['targetIdHash'],
   data() {
     return {
       initialized: null,

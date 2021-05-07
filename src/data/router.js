@@ -54,13 +54,13 @@ const routes = [
     component: Profile,
   },
   {
-    path: '/contact/:targetIdHashed',
+    path: '/contact/:targetIdHash',
     name: Constant.ROUTER_TAG.CONTACT,
     component: Contact,
     props: true,
   },
   {
-    path: '/chat/:targetIdHashed',
+    path: '/chat/:targetIdHash',
     name: Constant.ROUTER_TAG.CHAT,
     component: Chat,
     props: true,

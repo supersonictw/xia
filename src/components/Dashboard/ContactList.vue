@@ -59,7 +59,7 @@ export default {
     enterContact(chatId) {
       this.$router.push({
         name: Constant.ROUTER_TAG.CONTACT,
-        params: {targetIdHashed: chatId},
+        params: {targetIdHash: chatId},
       });
     },
     async waitForFetchData() {

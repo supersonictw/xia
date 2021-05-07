@@ -10,34 +10,21 @@
 */
 
 import Constant from '@/data/const';
-import IDB from '@/data/idb';
 import hash from 'js-sha256';
+import lineClient from '@/computes/line';
 
 export default class {
-  constructor(vuexInstance, talkServiceClient) {
-    this.vuex = vuexInstance;
-    this.client = talkServiceClient;
-    this.idb = new IDB(vuexInstance);
+  constructor(authToken, idbInstance, systemInstance) {
+    this.client = lineClient(Constant.LINE.PATH.QUERY, authToken);
+    this.idb = idbInstance;
+    this.system = systemInstance;
   }
 
   async init() {
     if (this.vuex.state.accessToken) {
-      await this.getProfile();
       await this.syncData();
-      await this.fetchChatIdsHashed();
+      await this.fetchChatIdsHash();
       await this.syncRevision();
-    }
-  }
-
-  async getProfile() {
-    try {
-      const profile = await this.client.getProfile();
-      this.vuex.commit('updateProfile', profile);
-      return true;
-    } catch (e) {
-      console.error(e);
-      if (e.name === 'TalkException') await this.revoke();
-      return false;
     }
   }
 
@@ -100,15 +87,15 @@ export default class {
     });
   }
 
-  async fetchChatIdsHashed() {
+  async fetchChatIdsHash() {
     for (const typeName of Constant.ALL_CONTACT_TYPES) {
       let cursor = await this.idb.user
           .transaction(typeName)
           .store.openCursor();
       while (cursor) {
-        this.vuex.commit('registerChatIdHashed', {
+        this.vuex.commit('registerChatIdHash', {
           targetId: cursor.key,
-          idHashed: hash.sha256(cursor.key),
+          idHash: hash.sha256(cursor.key),
         });
         cursor = await cursor.continue();
       }

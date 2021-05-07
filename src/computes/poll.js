@@ -15,21 +15,16 @@ import lineType from '@/computes/protocol/line_types';
 import hash from 'js-sha256';
 
 export default class {
-  constructor(vuexInstance) {
-    this.vuex = vuexInstance;
+  constructor(authToken, idbInstance, systemInstance) {
+    this.client = lineClient(Constant.LINE.PATH.POLL, authToken);
+    this.idb = idbInstance;
+    this.system = systemInstance;
+    this.revision = 0;
   }
 
-  async opListener() {
-    const opClient = lineClient(
-        Constant.LINE.PATH.POLL,
-        this.vuex.state.authToken,
-    );
-    await this.longPoll(opClient);
-  }
-
-  async longPoll(opClient) {
+  async start() {
     try {
-      const operations = await opClient.fetchOperations(
+      const operations = await this.client.fetchOperations(
           this.revision,
           Constant.FETCH_OP_NUM,
       );
@@ -39,7 +34,26 @@ export default class {
       console.error(e);
       if (e.name === 'TalkException') return this.revoke();
     }
-    await this.longPoll(opClient);
+    await this.start(this.client);
+  }
+
+  async updateRevision(operations) {
+    const opLength = operations.length;
+    if (opLength === 0) return;
+    if (opLength === 1) return (this.revision = operations[0].revision);
+    const latestRev = operations[opLength - 1].revision;
+    const secondRev = operations[opLength - 2].revision;
+    this.revision = latestRev.compare(secondRev) ? secondRev : latestRev;
+  }
+
+  async updateGroupInfo(groupId, accepted = false) {
+    const data = await this.client.getGroup(groupId);
+    if (accepted ||(await this.idb.user.get(Constant.IDB.USER.GROUP.JOINED, data.id))) {
+      this.idb.user.put(Constant.IDB.USER.GROUP.JOINED, data);
+    } else {
+      this.idb.user.put(Constant.IDB.USER.GROUP.INVITED, data);
+      this.vuex.commit('registerChatIdHash', {targetId: groupId, idHash: hash.sha256(groupId)});
+    }
   }
 
   async opHandler(operations) {
@@ -53,11 +67,11 @@ export default class {
         case lineType.OpType.ADD_CONTACT:
         case lineType.OpType.UPDATE_CONTACT: {
           const data = await this.client.getContact(operation.param1);
-          this.vuex.state.idbUser.put(Constant.IDB.USER.CONTACT, data);
+          this.idb.user.put(Constant.IDB.USER.CONTACT, data);
           break;
         }
         case lineType.OpType.ACCEPT_GROUP_INVITATION: {
-          this.vuex.state.idbUser.delete(
+          this.idb.user.delete(
               Constant.IDB.USER.GROUP.INVITED,
               operation.param1,
           );
@@ -67,10 +81,10 @@ export default class {
         case lineType.OpType.LEAVE_GROUP: {
           await this.clearMessageBox(operation.param1);
           this.vuex.commit(
-              'unregisterChatIdHashed',
+              'unregisterChatIdHash',
               hash.sha256(operation.param1),
           );
-          this.vuex.state.idbUser.delete(
+          this.idb.user.delete(
               Constant.IDB.USER.GROUP.JOINED,
               operation.param1,
           );
@@ -80,14 +94,14 @@ export default class {
           if (operation.param3.includes('\x1e')) {
             operation.param3 = operation.param3
                 .split('\x1e')
-                .find((id) => id === this.vuex.state.profile.userId);
+                .find((id) => id === this.profile.userId);
           }
-          if (operation.param3 === this.vuex.state.profile.userId) {
+          if (operation.param3 === this.profile.userId) {
             this.vuex.commit(
-                'unregisterChatIdHashed',
+                'unregisterChatIdHash',
                 hash.sha256(operation.param1),
             );
-            this.vuex.state.idbUser.delete(
+            this.idb.user.delete(
                 Constant.IDB.USER.GROUP.INVITED,
                 operation.param1,
             );
@@ -98,15 +112,15 @@ export default class {
           if (operation.param3.includes('\x1e')) {
             operation.param3 = operation.param3
                 .split('\x1e')
-                .find((id) => id === this.vuex.state.profile.userId);
+                .find((id) => id === this.profile.userId);
           }
-          if (operation.param3 === this.vuex.state.profile.userId) {
+          if (operation.param3 === this.profile.userId) {
             await this.clearMessageBox(operation.param1);
             this.vuex.commit(
-                'unregisterChatIdHashed',
+                'unregisterChatIdHash',
                 hash.sha256(operation.param1),
             );
-            this.vuex.state.idbUser.delete(
+            this.idb.user.delete(
                 Constant.IDB.USER.GROUP.JOINED,
                 operation.param1,
             );
@@ -140,17 +154,17 @@ export default class {
               case lineType.MIDType.GROUP:
                 return obj.to;
             }
-          })(operation.message, this.vuex.state.profile.userId);
+          })(operation.message, this.profile.userId);
           // Uint8Array to String
           operation.message.createdTime =
                         operation.message.createdTime.toString();
           operation.message.deliveredTime =
                         operation.message.deliveredTime.toString();
-          this.vuex.state.idbUser.put(
+          this.idb.user.put(
               Constant.IDB.USER.PREVIEW_MESSAGE_BOX,
               operation.message,
           );
-          this.vuex.state.idbUser.put(
+          this.idb.user.put(
               Constant.IDB.USER.MESSAGE_BOX,
               operation.message,
           );

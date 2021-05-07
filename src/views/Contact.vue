@@ -66,7 +66,7 @@ export default {
             name: Constant.ROUTER_TAG.REDIRECT,
             params: {
               next: Constant.ROUTER_TAG.CONTACT,
-              data: {targetIdHashed: this.targetIdHashed},
+              data: {targetIdHash: this.targetIdHash},
             },
           });
           return false;
@@ -116,7 +116,7 @@ export default {
     enterChat() {
       this.$router.replace({
         name: Constant.ROUTER_TAG.CHAT,
-        params: {targetIdHashed: this.targetIdHashed},
+        params: {targetIdHash: this.targetIdHash},
       });
     },
     replyGroupInvitation(status) {
@@ -153,8 +153,8 @@ export default {
       if (!this.$store.state.ready) {
         return -1;
       }
-      if (this.$store.state.chatIdsHashed.has(this.targetIdHashed)) {
-        return this.$store.state.chatIdsHashed.get(this.targetIdHashed);
+      if (this.$store.state.chatIdsHash.has(this.targetIdHash)) {
+        return this.$store.state.chatIdsHash.get(this.targetIdHash);
       }
       this.$router.replace({name: Constant.ROUTER_TAG.NOT_FOUND});
       return '';
@@ -163,7 +163,7 @@ export default {
       return this.escapeHtml(this.statusMessage).replace(/\n/g, '<br />');
     },
   },
-  props: ['targetIdHashed'],
+  props: ['targetIdHash'],
   data() {
     return {
       contactType: 0,

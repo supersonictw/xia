@@ -48,7 +48,7 @@ export default {
     enterChat(chatId) {
       this.$router.push({
         name: Constant.ROUTER_TAG.CHAT,
-        params: {targetIdHashed: chatId},
+        params: {targetIdHash: chatId},
       });
     },
     async getContactInfo(message) {
@@ -112,7 +112,7 @@ export default {
       const contactData = await this.getContactInfo(message);
       const displayName = contactData ? contactData.displayName : null;
       const pictureStatus = contactData ? contactData.pictureStatus : null;
-      const targetIdHashed = hash.sha256(message.target);
+      const targetIdHash = hash.sha256(message.target);
       const lastMessage = (function(obj) {
         switch (obj.contentType) {
           case lineType.ContentType.IMAGE:
@@ -131,7 +131,7 @@ export default {
         return;
       }
       this.$set(this.previewMessageBox, message.target, {
-        id: targetIdHashed,
+        id: targetIdHash,
         time: parseInt(message.createdTime),
         displayName,
         pictureStatus,

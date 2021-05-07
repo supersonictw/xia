@@ -11,11 +11,10 @@
 
 import Constant from '@/data/const';
 import {deleteDB, openDB} from 'idb';
-import hash from 'js-sha256';
 
 export default class {
-  constructor(vuexInstance) {
-    this.vuex = vuexInstance;
+  constructor(userIdHash) {
+    this.userIdHash = userIdHash;
     this.xia = null;
     this.user = null;
     this.setupXIA().then((db) => (this.xia = db));
@@ -46,7 +45,7 @@ export default class {
   }
 
   async setupUser() {
-    const target = this.vuex.state.profile.userIdHashed;
+    const target = this.userIdHash;
     const dbName = `${Constant.NAME}_${target}`;
     const localName =
             navigator.language ||
@@ -128,40 +127,9 @@ export default class {
     });
   }
 
-  async updateRevision(operations) {
-    const opLength = operations.length;
-    if (opLength === 0) return;
-    if (opLength === 1) return (this.revision = operations[0].revision);
-    const latestRev = operations[opLength - 1].revision;
-    const secondRev = operations[opLength - 2].revision;
-    this.revision = latestRev.compare(secondRev) ? secondRev : latestRev;
-  }
-
-  async updateGroupInfo(groupId, accepted = false) {
-    const data = await this.client.getGroup(groupId);
-    if (
-      accepted ||
-        (await this.vuex.state.idbUser.get(
-            Constant.IDB.USER.GROUP.JOINED,
-            data.id,
-        ))
-    ) {
-      this.vuex.state.idbUser.put(Constant.IDB.USER.GROUP.JOINED, data);
-    } else {
-      this.vuex.state.idbUser.put(Constant.IDB.USER.GROUP.INVITED, data);
-      this.vuex.commit('registerChatIdHashed', {
-        targetId: groupId,
-        idHashed: hash.sha256(groupId),
-      });
-    }
-  }
-
   async clearMessageBox(targetId) {
-    this.vuex.state.idbUser.delete(
-        Constant.IDB.USER.PREVIEW_MESSAGE_BOX,
-        targetId,
-    );
-    let cursor = await this.vuex.state.idbUser
+    this.user.delete(Constant.IDB.USER.PREVIEW_MESSAGE_BOX, targetId);
+    let cursor = await this.user
         .transaction(Constant.IDB.USER.MESSAGE_BOX, 'readwrite')
         .store.openCursor();
     while (cursor) {
@@ -172,26 +140,25 @@ export default class {
     }
   }
 
-  async revoke(reset = false, idbOldVersion = -1) {
+  async reset(previousVersion) {
+    let idbNames = [];
+    if (previousVersion >= 3 || previousVersion === -1) {
+      const idbXia = this.xia ? this.xia : await this.setupXIA();
+      const allUsers = await idbXia.getAllKeys(Constant.IDB.XIA.DB_LIST);
+      if (allUsers.length > 0) {
+        idbNames = allUsers.map((name) => `${Constant.NAME}_${name}`);
+        await idbXia.clear(Constant.IDB.XIA.DB_LIST);
+      }
+    } else if (previousVersion !== 0) {
+      await deleteDB(Constant.NAME);
+    }
+    await Promise.all(idbNames.map((name) => deleteDB(name)));
+  }
+
+  async revoke() {
     Constant.ALL_COOKIES.forEach((name) => this.$cookies.remove(name));
     window.localStorage.clear();
     window.sessionStorage.clear();
-    if (reset) {
-      let idbNames = [];
-      if (idbOldVersion >= 3 || idbOldVersion === -1) {
-        const idbXia = this.vuex.state.idbXia ?
-            this.vuex.state.idbXia :
-            await this.setupXIA();
-        const allIdbUsers = await idbXia.getAllKeys(Constant.IDB.XIA.DB_LIST);
-        if (allIdbUsers.length > 0) {
-          idbNames = allIdbUsers.map((name) => `${Constant.NAME}_${name}`);
-          await idbXia.clear(Constant.IDB.XIA.DB_LIST);
-        }
-      } else if (idbOldVersion !== 0) {
-        await deleteDB(Constant.NAME);
-      }
-      await Promise.all(idbNames.map((name) => deleteDB(name)));
-    }
     window.location.reload();
   }
 }

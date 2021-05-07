@@ -204,7 +204,7 @@ export default {
                   () =>
                     this.$router.push({
                       name: Constant.ROUTER_TAG.CHAT,
-                      params: {targetIdHashed: hash.sha256(group.id)},
+                      params: {targetIdHash: hash.sha256(group.id)},
                     }),
                   Constant.TIMEOUT.WAIT,
               );
