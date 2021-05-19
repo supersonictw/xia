@@ -51,12 +51,9 @@ const Constants = function() {
       ERROR: 'Error',
       NOT_FOUND: 'Not Found',
     },
-    COOKIE: {
+    LOCAL_STORAGE: {
       ACCESS_KEY: 'XIA_AccessKey',
       ACCESS_CERTIFICATE_PREFIX: 'XIA_AccessCertificate',
-      get ALL_COOKIES() {
-        return [this.ACCESS_KEY];
-      },
     },
     IDB: {
       XIA: {

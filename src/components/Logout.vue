@@ -20,14 +20,11 @@
 </template>
 
 <script>
-import Constant from '@/data/const.js';
-
 export default {
   name: 'Logout',
   methods: {
     logout() {
       this.$store.state.client.logout();
-      Constant.ALL_COOKIES.forEach((name) => this.$cookies.remove(name));
       window.localStorage.clear();
       window.sessionStorage.clear();
       window.location.reload();

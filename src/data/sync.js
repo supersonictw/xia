@@ -11,21 +11,35 @@
 
 import Constant from '@/data/const';
 import hash from 'js-sha256';
-import lineClient from '@/computes/line';
 
 export default class {
-  constructor(authToken, idbInstance, systemInstance) {
-    this.client = lineClient(Constant.LINE.PATH.QUERY, authToken);
+  constructor(queryClient, idbInstance, systemInstance) {
+    this.client = queryClient;
     this.idb = idbInstance;
     this.system = systemInstance;
+    this.chatRoomIdHash = [];
   }
 
   async init() {
-    if (this.vuex.state.accessToken) {
-      await this.syncData();
-      await this.fetchChatIdsHash();
-      await this.syncRevision();
+    try {
+      if (this.client) {
+        await this.syncData();
+        await this.fetchChatIdsHash();
+        await this.syncRevision();
+        return true;
+      }
+    } catch (e) {
+      console.error(e);
     }
+    return false;
+  }
+
+  updateProfile(profileData) {
+    this.system.profile.userId = profileData.mid;
+    this.system.profile.userIdHash = hash.sha256(profileData.mid);
+    this.system.profile.displayName = profileData.displayName;
+    this.system.profile.picturePath = profileData.picturePath;
+    this.system.profile.statusMessage = profileData.statusMessage;
   }
 
   async syncContact() {
@@ -93,7 +107,7 @@ export default class {
           .transaction(typeName)
           .store.openCursor();
       while (cursor) {
-        this.vuex.commit('registerChatIdHash', {
+        this.chatRoomIdHash.push({
           targetId: cursor.key,
           idHash: hash.sha256(cursor.key),
         });

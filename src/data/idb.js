@@ -45,8 +45,7 @@ export default class {
   }
 
   async setupUser() {
-    const target = this.userIdHash;
-    const dbName = `${Constant.NAME}_${target}`;
+    const dbName = `${Constant.NAME}_${this.userIdHash}`;
     const localName =
             navigator.language ||
             navigator.userLanguage ||
@@ -128,13 +127,15 @@ export default class {
   }
 
   async clearMessageBox(targetId) {
-    this.user.delete(Constant.IDB.USER.PREVIEW_MESSAGE_BOX, targetId);
-    let cursor = await this.user
-        .transaction(Constant.IDB.USER.MESSAGE_BOX, 'readwrite')
-        .store.openCursor();
+    await this.user.delete(Constant.IDB.USER.PREVIEW_MESSAGE_BOX, targetId);
+    const transaction = await this.user.transaction(
+        Constant.IDB.USER.MESSAGE_BOX,
+        'readwrite',
+    );
+    let cursor = await transaction.store.openCursor();
     while (cursor) {
       if (cursor.value.target === targetId) {
-        cursor.delete();
+        await cursor.delete();
       }
       cursor = await cursor.continue();
     }
@@ -156,7 +157,6 @@ export default class {
   }
 
   async revoke() {
-    Constant.ALL_COOKIES.forEach((name) => this.$cookies.remove(name));
     window.localStorage.clear();
     window.sessionStorage.clear();
     window.location.reload();

@@ -9,45 +9,70 @@
   (c) 2021 SuperSonic. (https://github.com/supersonictw)
 */
 
-import Constant from '@/data/const';
 import IDB from '@/data/idb';
 import Sync from '@/data/sync';
-import hash from 'js-sha256';
+import Login from '@/computes/login';
+import Poll from '@/computes/poll';
+import lineClient from '@/computes/line';
+import Constants from '@/data/const';
 
 export default class {
-  constructor() {
+  constructor(authToken=null) {
     this.ready = false;
-    this.profile = {};
     this.authToken = null;
-    this.idb = null;
-    this.sync = null;
-    if (this.$cookies.isKey(Constant.COOKIE.ACCESS_KEY)) {
-      this.authToken = this.$cookies.get(Constant.COOKIE.ACCESS_KEY);
-      this.init().then(() => (this.ready = true));
+    this.clients = {};
+    this.instances = {};
+    this.profile = {};
+    if (!authToken) {
+      this.clients.login = lineClient(
+          this.authToken,
+          Constants.LINE.PATH.LOGIN,
+      );
+      this.clients.auth = lineClient(
+          this.authToken,
+          Constants.LINE.PATH.AUTH,
+      );
+      this.instances.login = new Login();
+    } else {
+      this.clients.query = lineClient(
+          this.authToken,
+          Constants.LINE.PATH.QUERY,
+      );
+      this.clients.poll = lineClient(
+          this.authToken,
+          Constants.LINE.PATH.POLL,
+      );
+      this.init().then(
+          () => (this.ready = true),
+      );
     }
   }
 
   async init() {
+    let profile = null;
     try {
-      const profile = await this.client.getProfile();
-      this.updateProfile(profile);
+      profile = await this.clients.query.getProfile();
     } catch (e) {
       console.error(e);
       if (e.name === 'TalkException') await this.revoke();
     }
-    this.idb = new IDB(this.profile.userIdHash);
-    this.sync = new Sync(this.authToken, this.idb, this);
-  }
-
-  updateProfile(state, profileData) {
-    this.profile.userId = profileData.mid;
-    this.profile.userIdHash = hash.sha256(profileData.mid);
-    this.profile.displayName = profileData.displayName;
-    this.profile.picturePath = profileData.picturePath;
-    this.profile.statusMessage = profileData.statusMessage;
+    this.instances.idb = new IDB(this.profile.userIdHash);
+    this.instances.sync = new Sync(this.authToken, this.instances.idb, this);
+    this.instances.poll = new Poll(this.authToken, this.instances.idb, this);
+    await this.instances.sync.updateProfile(profile);
   }
 
   async syncData() {
-    await this.sync.init();
+    await this.instances.sync.init();
   }
+
+  sendMessage() {
+
+  }
+
+  addOperationListener() {
+
+  }
+
+  revoke() {}
 }

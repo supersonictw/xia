@@ -11,26 +11,24 @@
 
 import Vue from 'vue';
 import Vuex from 'vuex';
+import System from '@/computes/system';
 
 Vue.use(Vuex);
 
 const Store = new Vuex.Store({
   state: {
-    ready: 0,
     loaded: 0,
-    authToken: '',
     notifications: [],
     statusMessage: null,
+    system: new System(),
   },
   mutations: {
-    setReady(state) {
-      state.ready++;
-    },
     setLoaded(state) {
       state.loaded++;
     },
-    registerAuthToken(state, authToken) {
-      state.authToken = authToken;
+    registerNewSystemInstance(state, system) {
+      if (state.system) delete state.system;
+      state.system = system;
     },
     notify(state, {title, description}) {
       state.notifications.push({title, description});

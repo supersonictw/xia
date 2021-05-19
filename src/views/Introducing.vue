@@ -60,7 +60,9 @@ export default {
   name: 'Introducing',
   methods: {
     async checkAccess() {
-      if (!this.$cookies.isKey(Constant.COOKIE.ACCESS_KEY)) return this.ready--;
+      if (!window.localStorage.getItem(Constant.LOCAL_STORAGE.ACCESS_KEY)) {
+        return this.ready--;
+      }
       if (this.$store.state.loaded) {
         if (this.$store.state.ready) return this.ready++;
         else return this.ready--;
