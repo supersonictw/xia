@@ -454,8 +454,8 @@ export default {
       if (!this.$store.state.system.ready) {
         return -1;
       }
-      if (this.$store.state.chatIdsHash.has(this.targetIdHash)) {
-        return this.$store.state.chatIdsHash.get(this.targetIdHash);
+      if (this.$store.state.system.chatRoomIdHash.has(this.targetIdHash)) {
+        return this.$store.state.system.chatRoomIdHash.get(this.targetIdHash);
       }
       this.$router.replace({name: Constant.ROUTER_TAG.NOT_FOUND});
       return '';

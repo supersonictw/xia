@@ -148,6 +148,65 @@ export default class {
     }
   }
 
+  updateData(data, dataName) {
+    data.forEach((metadata) =>
+      this.user.put(dataName, metadata),
+    );
+  }
+
+  async updateGroupInfo(groupId, accepted = false) {
+    const data = await this.client.getGroup(groupId);
+    const localData = await this.user.get(
+        Constant.IDB.USER.GROUP.JOINED, data.id,
+    );
+    if (accepted || localData) {
+      await this.user.put(Constant.IDB.USER.GROUP.JOINED, data);
+    } else {
+      await this.user.put(Constant.IDB.USER.GROUP.INVITED, data);
+      this.system.registerChatRoomIdHash(groupId);
+    }
+  }
+
+  async syncRevision() {
+    const data = await this.user.get(
+        Constant.IDB.USER.SETTINGS,
+        Constant.IDB.USER.KEY.SETTINGS_REVISION,
+    );
+    if (data) {
+      this.revision = parseInt(data.value);
+    } else {
+      this.revision = await this.client.getLastOpRevision();
+    }
+  }
+
+  async syncData() {
+    const status = await this.user.get(
+        Constant.IDB.USER.SETTINGS,
+        Constant.IDB.USER.KEY.SETTINGS_SYNC_STATUS,
+    );
+    if (status && status.value === true) return;
+    await Promise.all([
+      this.syncContact(),
+      this.syncGroupJoined(),
+      this.syncGroupInvited(),
+    ]);
+    await this.user.put(Constant.IDB.USER.SETTINGS, {
+      id: Constant.IDB.USER.KEY.SETTINGS_SYNC_STATUS,
+      value: true,
+    });
+  }
+
+  async fetchChatIdsHash() {
+    for (const typeName of Constant.IDB.USER.ALL_CONTACT_TYPES) {
+      let cursor = await this.user
+          .transaction(typeName).store.openCursor();
+      while (cursor) {
+        this.system.registerChatRoomIdHash(cursor.key);
+        cursor = await cursor.continue();
+      }
+    }
+  }
+
   async reset(previousVersion) {
     let idbNames = [];
     if (previousVersion >= 3 || previousVersion === -1) {

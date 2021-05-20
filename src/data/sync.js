@@ -13,15 +13,15 @@ import Constant from '@/data/const';
 import hash from 'js-sha256';
 
 export default class {
-  constructor(queryClient, idbInstance, systemInstance) {
+  constructor(queryClient, instances, systemInstance) {
     this.client = queryClient;
-    this.idb = idbInstance;
+    this.idb = instances.idb;
     this.system = systemInstance;
   }
 
   async init(profileData) {
     try {
-      this.updateProfile(profileData);
+      this.syncProfile(profileData);
       await this.syncData();
       await this.fetchChatIdsHash();
       await this.syncRevision();
@@ -32,7 +32,7 @@ export default class {
     }
   }
 
-  updateProfile(profileData) {
+  syncProfile(profileData) {
     this.system.profile.userId = profileData.mid;
     this.system.profile.userIdHash = hash.sha256(profileData.mid);
     this.system.profile.displayName = profileData.displayName;
@@ -61,52 +61,6 @@ export default class {
     if (groupIdsInvited) {
       const groupDataInvited = await this.client.getGroups(groupIdsInvited);
       this.updateData(groupDataInvited, Constant.IDB.USER.GROUP.INVITED);
-    }
-  }
-
-  updateData(data, dataName) {
-    data.forEach((metadata) =>
-      this.idb.user.put(dataName, metadata),
-    );
-  }
-
-  async syncRevision() {
-    const data = await this.idb.user.get(
-        Constant.IDB.USER.SETTINGS,
-        Constant.IDB.USER.KEY.SETTINGS_REVISION,
-    );
-    if (data) {
-      this.revision = parseInt(data.value);
-    } else {
-      this.revision = await this.client.getLastOpRevision();
-    }
-  }
-
-  async syncData() {
-    const status = await this.idb.user.get(
-        Constant.IDB.USER.SETTINGS,
-        Constant.IDB.USER.KEY.SETTINGS_SYNC_STATUS,
-    );
-    if (status && status.value === true) return;
-    await Promise.all([
-      this.syncContact(),
-      this.syncGroupJoined(),
-      this.syncGroupInvited(),
-    ]);
-    await this.idb.user.put(Constant.IDB.USER.SETTINGS, {
-      id: Constant.IDB.USER.KEY.SETTINGS_SYNC_STATUS,
-      value: true,
-    });
-  }
-
-  async fetchChatIdsHash() {
-    for (const typeName of Constant.IDB.USER.ALL_CONTACT_TYPES) {
-      let cursor = await this.idb.user
-          .transaction(typeName).store.openCursor();
-      while (cursor) {
-        this.system.registerChatRoomIdHash(cursor.key);
-        cursor = await cursor.continue();
-      }
     }
   }
 }

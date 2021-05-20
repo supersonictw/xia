@@ -12,6 +12,7 @@
 import IDB from '@/data/idb';
 import Sync from '@/data/sync';
 import Login from '@/computes/login';
+import Operation from '@/computes/operation';
 import Poll from '@/computes/poll';
 import lineClient from '@/computes/line';
 import Constants from '@/data/const';
@@ -42,13 +43,13 @@ export default class {
           Constants.LINE.PATH.POLL,
           this.authToken,
       );
-      this.init().then(
+      this.service().then(
           () => (this.ready = true),
       );
     }
   }
 
-  async init() {
+  async service() {
     let profile = null;
     try {
       profile = await this.clients.query.getProfile();
@@ -58,22 +59,25 @@ export default class {
         await this.revoke();
       }
     }
-    this.instances.idb = new IDB(
-        this,
-    );
+    this.instances.idb = new IDB(this);
     this.instances.sync = new Sync(
         this.clients.query,
-        this.instances.idb,
+        this.instances,
+        this,
+    );
+    this.instances.operation = new Operation(
+        this.clients.query,
         this,
     );
     this.instances.poll = new Poll(
         this.clients.poll,
-        this.instances.idb,
+        this.instances,
         this,
     );
     await this.instances.idb.init();
     await this.instances.sync.init(profile);
     this.instances.idb.updateUserIdHash(this.profile.userIdHash);
+    await this.instances.poll.start();
   }
 
   async syncData() {
@@ -81,10 +85,6 @@ export default class {
   }
 
   sendMessage() {
-
-  }
-
-  addOperationListener() {
 
   }
 
