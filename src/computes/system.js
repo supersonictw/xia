@@ -15,32 +15,32 @@ import Login from '@/computes/login';
 import Poll from '@/computes/poll';
 import lineClient from '@/computes/line';
 import Constants from '@/data/const';
+import hash from 'js-sha256';
 
 export default class {
   constructor(authToken=null) {
     this.ready = false;
-    this.authToken = null;
     this.clients = {};
     this.instances = {};
     this.profile = {};
+    this.chatRoomIdHash = [];
+    this.authToken = authToken;
     if (!authToken) {
       this.clients.login = lineClient(
-          this.authToken,
           Constants.LINE.PATH.LOGIN,
       );
       this.clients.auth = lineClient(
-          this.authToken,
           Constants.LINE.PATH.AUTH,
       );
-      this.instances.login = new Login();
+      this.instances.login = new Login(this.clients);
     } else {
       this.clients.query = lineClient(
-          this.authToken,
           Constants.LINE.PATH.QUERY,
+          this.authToken,
       );
       this.clients.poll = lineClient(
-          this.authToken,
           Constants.LINE.PATH.POLL,
+          this.authToken,
       );
       this.init().then(
           () => (this.ready = true),
@@ -54,12 +54,26 @@ export default class {
       profile = await this.clients.query.getProfile();
     } catch (e) {
       console.error(e);
-      if (e.name === 'TalkException') await this.revoke();
+      if (e.name === 'TalkException') {
+        await this.revoke();
+      }
     }
-    this.instances.idb = new IDB(this.profile.userIdHash);
-    this.instances.sync = new Sync(this.authToken, this.instances.idb, this);
-    this.instances.poll = new Poll(this.authToken, this.instances.idb, this);
-    await this.instances.sync.updateProfile(profile);
+    this.instances.idb = new IDB(
+        this,
+    );
+    this.instances.sync = new Sync(
+        this.clients.query,
+        this.instances.idb,
+        this,
+    );
+    this.instances.poll = new Poll(
+        this.clients.poll,
+        this.instances.idb,
+        this,
+    );
+    await this.instances.idb.init();
+    await this.instances.sync.init(profile);
+    this.instances.idb.updateUserIdHash(this.profile.userIdHash);
   }
 
   async syncData() {
@@ -74,5 +88,13 @@ export default class {
 
   }
 
-  revoke() {}
+  registerChatRoomIdHash(targetId) {
+    this.chatRoomIdHash.push({targetId, idHash: hash.sha256(targetId)});
+  }
+
+  revoke() {
+    window.localStorage.clear();
+    window.sessionStorage.clear();
+    window.location.reload();
+  }
 }

@@ -61,7 +61,7 @@
 
 <script>
 import Back from '@/components/Back.vue';
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   name: 'Login',
@@ -74,28 +74,21 @@ export default {
         password: '',
       },
       processing: false,
-      status: '',
     };
-  },
-  watch: {
-    user(event) {
-      this.handler.update(event);
-    },
   },
   methods: {
     async loginSubmit() {
       if (this.processing) return;
       if (this.user.identity.length < 1 || this.user.password.length < 1) {
-        this.status = 'Empty identity or password';
+        this.handler.setStatus('Empty identity or password');
         return;
       }
       this.processing = true;
       try {
+        this.handler.update(this.user);
         const status = await this.handler.action();
         if (status === true) {
           window.location.reload();
-        } else {
-          this.status = 'Login failed';
         }
       } catch (e) {
         console.error(e);
@@ -110,7 +103,13 @@ export default {
   },
   computed: {
     handler() {
+      if (!this.$store.state.system.instances.login) {
+        this.$router.replace('/');
+      }
       return this.$store.state.system.instances.login;
+    },
+    status() {
+      return this.handler.status;
     },
   },
   async created() {

@@ -20,7 +20,7 @@ const Constants = function() {
     if (domain && !path) {
       return `${schema}://${domain}`;
     }
-    return `${schema}://${domain}/${path}`;
+    return `${schema}://${domain}${path}`;
   };
   return {
     NAME: 'XIA',

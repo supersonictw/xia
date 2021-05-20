@@ -23,7 +23,7 @@ export default {
   props: ['next', 'data'],
   methods: {
     waitForGoToNextPage() {
-      if (this.$store.state.ready) {
+      if (this.$store.state.system.ready) {
         this.$router.replace({
           name: this.next,
           params: this.data,

@@ -9,14 +9,13 @@
   (c) 2021 SuperSonic. (https://github.com/supersonictw)
 */
 
-import lineClient from '@/computes/line';
 import Constant from '@/data/const';
 import lineType from '@/computes/protocol/line_types';
 import hash from 'js-sha256';
 
 export default class {
-  constructor(authToken, idbInstance, systemInstance) {
-    this.client = lineClient(Constant.LINE.PATH.POLL, authToken);
+  constructor(pollClient, idbInstance, systemInstance) {
+    this.client = pollClient;
     this.idb = idbInstance;
     this.system = systemInstance;
     this.revision = 0;
@@ -32,7 +31,9 @@ export default class {
       await this.updateRevision(operations);
     } catch (e) {
       console.error(e);
-      if (e.name === 'TalkException') return this.revoke();
+      if (e.name === 'TalkException') {
+        return this.system.revoke();
+      }
     }
     await this.start(this.client);
   }
@@ -48,11 +49,14 @@ export default class {
 
   async updateGroupInfo(groupId, accepted = false) {
     const data = await this.client.getGroup(groupId);
-    if (accepted ||(await this.idb.user.get(Constant.IDB.USER.GROUP.JOINED, data.id))) {
+    const localData = await this.idb.user.get(
+        Constant.IDB.USER.GROUP.JOINED, data.id,
+    );
+    if (accepted || localData) {
       this.idb.user.put(Constant.IDB.USER.GROUP.JOINED, data);
     } else {
       this.idb.user.put(Constant.IDB.USER.GROUP.INVITED, data);
-      this.vuex.commit('registerChatIdHash', {targetId: groupId, idHash: hash.sha256(groupId)});
+      this.system.registerChatRoomIdHash(groupId);
     }
   }
 
@@ -61,7 +65,7 @@ export default class {
       switch (operation.type) {
         case lineType.OpType.UPDATE_PROFILE: {
           const data = await this.client.getProfile();
-          this.vuex.commit('updateProfile', data);
+          await this.system.sync.updateProfile(data);
           break;
         }
         case lineType.OpType.ADD_CONTACT:
@@ -94,9 +98,9 @@ export default class {
           if (operation.param3.includes('\x1e')) {
             operation.param3 = operation.param3
                 .split('\x1e')
-                .find((id) => id === this.profile.userId);
+                .find((id) => id === this.system.profile.userId);
           }
-          if (operation.param3 === this.profile.userId) {
+          if (operation.param3 === this.system.profile.userId) {
             this.vuex.commit(
                 'unregisterChatIdHash',
                 hash.sha256(operation.param1),
@@ -112,10 +116,10 @@ export default class {
           if (operation.param3.includes('\x1e')) {
             operation.param3 = operation.param3
                 .split('\x1e')
-                .find((id) => id === this.profile.userId);
+                .find((id) => id === this.system.profile.userId);
           }
-          if (operation.param3 === this.profile.userId) {
-            await this.clearMessageBox(operation.param1);
+          if (operation.param3 === this.system.profile.userId) {
+            await this.idb.clearMessageBox(operation.param1);
             this.vuex.commit(
                 'unregisterChatIdHash',
                 hash.sha256(operation.param1),
@@ -142,19 +146,19 @@ export default class {
         case lineType.OpType.SEND_MESSAGE:
         case lineType.OpType.RECEIVE_MESSAGE:
           // Add Target for index
-          operation.message.target = (function(obj, profileId) {
-            switch (obj.toType) {
+          operation.message.target = (() => {
+            switch (operation.message.toType) {
               case lineType.MIDType.USER:
-                if (obj.from_ === profileId) {
-                  return obj.to;
+                if (operation.message.from_ === this.system.profile.userId) {
+                  return operation.message.to;
                 } else {
-                  return obj.from_;
+                  return operation.message.from_;
                 }
               case lineType.MIDType.ROOM:
               case lineType.MIDType.GROUP:
-                return obj.to;
+                return operation.message.to;
             }
-          })(operation.message, this.profile.userId);
+          })();
           // Uint8Array to String
           operation.message.createdTime =
                         operation.message.createdTime.toString();

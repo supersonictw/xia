@@ -145,7 +145,7 @@ export default {
   methods: {
     async waitForFetchData() {
       setTimeout(() => {
-        if (this.$store.state.ready) {
+        if (this.$store.state.system.ready) {
           this.fetchContacts();
         } else {
           this.waitForFetchData();
@@ -153,7 +153,8 @@ export default {
       }, Constant.TIMEOUT.RETRY);
     },
     async fetchContacts() {
-      let cursor = await this.$store.state.syncHandler.idb.user
+      let cursor = await this.$store.state
+          .system.instances.idb.user
           .transaction(Constant.IDB.USER.CONTACT)
           .store.index('displayName')
           .openCursor();
@@ -288,7 +289,7 @@ export default {
       selected: [],
       filterName: '',
       displayContactValue: false,
-      mediaURL: Constant.LINE.MEDIA.HOST,
+      mediaURL: `//${Constant.LINE.MEDIA.HOST}`,
       mobileUI: window.innerWidth < Constant.MOBILE_UI_WIDTH,
     };
   },

@@ -64,7 +64,7 @@ export default {
         return this.ready--;
       }
       if (this.$store.state.loaded) {
-        if (this.$store.state.ready) return this.ready++;
+        if (this.$store.state.system.ready) return this.ready++;
         else return this.ready--;
       }
       setTimeout(this.checkAccess, Constant.TIMEOUT.RETRY);

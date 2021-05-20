@@ -17,21 +17,19 @@ export default class {
     this.client = queryClient;
     this.idb = idbInstance;
     this.system = systemInstance;
-    this.chatRoomIdHash = [];
   }
 
-  async init() {
+  async init(profileData) {
     try {
-      if (this.client) {
-        await this.syncData();
-        await this.fetchChatIdsHash();
-        await this.syncRevision();
-        return true;
-      }
+      this.updateProfile(profileData);
+      await this.syncData();
+      await this.fetchChatIdsHash();
+      await this.syncRevision();
+      return true;
     } catch (e) {
       console.error(e);
+      return false;
     }
-    return false;
   }
 
   updateProfile(profileData) {
@@ -102,15 +100,11 @@ export default class {
   }
 
   async fetchChatIdsHash() {
-    for (const typeName of Constant.ALL_CONTACT_TYPES) {
+    for (const typeName of Constant.IDB.USER.ALL_CONTACT_TYPES) {
       let cursor = await this.idb.user
-          .transaction(typeName)
-          .store.openCursor();
+          .transaction(typeName).store.openCursor();
       while (cursor) {
-        this.chatRoomIdHash.push({
-          targetId: cursor.key,
-          idHash: hash.sha256(cursor.key),
-        });
+        this.system.registerChatRoomIdHash(cursor.key);
         cursor = await cursor.continue();
       }
     }

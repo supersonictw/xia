@@ -149,7 +149,7 @@ export default {
   methods: {
     async fetchChatRoomInformation() {
       if (this.targetId === -1) {
-        if (!this.$store.state.ready) {
+        if (!this.$store.state.system.ready) {
           await this.$router.replace({
             name: Constant.ROUTER_TAG.REDIRECT,
             params: {
@@ -161,19 +161,21 @@ export default {
         }
       }
       if (this.targetId.startsWith('u')) {
-        this.chatRoomInfo = await this.$store.state.syncHandler.idb.user.get(
-            Constant.IDB.USER.CONTACT,
-            this.targetId,
-        );
+        this.chatRoomInfo = await this.$store.state.system
+            .instances.idb.user.get(
+                Constant.IDB.USER.CONTACT,
+                this.targetId,
+            );
         this.chatRoomTitle = this.chatRoomInfo.displayName;
         this.chatRoomPicture = this.chatRoomInfo.pictureStatus;
         this.chatRoomType = lineType.MIDType.USER;
         return true;
       } else if (this.targetId.startsWith('c')) {
-        this.chatRoomInfo = await this.$store.state.syncHandler.idb.user.get(
-            Constant.IDB.USER.GROUP.JOINED,
-            this.targetId,
-        );
+        this.chatRoomInfo = await this.$store.state.system
+            .instances.idb.user.get(
+                Constant.IDB.USER.GROUP.JOINED,
+                this.targetId,
+            );
         this.chatRoomTitle = this.chatRoomInfo.name;
         this.chatRoomPicture = this.chatRoomInfo.pictureStatus;
         this.chatRoomType = lineType.MIDType.GROUP;
@@ -200,10 +202,11 @@ export default {
       }
     },
     async fetchDisplayMessage() {
-      if (!this.$store.state.ready) {
+      if (!this.$store.state.system.ready) {
         setTimeout(this.fetchDisplayMessage, Constant.TIMEOUT.RETRY);
       }
-      let cursor = await this.$store.state.syncHandler.idb.user
+      let cursor = await this.$store.state
+          .system.instances.idb.user
           .transaction(Constant.IDB.USER.MESSAGE_BOX)
           .store.index('target')
           .openCursor(IDBKeyRange.only(this.targetId), 'prev');
@@ -448,7 +451,7 @@ export default {
   },
   computed: {
     targetId() {
-      if (!this.$store.state.ready) {
+      if (!this.$store.state.system.ready) {
         return -1;
       }
       if (this.$store.state.chatIdsHash.has(this.targetIdHash)) {
@@ -487,7 +490,7 @@ export default {
       return layout;
     },
     getMyUserId() {
-      return this.$store.state.profile.userId;
+      return this.$store.state.system.profile.userId;
     },
     checkUploadBox() {
       if (this.$refs.file === undefined) return;
@@ -508,7 +511,7 @@ export default {
       mediaObjects: {},
       messageIdLastSeen: null,
       showEmojiBoxCheckpoint: false,
-      mediaURL: Constant.LINE.MEDIA.HOST,
+      mediaURL: `//${Constant.LINE.MEDIA.HOST}`,
     };
   },
   async mounted() {

@@ -59,7 +59,7 @@ export default {
   data() {
     return {
       resource: null,
-      mediaURL: Constant.LINE.MEDIA.HOST,
+      mediaURL: `//${Constant.LINE.MEDIA.HOST}`,
     };
   },
   created() {

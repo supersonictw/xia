@@ -61,7 +61,7 @@ export default {
   methods: {
     async fetchContactProfile() {
       if (this.targetId === -1) {
-        if (!this.$store.state.ready) {
+        if (!this.$store.state.system.ready) {
           await this.$router.replace({
             name: Constant.ROUTER_TAG.REDIRECT,
             params: {
@@ -73,25 +73,28 @@ export default {
         }
       }
       if (this.targetId.startsWith('u')) {
-        const userInfo = await this.$store.state.syncHandler.idb.user.get(
-            Constant.IDB.USER.CONTACT,
-            this.targetId,
-        );
+        const userInfo = await this.$store.state
+            .system.instances.idb.user.get(
+                Constant.IDB.USER.CONTACT,
+                this.targetId,
+            );
         this.displayName = userInfo.displayName;
         this.statusMessage = userInfo.statusMessage;
         this.pictureStatus = userInfo.pictureStatus;
         this.contactType = lineType.MIDType.USER;
       } else if (this.targetId.startsWith('c')) {
         const statusMessageArray = [];
-        let groupInfo = await this.$store.state.syncHandler.idb.user.get(
-            Constant.IDB.USER.GROUP.JOINED,
-            this.targetId,
-        );
+        let groupInfo = await this.$store.state
+            .system.instances.idb.user.get(
+                Constant.IDB.USER.GROUP.JOINED,
+                this.targetId,
+            );
         if (!groupInfo) {
-          groupInfo = await this.$store.state.syncHandler.idb.user.get(
-              Constant.IDB.USER.GROUP.INVITED,
-              this.targetId,
-          );
+          groupInfo = await this.$store.state
+              .system.instances.idb.user.get(
+                  Constant.IDB.USER.GROUP.INVITED,
+                  this.targetId,
+              );
           this.groupInviting = true;
           statusMessageArray.push(
               `${Constant.GROUP_INVITING_ICON} This is a Group Invitation.\n`,
@@ -150,7 +153,7 @@ export default {
   },
   computed: {
     targetId() {
-      if (!this.$store.state.ready) {
+      if (!this.$store.state.system.ready) {
         return -1;
       }
       if (this.$store.state.chatIdsHash.has(this.targetIdHash)) {
@@ -171,7 +174,7 @@ export default {
       displayName: 'Loading...',
       statusMessage: 'Loading...',
       pictureStatus: null,
-      mediaURL: Constant.LINE.MEDIA.HOST,
+      mediaURL: `//${Constant.LINE.MEDIA.HOST}`,
     };
   },
   created() {

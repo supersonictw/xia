@@ -62,7 +62,7 @@ export default {
   methods: {
     async waitForFetchProfile() {
       setTimeout(() => {
-        if (this.$store.state.ready) {
+        if (this.$store.state.system.ready) {
           this.fetchProfile();
         } else {
           this.waitForFetchProfile();
@@ -70,9 +70,10 @@ export default {
       }, Constant.TIMEOUT.RETRY);
     },
     fetchProfile() {
-      this.profileDisplayName = this.$store.state.profile.displayName;
-      this.profileStatusMessage = this.$store.state.profile.statusMessage;
-      this.profilePicturePath = this.$store.state.profile.picturePath;
+      const profile = this.$store.state.system.profile;
+      this.profileDisplayName = profile.displayName;
+      this.profilePicturePath = profile.picturePath;
+      this.profileStatusMessage = profile.statusMessage;
     },
     tabSwitcher() {
       const tabs = [this.tabName, this.tabSwitcherName];
@@ -92,7 +93,7 @@ export default {
       profileDisplayName: 'Loading...',
       profileStatusMessage: 'Loading...',
       profilePicturePath: null,
-      mediaURL: Constant.LINE.MEDIA.HOST,
+      mediaURL: `//${Constant.LINE.MEDIA.HOST}`,
     };
   },
   created() {

@@ -13,20 +13,27 @@ import Constant from '@/data/const';
 import {deleteDB, openDB} from 'idb';
 
 export default class {
-  constructor(userIdHash) {
-    this.userIdHash = userIdHash;
+  constructor(systemInstance) {
+    this.system = systemInstance;
     this.xia = null;
     this.user = null;
-    this.setupXIA().then((db) => (this.xia = db));
-    this.setupUser().then((db) => (this.user = db));
+    this.userIdHash = null;
+  }
+
+  async init() {
+    this.xia = await this.setupXIA();
+    this.user = await this.setupUser();
+  }
+
+  updateUserIdHash(userIdHash) {
+    this.userIdHash = userIdHash;
   }
 
   async setupXIA() {
-    const resetFunction = this.revoke;
-    const upgradeFunction = function(db, oldVersion) {
+    const upgradeFunction = (db, oldVersion) => {
       // Remove the old data structure
       if (oldVersion !== 0 && oldVersion < 3) {
-        resetFunction(true, oldVersion);
+        this.system.revoke();
         return;
       }
       if (oldVersion === 0) {
@@ -154,11 +161,5 @@ export default class {
       await deleteDB(Constant.NAME);
     }
     await Promise.all(idbNames.map((name) => deleteDB(name)));
-  }
-
-  async revoke() {
-    window.localStorage.clear();
-    window.sessionStorage.clear();
-    window.location.reload();
   }
 }

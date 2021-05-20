@@ -19,6 +19,7 @@ import axios from 'axios';
 export default class {
   constructor(clients) {
     this.user = {};
+    this.status = '';
     this.clients = clients;
   }
 
@@ -30,8 +31,8 @@ export default class {
     const loginRequest = await this.getCredential();
     const loginResponse = await this.clients.login
         .loginZ(loginRequest)
-        .catch((error) => (this.loginStatus = error.reason));
-    if (loginResponse !== this.loginStatus) {
+        .catch((error) => (this.setStatus(error.reason)));
+    if (loginResponse !== this.status) {
       try {
         return await this.verifyPinCode(loginResponse);
       } catch (e) {
@@ -80,8 +81,9 @@ export default class {
   }
 
   async verifyPinCode(loginResult) {
-    this.loginStatus =
-            `Confirm your PinCode with ${loginResult.pinCode} in 2 minutes.`;
+    this.setStatus(
+        `Confirm your PinCode with ${loginResult.pinCode} in 2 minutes.`,
+    );
     switch (loginResult.type) {
       case lineType.LoginResultType.REQUIRE_DEVICE_CONFIRM: {
         const targetUrl = Constant.httpUrlWrapper(
@@ -110,22 +112,28 @@ export default class {
         });
         const verifyResult = await this.clients.login.loginZ(verifyRequest);
         if (verifyResult.type === lineType.LoginResultType.SUCCESS) {
-          this.loginStatus = 'Successful';
+          this.setStatus('Successful');
           this.setAuthToken(verifyResult.authToken);
           this.setAccessCertificate(verifyResult.certificate);
           return true;
         }
-        this.loginStatus = 'Unknown Error';
+        this.setStatus('Unknown Error');
         return false;
       }
       case lineType.LoginResultType.REQUIRE_QRCODE:
-        this.loginStatus = 'QR Code Login Required. But nothing to do.';
+        this.setStatus(
+            'Login with QR Code required, but there should be nothing to do.',
+        );
         return false;
       case lineType.LoginResultType.SUCCESS:
-        this.loginStatus = 'Successful';
+        this.setStatus('Successful');
         this.setAuthToken(loginResult.authToken);
         return true;
     }
+  }
+
+  setStatus(message) {
+    this.status = message;
   }
 
   setAuthToken(authToken) {

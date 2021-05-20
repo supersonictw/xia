@@ -64,7 +64,7 @@ export default {
     },
     async waitForFetchData() {
       setTimeout(() => {
-        if (this.$store.state.ready) {
+        if (this.$store.state.system.ready) {
           this.fetchContacts();
           this.fetchGroupsJoined();
           this.fetchGroupsInvited();
@@ -74,7 +74,8 @@ export default {
       }, Constant.TIMEOUT.RETRY);
     },
     async fetchContacts() {
-      let cursor = await this.$store.state.syncHandler.idb.user
+      let cursor = await this.$store.state.system
+          .instances.idb.user
           .transaction(Constant.IDB.USER.CONTACT)
           .store.index('displayName')
           .openCursor();
@@ -98,7 +99,8 @@ export default {
       return layout.join(' ');
     },
     async fetchGroupsJoined() {
-      let cursor = await this.$store.state.syncHandler.idb.user
+      let cursor = await this.$store.state.system
+          .instances.idb.user
           .transaction(Constant.IDB.USER.GROUP.JOINED)
           .store.index('displayName')
           .openCursor();
@@ -113,7 +115,8 @@ export default {
       }
     },
     async fetchGroupsInvited() {
-      let cursor = await this.$store.state.syncHandler.idb.user
+      let cursor = await this.$store.state.system
+          .instances.idb.user
           .transaction(Constant.IDB.USER.GROUP.INVITED)
           .store.index('displayName')
           .openCursor();
@@ -128,7 +131,7 @@ export default {
       }
     },
     getTabData() {
-      if (!this.$store.state.ready) return;
+      if (!this.$store.state.system.ready) return;
       switch (this.tabId) {
         case 0:
           return this.contactUser;
@@ -167,7 +170,7 @@ export default {
     return {
       tabId: 0,
       contactType: ['Contact', 'Group'],
-      mediaURL: Constant.LINE.MEDIA.HOST,
+      mediaURL: `//${Constant.LINE.MEDIA.HOST}`,
       contactUser: [],
       contactGroupJoined: [],
       contactGroupInvited: [],

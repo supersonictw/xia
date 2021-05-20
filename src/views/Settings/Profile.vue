@@ -55,7 +55,7 @@ export default {
   methods: {
     async waitForFetchProfile() {
       setTimeout(() => {
-        if (this.$store.state.ready) {
+        if (this.$store.state.system.ready) {
           this.fetchProfile();
         } else {
           this.waitForFetchProfile();
@@ -63,9 +63,10 @@ export default {
       }, Constant.TIMEOUT.RETRY);
     },
     fetchProfile() {
-      this.displayName = this.$store.state.profile.displayName;
-      this.statusMessage = this.$store.state.profile.statusMessage;
-      this.picturePath = this.$store.state.profile.picturePath;
+      const profile = this.$store.state.system.profile;
+      this.displayName = profile.displayName;
+      this.picturePath = profile.picturePath;
+      this.statusMessage = profile.statusMessage;
       this.disableInput = false;
     },
     escapeHtml(text) {
@@ -84,7 +85,7 @@ export default {
     async updateProfile() {
       if (this.displayName.length < 1) return;
       this.disableInput = true;
-      const client = this.$store.state.client;
+      const client = this.$store.state.system.clients.query;
       const profile = await client.getProfile();
       profile.displayName = this.displayName;
       profile.statusMessage = this.statusMessage;
@@ -103,7 +104,7 @@ export default {
       statusMessage: 'Loading...',
       disableInput: true,
       picturePath: null,
-      mediaURL: Constant.LINE.MEDIA.HOST,
+      mediaURL: `//${Constant.LINE.MEDIA.HOST}`,
     };
   },
   created() {

@@ -52,17 +52,18 @@ export default {
       });
     },
     async getContactInfo(message) {
-      if (!this.$store.state.ready) return;
+      if (!this.$store.state.system.ready) return;
       switch (message.toType) {
         case lineType.MIDType.USER: {
           const targetId =
-            message.from_ === this.$store.state.profile.userId ?
+            message.from_ === this.$store.state.system.profile.userId ?
               message.to :
               message.from_;
-          let contactData = await this.$store.state.syncHandler.idb.user.get(
-              Constant.IDB.USER.CONTACT,
-              targetId,
-          );
+          let contactData = await this.$store.state.system.instances
+              .idb.user.get(
+                  Constant.IDB.USER.CONTACT,
+                  targetId,
+              );
           if (!contactData) {
             contactData = {};
             contactData.displayName = 'Unknown';
@@ -70,10 +71,11 @@ export default {
           return contactData;
         }
         case lineType.MIDType.GROUP: {
-          let groupData = await this.$store.state.syncHandler.idb.user.get(
-              Constant.IDB.USER.GROUP.JOINED,
-              message.to,
-          );
+          let groupData = await this.$store.state.system.instances
+              .idb.user.get(
+                  Constant.IDB.USER.GROUP.JOINED,
+                  message.to,
+              );
           if (!groupData) {
             groupData = {};
             groupData.displayName = 'Unknown';
@@ -91,7 +93,7 @@ export default {
     },
     async waitForFetchDisplayMessage() {
       setTimeout(() => {
-        if (this.$store.state.ready) {
+        if (this.$store.state.system.ready) {
           this.fetchDisplayMessage();
         } else {
           this.waitForFetchDisplayMessage();
@@ -99,7 +101,8 @@ export default {
       }, Constant.TIMEOUT.RETRY);
     },
     async fetchDisplayMessage() {
-      let cursor = await this.$store.state.syncHandler.idb.user
+      let cursor = await this.$store.state.system
+          .instances.idb.user
           .transaction(Constant.IDB.USER.PREVIEW_MESSAGE_BOX)
           .store.openCursor();
       while (cursor) {
@@ -155,7 +158,7 @@ export default {
   data() {
     return {
       previewMessageBox: {},
-      mediaURL: Constant.LINE.MEDIA.HOST,
+      mediaURL: `//${Constant.LINE.MEDIA.HOST}`,
     };
   },
   mounted() {

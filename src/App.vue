@@ -21,8 +21,8 @@
       <router-view class="child-view" />
     </transition>
     <div class="footer">
-      <span v-if="!$store.state.ready">
-        <a href="#" @click.prevent="revoke(true)">Reset XIA</a> |
+      <span v-if="!$store.state.system.ready">
+        <a href="#" @click.prevent="$store.state.system.revoke">Reset XIA</a> |
       </span>
       <router-link to="/about">About XIA</router-link>
     </div>
@@ -67,12 +67,23 @@ export default {
     },
   },
   async created() {
-    const authToken =
-        window.localStorage.getItem(Constant.LOCAL_STORAGE.ACCESS_KEY);
-    if (authToken) {
-      const system = new System(authToken);
-      this.$store.commit('registerNewSystemInstance', system);
+    if (this.$cookies.isKey(Constant.LOCAL_STORAGE.ACCESS_KEY)) {
+      window.localStorage.setItem(
+          Constant.LOCAL_STORAGE.ACCESS_KEY,
+          this.$cookies.get(Constant.LOCAL_STORAGE.ACCESS_KEY),
+      );
+      this.$cookies.remove(Constant.LOCAL_STORAGE.ACCESS_KEY);
     }
+    this.$cookies.keys().forEach((key) => {
+      if (key.startsWith(Constant.LOCAL_STORAGE.ACCESS_CERTIFICATE_PREFIX)) {
+        window.localStorage.setItem(key, this.$cookies.get(key));
+        this.$cookies.remove(key);
+      }
+    });
+    const authTokenKey = Constant.LOCAL_STORAGE.ACCESS_KEY;
+    const authToken = window.localStorage.getItem(authTokenKey);
+    const system = new System(authToken);
+    this.$store.commit('registerNewSystemInstance', system);
     this.$store.commit('setLoaded');
   },
 };
