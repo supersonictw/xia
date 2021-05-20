@@ -22,9 +22,13 @@ export default class {
   async init(profileData) {
     try {
       this.syncProfile(profileData);
-      await this.syncData();
-      await this.fetchChatIdsHash();
-      await this.syncRevision();
+      await this.idb.waitForSyncData([
+        this.syncContact(),
+        this.syncGroupJoined(),
+        this.syncGroupInvited(),
+      ]);
+      await this.idb.fetchChatIdsHash();
+      this.revision = await this.idb.getLatestRevision();
       return true;
     } catch (e) {
       console.error(e);
@@ -44,7 +48,7 @@ export default class {
     const contactIds = await this.client.getAllContactIds();
     if (contactIds) {
       const contactData = await this.client.getContacts(contactIds);
-      this.updateData(contactData, Constant.IDB.USER.CONTACT);
+      this.idb.updateData(contactData, Constant.IDB.USER.CONTACT);
     }
   }
 
@@ -52,7 +56,7 @@ export default class {
     const groupIdsJoined = await this.client.getGroupIdsJoined();
     if (groupIdsJoined) {
       const groupDataJoined = await this.client.getGroups(groupIdsJoined);
-      this.updateData(groupDataJoined, Constant.IDB.USER.GROUP.JOINED);
+      this.idb.updateData(groupDataJoined, Constant.IDB.USER.GROUP.JOINED);
     }
   }
 
@@ -60,7 +64,7 @@ export default class {
     const groupIdsInvited = await this.client.getGroupIdsInvited();
     if (groupIdsInvited) {
       const groupDataInvited = await this.client.getGroups(groupIdsInvited);
-      this.updateData(groupDataInvited, Constant.IDB.USER.GROUP.INVITED);
+      this.idb.updateData(groupDataInvited, Constant.IDB.USER.GROUP.INVITED);
     }
   }
 }

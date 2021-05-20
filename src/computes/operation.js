@@ -3,16 +3,17 @@ import Constant from '@/data/const';
 import hash from 'js-sha256';
 
 export default class {
-  constructor(queryClient, systemInstance) {
+  constructor(queryClient, instances, profile) {
     this.client = queryClient;
-    this.system = systemInstance;
+    this.instances = instances;
+    this.profile = profile;
   }
 
   async trigger(operation) {
     switch (operation.type) {
       case lineType.OpType.UPDATE_PROFILE: {
         const data = await this.client.getProfile();
-        await this.system.sync.syncProfile(data);
+        await this.instances.sync.syncProfile(data);
         break;
       }
       case lineType.OpType.ADD_CONTACT:
@@ -26,7 +27,7 @@ export default class {
             Constant.IDB.USER.GROUP.INVITED,
             operation.param1,
         );
-        await this.updateGroupInfo(operation.param1, true);
+        await this.saveGroupInfo(operation.param1, true);
         break;
       }
       case lineType.OpType.LEAVE_GROUP: {
@@ -45,9 +46,9 @@ export default class {
         if (operation.param3.includes('\x1e')) {
           operation.param3 = operation.param3
               .split('\x1e')
-              .find((id) => id === this.system.profile.userId);
+              .find((id) => id === this.profile.userId);
         }
-        if (operation.param3 === this.system.profile.userId) {
+        if (operation.param3 === this.profile.userId) {
           this.vuex.commit(
               'unregisterChatIdHash',
               hash.sha256(operation.param1),
@@ -63,9 +64,9 @@ export default class {
         if (operation.param3.includes('\x1e')) {
           operation.param3 = operation.param3
               .split('\x1e')
-              .find((id) => id === this.system.profile.userId);
+              .find((id) => id === this.profile.userId);
         }
-        if (operation.param3 === this.system.profile.userId) {
+        if (operation.param3 === this.profile.userId) {
           await this.idb.clearMessageBox(operation.param1);
           this.vuex.commit(
               'unregisterChatIdHash',
@@ -76,7 +77,7 @@ export default class {
               operation.param1,
           );
         } else {
-          await this.updateGroupInfo(operation.param1);
+          await this.saveGroupInfo(operation.param1);
         }
         break;
       case lineType.OpType.NOTIFIED_UPDATE_GROUP:
@@ -88,7 +89,7 @@ export default class {
       case lineType.OpType.CANCEL_INVITATION_GROUP:
       case lineType.OpType.INVITE_INTO_GROUP:
       case lineType.OpType.KICKOUT_FROM_GROUP:
-        await this.updateGroupInfo(operation.param1);
+        await this.saveGroupInfo(operation.param1);
         break;
       case lineType.OpType.SEND_MESSAGE:
       case lineType.OpType.RECEIVE_MESSAGE:
@@ -96,7 +97,7 @@ export default class {
         operation.message.target = (() => {
           switch (operation.message.toType) {
             case lineType.MIDType.USER:
-              if (operation.message.from_ === this.system.profile.userId) {
+              if (operation.message.from_ === this.profile.userId) {
                 return operation.message.to;
               } else {
                 return operation.message.from_;

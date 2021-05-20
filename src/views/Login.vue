@@ -109,7 +109,7 @@ export default {
       return this.$store.state.system.instances.login;
     },
     status() {
-      return this.handler.status;
+      return this.handler.ready;
     },
   },
   async created() {

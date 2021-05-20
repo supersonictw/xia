@@ -154,7 +154,7 @@ export default class {
     );
   }
 
-  async updateGroupInfo(groupId, accepted = false) {
+  async saveGroupInfo(groupId, accepted = false) {
     const data = await this.client.getGroup(groupId);
     const localData = await this.user.get(
         Constant.IDB.USER.GROUP.JOINED, data.id,
@@ -167,29 +167,25 @@ export default class {
     }
   }
 
-  async syncRevision() {
+  async getLatestRevision() {
     const data = await this.user.get(
         Constant.IDB.USER.SETTINGS,
         Constant.IDB.USER.KEY.SETTINGS_REVISION,
     );
     if (data) {
-      this.revision = parseInt(data.value);
+      return parseInt(data.value);
     } else {
-      this.revision = await this.client.getLastOpRevision();
+      return await this.client.getLastOpRevision();
     }
   }
 
-  async syncData() {
+  async waitForSyncData(tasks) {
     const status = await this.user.get(
         Constant.IDB.USER.SETTINGS,
         Constant.IDB.USER.KEY.SETTINGS_SYNC_STATUS,
     );
     if (status && status.value === true) return;
-    await Promise.all([
-      this.syncContact(),
-      this.syncGroupJoined(),
-      this.syncGroupInvited(),
-    ]);
+    await Promise.all(tasks);
     await this.user.put(Constant.IDB.USER.SETTINGS, {
       id: Constant.IDB.USER.KEY.SETTINGS_SYNC_STATUS,
       value: true,
