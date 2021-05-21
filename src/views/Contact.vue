@@ -123,7 +123,7 @@ export default {
       });
     },
     replyGroupInvitation(status) {
-      const client = this.$store.state.client;
+      const client = this.$store.state.system.clients.query;
       if (status) {
         client.acceptGroupInvitation(
             Constant.THRIFT_DEFAULT_SEQ,

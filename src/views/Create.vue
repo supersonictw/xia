@@ -191,7 +191,7 @@ export default {
     async create() {
       if (this.createType > 0 && this.createName.length > 0) {
         this.created = true;
-        const client = this.$store.state.client;
+        const client = this.$store.state.system.clients.query;
         switch (this.createType) {
           case lineType.MIDType.GROUP: {
             const group = await client.createGroup(

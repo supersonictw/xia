@@ -24,7 +24,7 @@ export default class {
     this.clients = {};
     this.instances = {};
     this.profile = {};
-    this.chatRoomIdHash = [];
+    this.chatRoomIdHash = new Map();
     this.authToken = authToken;
     if (!authToken) {
       this.clients.login = lineClient(
@@ -67,6 +67,7 @@ export default class {
     );
     this.instances.operation = new Operation(
         this.clients.query,
+        this.instances,
         this,
     );
     this.instances.poll = new Poll(
@@ -77,19 +78,18 @@ export default class {
     await this.instances.idb.init();
     await this.instances.sync.init(profile);
     this.instances.idb.updateUserIdHash(this.profile.userIdHash);
-    await this.instances.poll.start();
-  }
-
-  async syncData() {
-    await this.instances.sync.init();
+    this.instances.poll.start();
   }
 
   sendMessage() {
-
   }
 
   registerChatRoomIdHash(targetId) {
-    this.chatRoomIdHash.push({targetId, idHash: hash.sha256(targetId)});
+    this.chatRoomIdHash.set(hash.sha256(targetId), targetId);
+  }
+
+  unregisterChatIdHashed(state, idHash) {
+    this.chatRoomIdHash.delete(idHash);
   }
 
   revoke() {

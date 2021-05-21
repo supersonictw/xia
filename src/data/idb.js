@@ -155,7 +155,7 @@ export default class {
   }
 
   async saveGroupInfo(groupId, accepted = false) {
-    const data = await this.client.getGroup(groupId);
+    const data = await this.system.clients.query.getGroup(groupId);
     const localData = await this.user.get(
         Constant.IDB.USER.GROUP.JOINED, data.id,
     );
@@ -175,7 +175,7 @@ export default class {
     if (data) {
       return parseInt(data.value);
     } else {
-      return await this.client.getLastOpRevision();
+      return await this.system.clients.query.getLastOpRevision();
     }
   }
 

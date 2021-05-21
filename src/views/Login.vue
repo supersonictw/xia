@@ -23,7 +23,7 @@
         <a href="https://line.me" target="_blank" rel="noopener">LINE</a>
         account.
       </h3>
-      <p class="warning">{{ status }}</p>
+      <p class="warning">{{ handler.status }}</p>
       <form method="post">
         <div id="login-input-box">
           <input
@@ -107,9 +107,6 @@ export default {
         this.$router.replace('/');
       }
       return this.$store.state.system.instances.login;
-    },
-    status() {
-      return this.handler.ready;
     },
   },
   async created() {

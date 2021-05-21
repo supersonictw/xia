@@ -19,11 +19,11 @@ export default class {
       case lineType.OpType.ADD_CONTACT:
       case lineType.OpType.UPDATE_CONTACT: {
         const data = await this.client.getContact(operation.param1);
-        this.idb.user.put(Constant.IDB.USER.CONTACT, data);
+        this.instances.idb.user.put(Constant.IDB.USER.CONTACT, data);
         break;
       }
       case lineType.OpType.ACCEPT_GROUP_INVITATION: {
-        this.idb.user.delete(
+        this.instances.idb.user.delete(
             Constant.IDB.USER.GROUP.INVITED,
             operation.param1,
         );
@@ -36,7 +36,7 @@ export default class {
             'unregisterChatIdHash',
             hash.sha256(operation.param1),
         );
-        this.idb.user.delete(
+        this.instances.idb.user.delete(
             Constant.IDB.USER.GROUP.JOINED,
             operation.param1,
         );
@@ -53,7 +53,7 @@ export default class {
               'unregisterChatIdHash',
               hash.sha256(operation.param1),
           );
-          this.idb.user.delete(
+          this.instances.idb.user.delete(
               Constant.IDB.USER.GROUP.INVITED,
               operation.param1,
           );
@@ -67,12 +67,12 @@ export default class {
               .find((id) => id === this.profile.userId);
         }
         if (operation.param3 === this.profile.userId) {
-          await this.idb.clearMessageBox(operation.param1);
+          await this.instances.idb.clearMessageBox(operation.param1);
           this.vuex.commit(
               'unregisterChatIdHash',
               hash.sha256(operation.param1),
           );
-          this.idb.user.delete(
+          this.instances.idb.user.delete(
               Constant.IDB.USER.GROUP.JOINED,
               operation.param1,
           );
@@ -112,11 +112,11 @@ export default class {
                     operation.message.createdTime.toString();
         operation.message.deliveredTime =
                     operation.message.deliveredTime.toString();
-        this.idb.user.put(
+        this.instances.idb.user.put(
             Constant.IDB.USER.PREVIEW_MESSAGE_BOX,
             operation.message,
         );
-        this.idb.user.put(
+        this.instances.idb.user.put(
             Constant.IDB.USER.MESSAGE_BOX,
             operation.message,
         );

@@ -339,7 +339,7 @@ export default {
         });
         return;
       }
-      const response = await this.$store.state.client.sendMessage(
+      const response = await this.$store.state.system.clients.query.sendMessage(
           Constant.THRIFT_DEFAULT_SEQ,
           message,
       );
@@ -403,7 +403,7 @@ export default {
       }
     },
     sendReadTag(messageId) {
-      this.$store.state.client.sendChatChecked(
+      this.$store.state.system.clients.query.sendChatChecked(
           Constant.THRIFT_DEFAULT_SEQ,
           this.targetId,
           messageId,
