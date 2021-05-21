@@ -258,7 +258,7 @@ export default {
       const domain = Constant.LINE.STICKER.HOST;
       const path = `/products/${version}/${packageId}/${platform}/stickers/`;
       const stickerFileName = `${stickerId}.png`;
-      const stickerURL = `${domain}${path}${stickerFileName}`;
+      const stickerURL = `//${domain}${path}${stickerFileName}`;
       this.$set(this.mediaObjects, messageId, stickerURL);
     },
     async getImageResource(messageId, messageOrigin) {
