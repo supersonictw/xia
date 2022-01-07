@@ -1,5 +1,4 @@
-/* jshint esversion: 8 */
-/*
+<!--
     XIA - LINE Web Client
     ---
   This Source Code Form is subject to the terms of the Mozilla Public
@@ -7,15 +6,10 @@
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
   (c) 2021 SuperSonic. (https://github.com/supersonictw)
-*/
+-->
 
-module.exports = {
-  pages: {
-    index: {
-      title: 'XIA',
-      entry: 'src/main.js',
-      template: 'public/index.html',
-      filename: 'index.html',
-    },
-  },
-};
+<template>
+  <div v-show="$store.state.statusMessage">
+    <p>{{ $store.state.statusMessage }}</p>
+  </div>
+</template>

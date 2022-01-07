@@ -9,13 +9,16 @@
   (c) 2021 SuperSonic. (https://github.com/supersonictw)
 */
 
-module.exports = {
-  pages: {
-    index: {
-      title: 'XIA',
-      entry: 'src/main.js',
-      template: 'public/index.html',
-      filename: 'index.html',
-    },
-  },
-};
+import Vue from 'vue'
+import LineClient from "@/client/index"
+
+class Client {}
+
+Client.install = function (Vue) {
+    const client = new LineClient()
+    Vue.prototype.$client = client
+}
+
+Vue.use(Client)
+
+export default new Auth()
