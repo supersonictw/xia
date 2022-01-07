@@ -23,6 +23,8 @@ if (/Line/.test(navigator.userAgent)) {
 // Vue
 import Vue from "vue";
 
+Vue.config.productionTip = false;
+
 // Basic View
 import App from "./App.vue";
 
@@ -30,14 +32,6 @@ import App from "./App.vue";
 import store from "./plugins/store";
 import client from "./plugins/client";
 import router from "./plugins/router";
-
-// Configure Plugin Manually
-import VueCookies from "vue-cookies";
-Vue.use(VueCookies);
-
-// Vue Settings
-Vue.$cookies.config("30d");
-Vue.config.productionTip = false;
 
 // Create Vue Application
 new Vue({
