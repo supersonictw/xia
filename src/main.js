@@ -10,37 +10,39 @@
 */
 
 // Redirect for XIA - Demo
-if (window.location.hostname == 'xia-demo.netlify.app') {
-  window.location.replace('https://xia.randychen.tk');
+if (window.location.hostname == "xia-demo.netlify.app") {
+  window.location.replace("https://xia.randychen.tk");
 }
 
 // Open external browser while user using LINE IAB
 if (/Line/.test(navigator.userAgent)) {
-  const url = window.location.href.split('#')[0];
-  location.href = url + '?openExternalBrowser=1';
+  const url = window.location.href.split("#")[0];
+  location.href = url + "?openExternalBrowser=1";
 }
 
 // Vue
-import Vue from 'vue';
+import Vue from "vue";
 
 // Basic View
-import App from './App.vue';
+import App from "./App.vue";
 
 // Configure Plugin Automatically
-import Store from './data/store.js';
-import Router from './data/router.js';
+import store from "./plugins/store";
+import client from "./plugins/client";
+import router from "./plugins/router";
 
 // Configure Plugin Manually
-import VueCookies from 'vue-cookies';
+import VueCookies from "vue-cookies";
 Vue.use(VueCookies);
 
 // Vue Settings
-Vue.$cookies.config('30d');
+Vue.$cookies.config("30d");
 Vue.config.productionTip = false;
 
 // Create Vue Application
 new Vue({
+  store,
+  router,
+  client,
   render: (h) => h(App),
-  store: Store,
-  router: Router,
-}).$mount('#app');
+}).$mount("#app");
