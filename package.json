@@ -13,7 +13,7 @@
     "error-polyfill": "^0.1.2",
     "idb": "^5.0.4",
     "js-sha256": "^0.9.0",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "node-bignumber": "^1.2.1",
     "thrift": "^0.11.0",
     "utf8": "^3.0.0",
