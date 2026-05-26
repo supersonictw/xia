@@ -1,55 +1,50 @@
 {
-  "name": "xia",
-  "version": "0.1.0",
+  "name": "index",
+  "type": "module",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "lint-staged",
+    "lint:es:fix": "eslint . --fix",
+    "lint:es:check": "eslint . --max-warnings 0",
+    "prepare": "husky install"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "*.ts": "eslint",
+    "*.vue": "eslint"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "core-js": "^3.6.5",
-    "error-polyfill": "^0.1.2",
-    "idb": "^5.0.4",
-    "js-sha256": "^0.9.0",
-    "moment": "^2.29.4",
-    "node-bignumber": "^1.2.1",
-    "thrift": "^0.11.0",
-    "utf8": "^3.0.0",
-    "v-emoji-picker": "^2.3.0",
-    "vue": "^2.6.12",
-    "vue-image-crop-upload": "^2.5.0",
-    "vue-router": "^3.4.3",
-    "vuex": "^3.5.1"
+    "@nuxt/image": "2.0.0",
+    "@nuxt/scripts": "0.13.0",
+    "@nuxt/ui": "4.1.0",
+    "@unhead/vue": "^2.0.3",
+    "jwt-decode": "^4.0.0",
+    "ky": "^1.7.2",
+    "nuxt": "^4.2.1",
+    "typescript": "^5.6.3",
+    "vue": "^3.5.22",
+    "vue-router": "^4.6.3"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.4.0",
-    "@vue/cli-plugin-eslint": "~4.4.0",
-    "@vue/cli-service": "~4.4.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.22.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-plugin-vue": "^7.7.0",
-    "vue-template-compiler": "^2.6.12"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+    "@commitlint/cli": "^17.4.4",
+    "@commitlint/config-conventional": "^17.4.4",
+    "@iconify-json/heroicons": "^1.2.3",
+    "@nuxt/eslint": "1.10.0",
+    "@nuxt/test-utils": "3.20.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^9.0.0",
+    "eslint-config-nymph": "^0.15.3",
+    "eslint-plugin-jsdoc": "^48.2.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0"
+  }
 }
