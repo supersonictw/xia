@@ -167,7 +167,6 @@ interface Contact {
 
 definePageMeta({
   title: 'Create Group',
-  middleware: 'auth',
 });
 
 const system = useSystem();
@@ -186,7 +185,7 @@ const pictureFile = ref<File | null>(null);
 const mediaURL = `//${Constant.LINE.MEDIA.HOST}`;
 
 const goBack = () => {
-  router.push('/dashboard');
+  router.push('/');
 };
 
 const triggerFileInput = () => {

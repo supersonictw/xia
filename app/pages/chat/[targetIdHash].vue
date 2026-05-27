@@ -264,7 +264,6 @@ import type {Contact, Group, Message} from '~/types/line';
 
 definePageMeta({
   title: 'Chat Room',
-  middleware: 'auth',
 });
 
 const system = useSystem();
@@ -315,7 +314,7 @@ const targetId = computed(() => {
 });
 
 const goBack = () => {
-  router.push('/dashboard');
+  router.push('/');
 };
 
 const triggerFileInput = () => {
@@ -348,7 +347,8 @@ const insertEmoji = (emoji: string) => {
   inputText.value += emoji;
 };
 
-const triggerLightbox = (imgUrl: string) => {
+const triggerLightbox = (imgUrl: string | undefined) => {
+  if (!imgUrl) return;
   lightboxImage.value = imgUrl;
   lightboxOpen.value = true;
 };
@@ -379,6 +379,7 @@ const downloadImage = async (imageSource: string) => {
 
 const getStickerImageResource = async (messageId: string, contentMetadata: Record<string, string | number>) => {
   if (messageId in mediaObjects.value) return;
+  if (!contentMetadata.STKPKGID || !contentMetadata.STKID) return;
   const stkVer = Number(contentMetadata.STKVER);
   const version =
     Math.floor(stkVer / 1000000) +
@@ -407,7 +408,7 @@ const getImageResource = async (messageId: string) => {
     const bytes = new Uint8Array(arrayBuffer);
     let binary = '';
     for (let i = 0; i < bytes.byteLength; i++) {
-      binary += String.fromCharCode(bytes[i]);
+      binary += String.fromCharCode(bytes[i]!);
     }
     const imageB64 = 'data:image/jpeg;base64,' + window.btoa(binary);
     mediaObjects.value[messageId] = imageB64;
@@ -554,7 +555,7 @@ const escapeHtml = (text: string) => {
     '"': '&quot;',
     '\'': '&#039;',
   };
-  return text.replace(/[&<>"']/g, (m) => map[m]);
+  return text.replace(/[&<>"']/g, (m) => map[m] || m);
 };
 
 const formatMsgTime = (createdTime: number | string | { toNumber?: () => number }) => {

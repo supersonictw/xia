@@ -177,7 +177,7 @@ const targetId = computed(() => {
 });
 
 const goBack = () => {
-  router.push('/dashboard');
+  router.push('/');
 };
 
 const enterChat = () => {
@@ -217,7 +217,7 @@ const fetchProfile = async () => {
         members.value = groupInfo.members || [];
       }
     } else {
-      router.replace('/dashboard');
+      router.replace('/');
     }
   } catch (err) {
     console.error('Failed to load contact/group details:', err);
@@ -238,7 +238,7 @@ const replyGroupInvitation = async (status: boolean) => {
       setTimeout(enterChat, 500);
     } else {
       await client.rejectGroupInvitation(Constant.THRIFT_DEFAULT_SEQ, targetId.value);
-      router.replace('/dashboard');
+      router.replace('/');
     }
   } catch (err) {
     console.error('Failed responding to group invitation:', err);

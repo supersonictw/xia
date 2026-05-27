@@ -67,7 +67,7 @@
                   size="lg"
                   :disabled="saving"
                   class="rounded-xl w-full"
-                  rows="3"
+                  :rows="3"
                 />
               </UFormField>
 
@@ -125,7 +125,6 @@ import Constant from '~/client/data/const';
 
 definePageMeta({
   title: 'Settings',
-  middleware: 'auth',
 });
 
 const system = useSystem();
@@ -146,7 +145,7 @@ const profileForm = reactive({
 });
 
 const goBack = () => {
-  router.push('/dashboard');
+  router.push('/');
 };
 
 const saveProfile = async () => {

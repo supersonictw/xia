@@ -98,7 +98,6 @@ import Constant from '~/client/data/const';
 
 definePageMeta({
   title: 'Profile',
-  middleware: 'auth',
 });
 
 const system = useSystem();
@@ -122,7 +121,7 @@ const goBack = () => {
   if (window.history.length > 1) {
     router.back();
   } else {
-    router.push('/dashboard');
+    router.push('/');
   }
 };
 </script>

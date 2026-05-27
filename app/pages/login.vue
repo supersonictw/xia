@@ -196,7 +196,7 @@ const loginSubmit = async () => {
       const success = await system.instances.login.action();
       if (success === true) {
         // Redirect to dashboard on success
-        navigateTo('/dashboard');
+        navigateTo('/');
       }
     } else {
       console.error('Login controller not initialized');
@@ -218,7 +218,7 @@ onMounted(async () => {
     // If already logged in, redirect to dashboard
     const token = localStorage.getItem(Constant.LOCAL_STORAGE.ACCESS_KEY);
     if (token) {
-      navigateTo('/dashboard');
+      navigateTo('/');
     }
   }
 });
