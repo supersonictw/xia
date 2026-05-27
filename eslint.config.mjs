@@ -13,4 +13,15 @@ export default withNuxt([
       'max-len': 'off',
     },
   },
+  {
+    files: ['app/client/**/*.ts'],
+    rules: {
+      'max-len': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      'camelcase': 'off',
+      'new-cap': 'off',
+      '@typescript-eslint/no-dynamic-delete': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
+    },
+  },
 ]);
