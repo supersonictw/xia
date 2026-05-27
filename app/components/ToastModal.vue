@@ -17,19 +17,19 @@
 </template>
 
 <script setup lang="ts">
-import {watch} from "vue";
+import {watch} from 'vue';
 
 let timer: ReturnType<typeof setTimeout> | null = null;
 
 const model = defineModel<string>({
-  default: "",
+  default: '',
 });
 
 const onClickClose = (): void => {
   if (timer) {
     clearTimeout(timer);
   }
-  model.value = "";
+  model.value = '';
 };
 
 watch(model, () => {

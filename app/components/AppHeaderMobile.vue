@@ -50,28 +50,28 @@
 </template>
 
 <script setup lang="ts">
-import {inject, watch, type Ref} from "vue";
+import {inject, watch, type Ref} from 'vue';
 
 import {
   label,
   isSaraEnabled,
   menuItems,
   type MenuFunctionItem,
-} from "../data/AppHeaderMenuData";
+} from '../data/AppHeaderMenuData';
 
 const emit = defineEmits<{
   close: [];
 }>();
 
-const parentMenuState = inject<Ref<boolean>>("parent-menu-state")!;
+const parentMenuState = inject<Ref<boolean>>('parent-menu-state')!;
 watch(parentMenuState, (value) => {
   if (!value) {
-    emit("close");
+    emit('close');
   }
 });
 
 const onClickMobileMenuClose = (): void => {
-  emit("close");
+  emit('close');
 };
 
 const onClickItem = (item: MenuFunctionItem): void => {

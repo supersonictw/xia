@@ -4,15 +4,15 @@ export default defineNuxtConfig({
     head: {
       titleTemplate: '%s - Web-Tech-TW',
       title: 'Xia',
-    }
+    },
   },
 
   compatibilityDate: '2025-07-15',
 
-  devtools: { enabled: true },
-  nitro: { preset: 'bun' },
+  devtools: {enabled: true},
+  nitro: {preset: 'bun'},
 
-  colorMode: { preference: 'light' },
+  colorMode: {preference: 'light'},
   css: ['~/assets/css/main.css'],
 
   modules: [
@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/scripts',
     '@nuxt/ui',
-    '@nuxt/test-utils'
+    '@nuxt/test-utils',
   ],
 
   runtimeConfig: {
@@ -28,6 +28,6 @@ export default defineNuxtConfig({
       homeInteHost: 'https://web-tech.tw',
       saraInteHost: 'https://web-tech.tw/sara',
       saraTokenName: 'unified_token',
-    }
-  }
-})
+    },
+  },
+});

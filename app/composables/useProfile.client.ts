@@ -1,4 +1,4 @@
-import {jwtDecode} from "jwt-decode";
+import {jwtDecode} from 'jwt-decode';
 
 interface JwtPayload {
   exp: number;
@@ -17,7 +17,7 @@ export const useProfile = (): UserProfile | null => {
   }
 
   const {
-    public: publicConfig
+    public: publicConfig,
   } = useRuntimeConfig();
 
   const {
@@ -32,7 +32,7 @@ export const useProfile = (): UserProfile | null => {
   try {
     const data = jwtDecode<JwtPayload>(saraToken);
     if (Date.now() >= data.exp * 1000) {
-      throw new Error("sara token expired");
+      throw new Error('sara token expired');
     }
     return data?.user;
   } catch (e) {

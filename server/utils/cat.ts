@@ -3,6 +3,13 @@ export interface UseCatParams {
   message?: string;
 }
 
+/**
+ * Generates an ASCII cat response or string.
+ * @param {UseCatParams} params - Destructured parameters.
+ * @param {number} [params.status] - Optional HTTP status code.
+ * @param {string} [params.message] - Optional message prefix.
+ * @returns {Response|string} The formatted ASCII cat.
+ */
 export function useCat<T extends Response | string = Response>({
   status = 200,
   message = '',
@@ -30,6 +37,6 @@ export function useCat<T extends Response | string = Response>({
   return new Response(body, {
     status, headers: {
       'Content-Type': 'text/plain; charset=utf-8',
-    }
+    },
   }) as T;
 }

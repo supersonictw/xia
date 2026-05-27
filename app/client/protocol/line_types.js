@@ -13123,3 +13123,6 @@ WapInvitation.prototype.write = function(output) {
   return;
 };
 
+ttypes.default = ttypes;
+export default ttypes;
+

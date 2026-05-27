@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted, onUnmounted, provide, type Ref} from "vue";
+import {ref, onMounted, onUnmounted, provide, type Ref} from 'vue';
 
 import {
   title,
@@ -44,12 +44,12 @@ import {
   label,
   isSaraEnabled,
   menuItems,
-} from "../data/AppHeaderMenuData";
+} from '../data/AppHeaderMenuData';
 
 const isMobileMenuOpened = ref(false);
 
 const parentMenuState: Ref<boolean> = ref(true);
-provide("parent-menu-state", parentMenuState);
+provide('parent-menu-state', parentMenuState);
 
 const isMenuItemExist = isSaraEnabled || menuItems.length;
 
@@ -65,16 +65,16 @@ const onClickMobileMenuBtnClose = (): void => {
 
 const onDocumentClick = (e: MouseEvent): void => {
   const target = e.target as HTMLElement;
-  if (!document.querySelector(".app-header")?.contains(target)) {
+  if (!document.querySelector('.app-header')?.contains(target)) {
     parentMenuState.value = false;
   }
 };
 
 onMounted(() => {
-  document.addEventListener("click", onDocumentClick);
+  document.addEventListener('click', onDocumentClick);
 });
 
 onUnmounted(() => {
-  document.removeEventListener("click", onDocumentClick);
+  document.removeEventListener('click', onDocumentClick);
 });
 </script>

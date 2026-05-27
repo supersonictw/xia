@@ -12,8 +12,8 @@ const props = defineProps<{
   class?: string;
 }>();
 
-type IconName = "Unknown";
+type IconName = 'Unknown';
 
-const allIcons: Record<IconName, string> = {Unknown: ""};
+const allIcons: Record<IconName, string> = {Unknown: ''};
 const resource = allIcons[props.name as IconName];
 </script>

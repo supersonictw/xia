@@ -1,4 +1,5 @@
 import {System} from '~/client/system';
+import {reactive} from 'vue';
 import Constant from '~/client/data/const';
 
 let systemInstance: System | null = null;
@@ -10,10 +11,11 @@ export const useSystem = (): System => {
 
   if (!systemInstance) {
     const token = localStorage.getItem(Constant.LOCAL_STORAGE.ACCESS_KEY);
-    systemInstance = new System(token);
+    systemInstance = reactive(new System(token)) as System;
   }
 
   return systemInstance;
 };
 
 export default useSystem;
+

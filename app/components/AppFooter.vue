@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 const {
-  public: publicConfig
+  public: publicConfig,
 } = useRuntimeConfig();
 
 const {
